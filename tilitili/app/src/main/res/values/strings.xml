@@ -12,4 +12,19 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="home_second">Home Second</string>
+
+    <string name="thu_logo">THU-Logo</string>
+
+    <string name="username">用户名/邮箱</string>
+    <string name="password">密码</string>
+    <string name="forget_pw">忘记密码？</string>
+    <string name="register">注册</string>
+    <string name="login">登录</string>
+
+    <string name="reset_pw">修改密码</string>
+    <string name="verify_code">验证码</string>
+    <string name="get_verify_code">获取验证码</string>
+    <string name="new_pw">新密码</string>
+    <string name="confirm_pw">确认密码</string>
+
 </resources>
