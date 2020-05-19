@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,16 @@ public class LoginActivity extends Activity {
         Button btn_login = findViewById(R.id.btn_login);
         Button btn_register = findViewById(R.id.btn_register);
         TextView reset_password = findViewById(R.id.text_reset);
+
+//        final ImageView logo = findViewById(R.id.imageView3);
+//        logo.setVisibility(View.VISIBLE);
+//
+//        logo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(LoginActivity.this, "image", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override

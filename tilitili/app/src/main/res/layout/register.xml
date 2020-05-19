@@ -85,7 +85,11 @@
         android:id="@+id/imageView4"
         android:layout_width="148dp"
         android:layout_height="164dp"
-        app:srcCompat="@mipmap/thu_logo"
-        tools:layout_editor_absoluteX="131dp"
-        tools:layout_editor_absoluteY="63dp" />
+        android:layout_marginStart="131dp"
+        android:layout_marginTop="63dp"
+        android:layout_marginEnd="132dp"
+        android:src="@drawable/thu_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
