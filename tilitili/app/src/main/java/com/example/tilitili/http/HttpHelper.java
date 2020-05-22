@@ -1,7 +1,8 @@
-package com.example.tilitili.utils;
+package com.example.tilitili.http;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -25,7 +26,7 @@ public class HttpHelper {
     private Gson gson;
     private Handler handler;
 
-    private HttpHelper(){
+    private HttpHelper() {
         okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
@@ -33,7 +34,9 @@ public class HttpHelper {
                 .build();
         gson = new Gson();
         handler = new Handler(Looper.getMainLooper());
-    };
+    }
+
+    ;
 
     public static HttpHelper getInstance() {
         return new HttpHelper();
@@ -51,7 +54,7 @@ public class HttpHelper {
 
     public void request(final Request request, final BaseHttpCallback callback) {
 
-        callback.onRequestBefore(request);
+        callback.onBeforeRequest(request);
 
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -62,9 +65,9 @@ public class HttpHelper {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     String result = response.body().string();
-                    if(callback.type == String.class){
+                    if (callback.type == String.class) {
                         callbackSuccess(callback, response, result);
                     } else {
                         try {
@@ -79,34 +82,33 @@ public class HttpHelper {
                 }
             }
         });
-
     }
 
     private Request buildRequset(String url, Map<String, String> params, HttpMethodType httpMethodType) {
         Request.Builder builder = new Request.Builder();
         builder.url(url);
 
-        if(httpMethodType == HttpMethodType.GET) {
+        if (httpMethodType == HttpMethodType.GET) {
             builder.get();
         } else if (httpMethodType == HttpMethodType.POST) {
             RequestBody requestBody = buildFromData(params);
             builder.post(requestBody);
         }
-
         return builder.build();
     }
 
-    private RequestBody buildFromData(Map<String, String> params){
+    private RequestBody buildFromData(Map<String, String> params) {
 
         FormBody.Builder builder = new FormBody.Builder();
-        if(params != null) {
-            for (Map.Entry<String, String> entry : params.entrySet()){
+        if (params != null) {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
                 builder.add(entry.getKey(), entry.getValue());
             }
         }
         return builder.build();
     }
-    private void callbackSuccess(final BaseHttpCallback callback, final Response response, final Object object){
+
+    private void callbackSuccess(final BaseHttpCallback callback, final Response response, final Object object) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -114,17 +116,22 @@ public class HttpHelper {
             }
         });
     }
-    private void callbackError(final BaseHttpCallback callback, final Response response, final Exception e){
+
+    private void callbackError(final BaseHttpCallback callback, final Response response, final Exception e) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                callback.onError(response, response.code(),e);
+                callback.onError(response, response.code(), e);
             }
         });
     }
 
-    enum HttpMethodType{
+    enum HttpMethodType {
         GET,
         POST
+    }
+
+    public void asd() {
+        Log.d("asd", "asd");
     }
 }
