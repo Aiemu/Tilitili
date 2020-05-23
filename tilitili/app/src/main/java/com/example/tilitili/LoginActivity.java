@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.tilitili.data.Contants;
+import com.example.tilitili.data.User;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.ToastUtils;
@@ -46,15 +48,14 @@ public class LoginActivity extends Activity {
         final String username = edit_username.getText().toString();
         final String password = edit_password.getText().toString();
 
-        String url = "https://ml4ffd.com/account/login/";
         Map<String, String> map = new HashMap<>(2);
         map.put("username", username);
         map.put("password", password);
-        SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(this) {
+        SpotsCallBack<User> stringSpotsCallBack = new SpotsCallBack<User>(this) {
             @Override
-            public void onSuccess(Response response, String string) {
-                Log.d("response is: ", string);
+            public void onSuccess(Response response, User user) {
                 UserManagerApplication application = UserManagerApplication.getInstance();
+                application.putUser(user);
                 Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(register_intent);
             }
@@ -66,7 +67,7 @@ public class LoginActivity extends Activity {
             }
         };
         stringSpotsCallBack.setMessage(R.string.logining);
-        httpHelper.post(url, map, stringSpotsCallBack);
+        httpHelper.post(Contants.API.LOGIN_URL, map, stringSpotsCallBack);
     }
 
     @OnClick(R.id.btn_register)

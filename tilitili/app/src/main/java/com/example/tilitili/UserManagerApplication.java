@@ -31,19 +31,14 @@ public class UserManagerApplication extends Application {
         return user;
     }
 
-    public void putUser(User user, String token) {
+    public void putUser(User user) {
         this.user = user;
         UserLocalData.putUser(this, user);
-        UserLocalData.putToken(this, token);
     }
 
     public void clearUser() {
         this.user = null;
         UserLocalData.clearUser(this);
-        UserLocalData.clearToken(this);
     }
 
-    public String getToken() {
-        return UserLocalData.getToken(this);
-    }
 }
