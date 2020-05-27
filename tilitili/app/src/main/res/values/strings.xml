@@ -15,6 +15,12 @@
 
     <string name="thu_logo">THU-Logo</string>
 
+    
+    <string name="main_page">首页</string>
+    <string name="plates_page">板块</string>
+    <string name="activity_page">动态</string>
+    <string name="mine_page">我的</string>
+    
     <string name="username">用户名/邮箱</string>
     <string name="password">密码</string>
     <string name="forget_pw">忘记密码？</string>

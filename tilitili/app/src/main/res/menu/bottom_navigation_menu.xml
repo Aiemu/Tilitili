@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_page"
+        android:enabled="true"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="@string/main_page"/>
+    <item
+        android:id="@+id/plates_page"
+        android:enabled="true"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="@string/plates_page"/>
+    <item
+        android:id="@+id/activity_page"
+        android:enabled="true"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="@string/activity_page"/>
+    <item
+        android:id="@+id/mine_page"
+        android:enabled="true"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="@string/mine_page"/>
+</menu>
