@@ -1,7 +1,5 @@
 package com.example.tilitili.data;
 
-import static com.example.tilitili.data.Contants.privilegeMap;
-
 public class User {
     private int userId;
     private String username;

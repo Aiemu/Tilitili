@@ -25,9 +25,48 @@ var account_2 = {
     "ID": 2
         //     "joinAt": 1998.02.02,
 }
+
+var submission_1 = {
+    "id": 1,
+    "pid": 1,
+    "type": 1,
+    "resource": "123",
+    "title": "庆祝清华大学109年校庆",
+    "introduction": "庆祝清华大学校庆",
+    //    public String snapshot;
+    "submissionTime": 1590600906,
+    "watchTimes": 20
+}
+
+var submission_2 = {
+    "id": 2,
+    "pid": 1,
+    "type": 1,
+    "resource": "123",
+    "title": "庆祝清华大学110年校庆",
+    "introduction": "庆祝清华大学校庆",
+    //    public String snapshot;
+    "submissionTime": 1590600906,
+    "watchTimes": 20
+}
+
+var submission_3 = {
+    "id": 2,
+    "pid": 1,
+    "type": 1,
+    "resource": "123",
+    "title": "庆祝清华大学111年校庆",
+    "introduction": "庆祝清华大学校庆",
+    //    public String snapshot;
+    "submissionTime": 1590600906,
+    "watchTimes": 20
+}
+
+
 var accounts = [account_1, account_2]
 var loginAccount = undefined
 
+var submission_list = [submission_1, submission_1, submission_1, submission_1, submission_1, submission_2, submission_2, submission_2, submission_2, submission_2, submission_3, submission_3, submission_3, submission_3, submission_3]
 
 // 用户登录
 router.post("/login", async(ctx, next) => {
@@ -58,6 +97,21 @@ router.post("/user/:username/password", async(ctx, next) => {
         ctx.body = {}
         ctx.response.status = 400
     }
+    next()
+})
+
+router.get("/submission/hot", async(ctx, next) => {
+    console.log(1)
+    page = ctx.request.query['page']
+    count = ctx.request.query['count']
+    ctx.body = {
+        "currentPage": parseInt(page),
+        "pageSize": submission_list.slice((page - 1) * count, page * count).length,
+        "totalPage": Math.ceil(submission_list.length / count),
+        "totalCount": submission_list.length,
+        "list": submission_list.slice((page - 1) * count, page * count)
+    }
+    ctx.response.status = 200
     next()
 })
 

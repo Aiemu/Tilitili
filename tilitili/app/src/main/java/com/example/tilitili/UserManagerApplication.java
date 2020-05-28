@@ -1,11 +1,10 @@
 package com.example.tilitili;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
 
 import com.example.tilitili.data.User;
 import com.example.tilitili.data.UserLocalData;
+import com.facebook.drawee.backends.pipeline.Fresco;
 
 public class UserManagerApplication extends Application {
     private User user;
@@ -21,6 +20,7 @@ public class UserManagerApplication extends Application {
         super.onCreate();
         mInstance = this;
         this.initUser();
+        Fresco.initialize(this);
     }
 
     private void initUser() {

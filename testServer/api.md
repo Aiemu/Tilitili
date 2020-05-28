@@ -278,6 +278,15 @@ Schema: PlateParticipation
 响应 200
 - 若干Submission组成的数组
 
+
+### 查看首页内容 GET /submission/hot
+请求
+- **page** (number) 表示页数，从1开始
+- **count** (number) 表示每页个数，大于0，默认10
+
+响应 200
+- 若干Submission组成的数组
+
 ### 查看所有板块 GET /plate/list
 
 请求

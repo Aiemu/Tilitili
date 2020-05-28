@@ -7,9 +7,9 @@ import com.example.tilitili.R;
 
 import java.util.Objects;
 
+import dmax.dialog.SpotsDialog;
 import okhttp3.Request;
 import okhttp3.Response;
-import dmax.dialog.SpotsDialog;
 
 public abstract class SpotsCallBack<T> extends SimpleCallback<T> {
 
