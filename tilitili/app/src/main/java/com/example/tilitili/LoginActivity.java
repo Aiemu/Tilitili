@@ -49,6 +49,7 @@ public class LoginActivity extends Activity {
         Map<String, String> map = new HashMap<>(2);
         map.put("username", username);
         map.put("password", password);
+
         SpotsCallBack<User> stringSpotsCallBack = new SpotsCallBack<User>(this) {
             @Override
             public void onSuccess(Response response, User user) {

@@ -7,7 +7,7 @@ public class Contants {
     public static final String TOKEN = "token";
 
     public static class API {
-        public static final String BASE_URL = "http://192.168.0.103:8000";
+        public static final String BASE_URL = "http://192.168.0.102:8000";
         public static final String LOGIN_URL = BASE_URL + "/login";
         public static final String CHANGE_PASSWORD = BASE_URL + "/user/%s/password"; // %s username
         public static final String GET_HOT = BASE_URL + "/submission/hot";
