@@ -101,7 +101,6 @@ router.post("/user/:username/password", async(ctx, next) => {
 })
 
 router.get("/submission/hot", async(ctx, next) => {
-    console.log(1)
     page = ctx.request.query['page']
     count = ctx.request.query['count']
     ctx.body = {
