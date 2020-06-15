@@ -113,12 +113,6 @@ Schema: PlateParticipation
 - 任何时候返回 500 表示服务器内部错误。
 - 其余状态码由每个接入点各自规定。
 
-### 验证码 GET /captcha
-
-响应 200
-- **key** (string) 标识符
-- **img** (string) Base64 编码的图像
-
 ### 注册 POST /signup
 
 请求
@@ -126,8 +120,6 @@ Schema: PlateParticipation
 - **password** (string) 不可逆哈希后的密码
 - **email** (string) 清华邮箱
 - **nickname** (string) 昵称
-- **captcha_key** (string) 此前获得的验证码 key
-- **captcha_value** (string) 验证码填写值
 
 响应 200
 - **err** ([number]) 空数组 []
@@ -136,7 +128,6 @@ Schema: PlateParticipation
 - **err** ([number]) 错误列表
 	- **1**	用户名重复
 	- **2** 邮箱重复
-	- **3** 验证码不正确
 	- **-1** 任何一项信息过长、过短或包含不合法字符 —— 前端检查严格时不应出现此项
 
 ### 登录 POST /login
