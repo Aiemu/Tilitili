@@ -23,6 +23,7 @@ public class ResetPWActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reset_password);
 
+
         final EditText edit_username = findViewById(R.id.edit_username);
         final EditText edit_password = findViewById(R.id.edit_newpw);
         final EditText edit_password_con = findViewById(R.id.edit_confirmpw);
