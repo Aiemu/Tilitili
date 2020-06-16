@@ -2,7 +2,6 @@ package com.example.tilitili.http;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -25,6 +24,7 @@ public class HttpHelper {
     private static OkHttpClient okHttpClient;
     private Gson gson;
     private Handler handler;
+    private static HttpHelper httpHelper;
 
     private HttpHelper() {
         okHttpClient = new OkHttpClient.Builder()
@@ -36,10 +36,12 @@ public class HttpHelper {
         handler = new Handler(Looper.getMainLooper());
     }
 
-    ;
-
     public static HttpHelper getInstance() {
-        return new HttpHelper();
+        if(httpHelper == null) {
+            httpHelper = new HttpHelper();
+            return httpHelper;
+        }
+        return httpHelper;
     }
 
     public void get(String url, BaseHttpCallback callback) {
@@ -131,7 +133,4 @@ public class HttpHelper {
         POST
     }
 
-    public void asd() {
-        Log.d("asd", "asd");
-    }
 }

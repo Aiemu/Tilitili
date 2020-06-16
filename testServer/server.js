@@ -12,8 +12,8 @@ var account_1 = {
     "email": "list17@mails.tsinghua.edu.cn",
     "nickname": "渣渣辉",
     "privilege": 1,
-    "ID": 1
-        //     "joinAt": 1998.02.02,
+    "ID": 1,
+    "joinAt": 3030303030,
 }
 var account_2 = {
     "username": "2",
@@ -22,8 +22,8 @@ var account_2 = {
     "email": "list17@mails.tsinghua.edu.cn",
     "nickname": "渣渣辉",
     "privilege": 1,
-    "ID": 2
-        //     "joinAt": 1998.02.02,
+    "ID": 2,
+    "joinAt": 3030303030,
 }
 
 var submission_1 = {
@@ -84,6 +84,18 @@ router.post("/login", async(ctx, next) => {
         ctx.body = {}
         ctx.response.status = 400
     }
+    next()
+})
+
+// 用户注册
+router.post("/signup", async(ctx, next) => {
+    username = ctx.request.body['username']
+    password = ctx.request.body['password']
+    email = ctx.request.body['email']
+    nickname = ctx.request.body['nickname']
+    console.log(username, password, email, nickname)
+    ctx.body = {}
+    ctx.response.status = 200
     next()
 })
 

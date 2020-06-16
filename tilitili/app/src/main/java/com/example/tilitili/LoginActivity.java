@@ -69,15 +69,20 @@ public class LoginActivity extends Activity {
         httpHelper.post(Contants.API.LOGIN_URL, map, stringSpotsCallBack);
     }
 
-    @OnClick(R.id.btn_register)
+    @OnClick(R.id.register_button)
     public void register(View view) {
-        Intent register_intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        Intent register_intent = new Intent(this, RegisterActivity.class);
         startActivity(register_intent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @OnClick(R.id.text_reset)
     public void reset(View view) {
-        Intent reset_intent = new Intent(LoginActivity.this, ResetPWActivity.class);
+        Intent reset_intent = new Intent(this, ResetPWActivity.class);
         startActivity(reset_intent);
     }
 }
