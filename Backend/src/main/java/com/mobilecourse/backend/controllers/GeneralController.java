@@ -1,19 +1,25 @@
 package com.mobilecourse.backend.controllers;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mobilecourse.backend.BackendApplication;
+import com.mobilecourse.backend.annotation.LoginAuth;
 import com.mobilecourse.backend.dao.UserDao;
+import com.mobilecourse.backend.exception.BusinessException;
 import com.mobilecourse.backend.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 import java.util.HashMap;
@@ -24,7 +30,7 @@ import java.util.Random;
 //@RequestMapping("")
 public class GeneralController extends CommonController {
 
-    private final Logger LOG = LoggerFactory.getLogger(BackendApplication.class);
+    private final Logger LOG = LoggerFactory.getLogger(GeneralController.class);
     public class UserInfoCache {
         String username;
         String password;
@@ -60,16 +66,22 @@ public class GeneralController extends CommonController {
      * @return
      */
     @RequestMapping(value = "/signup", method = { RequestMethod.POST })
-    public String signUp(@RequestParam(value = "username") String username,
-                         @RequestParam(value = "password") String password,
-                         @RequestParam(value = "email") String email,
-                         @RequestParam(value = "nickname") String nickname) {
+    public ResponseEntity<JSONObject> signUp(@RequestParam(value = "username") String username,
+                                             @RequestParam(value = "password") String password,
+                                             @RequestParam(value = "email") String email,
+                                             @RequestParam(value = "nickname") String nickname,
+                                             HttpServletRequest request) {
         //检查用户名是否重复
         User existUser = userMapper.getUserByUsername(username);
         if (existUser != null) {
-            return wrapperMsg(400, "The user existed!");
-        } else if (existUser.getEmail().equals(email)) {
-            return wrapperMsg(400, "The email existed!");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, 1,
+                    String.format("The username (%s) in the register process has already existed in Database.", username));
+        }
+        //检查邮箱是否重复.
+        User existEmail = userMapper.getUserByEmail(email);
+        if (existEmail != null) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, 1,
+                    String.format("The email (%s) in the register process has already existed in Database.", username));
         }
 
         //随机生成验证码
@@ -91,13 +103,14 @@ public class GeneralController extends CommonController {
         // 成功发送邮件, 将验证信息加入到缓存中, 返回200.
         verifyCodesHashMap.put(verifyCode, new UserInfoCache(username, password, email, nickname));
         LOG.info("The verification mail sends successfully.");
-        return wrapperMsg(200, "success");
+        return wrapperResponse(HttpStatus.OK, "success");
     }
 
+    @LoginAuth
     @RequestMapping(value = "/paramtest", method = { RequestMethod.POST })
-    public String paramTest(HttpSession session) {
+    public ResponseEntity<JSONObject> paramTest(HttpSession session) {
         LOG.info(session.getId());
-        return wrapperMsg(200, "success");
+        return wrapperResponse(HttpStatus.OK, "success");
     }
 
     /**
@@ -105,7 +118,7 @@ public class GeneralController extends CommonController {
      * @return
      */
     @RequestMapping(value = "/verify/{code}", method = { RequestMethod.GET })
-    public String verifyUser(@PathVariable String code) {
+    public ResponseEntity<JSONObject> verifyUser(@PathVariable String code) {
         if (verifyCodesHashMap.containsKey(code)) {
             //获取验证码对应的用户信息, 然后加入到数据库中
             UserInfoCache cache = verifyCodesHashMap.get(code);
@@ -116,16 +129,40 @@ public class GeneralController extends CommonController {
             user.setEmail(cache.email);
             user.setNickname(cache.nickname);
             userMapper.registerUser(user);
-            return wrapperMsg(200, "success");
+            return wrapperResponse(HttpStatus.OK, "success");
         } else {
-            return wrapperMsg(404, "user not found");
+            LOG.warn(String.format("The verifyCode (%s) has not registered yet.", code));
+            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The verification code could not be found!");
         }
     }
 
+    @RequestMapping(value = "/login", method = { RequestMethod.POST })
+    public ResponseEntity<JSONObject> loginUser(@RequestParam(value = "username") String username,
+                                                @RequestParam(value = "password") String password) {
+        User existUser = userMapper.getUserByUsername(username);
+        JSONObject jsonObject = new JSONObject();
+        if (existUser == null) {
+            //用户不存在
+            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "User could not be found.");
+        }
+        if (!existUser.getPassword().equals(password)) {
+            //用户密码错误
+            throw new BusinessException(HttpStatus.BAD_REQUEST, 1, "Password is wrong.");
+        }
+        // 登录成功, 存储登录状态
+        jsonObject.put("id", existUser.getId());
+        jsonObject.put("username", existUser.getUsername());
+        jsonObject.put("privilege", existUser.getPrivilege());
+        jsonObject.put("nickname", existUser.getNickname());
+        return wrapperResponse(HttpStatus.OK, jsonObject);
+    }
+
+    @LoginAuth
     @RequestMapping(value = "/logout", method = { RequestMethod.POST })
-    public String logoutUser(HttpSession session) {
+    public ResponseEntity<JSONObject> logoutUser(HttpSession session) {
+        LOG.info(String.format("The user (%s) logouts.", session.getAttribute("username")));
         session.invalidate();
-        return wrapperMsg(200, "logout successfully.");
+        return wrapperResponse(HttpStatus.OK, "logout successfully.");
     }
 
 

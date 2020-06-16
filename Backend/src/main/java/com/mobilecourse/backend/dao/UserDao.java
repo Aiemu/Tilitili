@@ -7,5 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserDao {
     int userCount();
     User getUserByUsername(String username);
+    User getUserByEmail(String email);
     void registerUser(User user);
 }
