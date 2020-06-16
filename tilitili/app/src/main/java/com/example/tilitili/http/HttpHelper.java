@@ -37,7 +37,7 @@ public class HttpHelper {
     }
 
     public static HttpHelper getInstance() {
-        if(httpHelper == null) {
+        if (httpHelper == null) {
             httpHelper = new HttpHelper();
             return httpHelper;
         }
@@ -100,7 +100,6 @@ public class HttpHelper {
     }
 
     private RequestBody buildFromData(Map<String, String> params) {
-
         FormBody.Builder builder = new FormBody.Builder();
         if (params != null) {
             for (Map.Entry<String, String> entry : params.entrySet()) {

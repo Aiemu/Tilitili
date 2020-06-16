@@ -1,6 +1,7 @@
 const Koa = require('koa')
 const Router = require('koa-router')
 const bodyParser = require('koa-bodyparser')
+const multer = require('koa-multer');
 
 const app = new Koa()
 const router = new Router()
@@ -125,6 +126,14 @@ router.get("/submission/hot", async(ctx, next) => {
     ctx.response.status = 200
     next()
 })
+
+router.post('/image/upload', async function(ctx, next) {
+    ctx.body = {
+        "image_url": "http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG"
+    }
+    ctx.response.status = 200
+    next()
+});
 
 app.use(bodyParser())
 app.use(router.routes())

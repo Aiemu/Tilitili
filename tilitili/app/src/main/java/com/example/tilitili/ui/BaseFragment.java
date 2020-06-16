@@ -17,32 +17,31 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = createView(inflater,container,savedInstanceState);
+        View view = createView(inflater, container, savedInstanceState);
         ViewUtils.inject(this, view);
         initToolBar();
         init();
         return view;
     }
 
-    public void  initToolBar(){
+    public void initToolBar() {
     }
 
     public abstract View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
     public abstract void init();
-    public void startActivity(Intent intent, boolean isNeedLogin){
-        if(isNeedLogin){
+
+    public void startActivity(Intent intent, boolean isNeedLogin) {
+        if (isNeedLogin) {
             User user = UserManagerApplication.getInstance().getUser();
-            if(user !=null){
+            if (user != null) {
                 super.startActivity(intent);
-            }
-            else{
+            } else {
 //                UserManagerApplication.getInstance().putIntent(intent);
                 Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
                 super.startActivity(loginIntent);
             }
-        }
-        else{
+        } else {
             super.startActivity(intent);
         }
     }

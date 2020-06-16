@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.tilitili.data.Contants;
-import com.example.tilitili.data.User;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.CaptchaUtil;

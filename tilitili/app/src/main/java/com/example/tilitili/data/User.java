@@ -6,10 +6,27 @@ public class User {
     private String nickname;
     private int privilege;
 
-    public User(int id, String username, int privilege, String nickname){
+    public User(int id, String username, int privilege, String nickname) {
         this.userId = id;
         this.username = username;
         this.privilege = privilege;
         this.nickname = nickname;
     }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public int getPrivilege() {
+        return privilege;
+    }
+
 }
