@@ -4,14 +4,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.mobilecourse.backend.BackendApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Controller
 public class CommonController {
-
     // session半个小时无交互就会过期
     private static int MAXTIME = 1800;
     private final Logger LOG = LoggerFactory.getLogger(BackendApplication.class);
@@ -22,6 +24,16 @@ public class CommonController {
         wrapperMsg.put("code", code);
         wrapperMsg.put("msg", msg);
         return wrapperMsg.toJSONString();
+    }
+
+    ResponseEntity<JSONObject> wrapperResponse(HttpStatus code, JSONObject body) {
+        return new ResponseEntity<>(body, code);
+    }
+
+    ResponseEntity<JSONObject> wrapperResponse(HttpStatus code, String msg) {
+        JSONObject body = new JSONObject();
+        body.put("msg", msg);
+        return new ResponseEntity<>(body, code);
     }
 
     // 添加信息到session之中，此部分用途很广泛，比如可以通过session获取到对应的用户名或者用户ID，避免繁冗操作
