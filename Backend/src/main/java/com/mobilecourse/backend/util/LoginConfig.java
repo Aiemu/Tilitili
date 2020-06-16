@@ -8,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class LoginConfig implements WebMvcConfigurer {
+    public static final String LOGIN_KEY = "LOGIN";
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
