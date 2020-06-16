@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.UserDao">
+    <select id="userCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM User;
+    </select>
+    <select id="getUserByUsername" resultType="com.mobilecourse.backend.model.User">
+        SELECT *
+        FROM User
+        WHERE username=#{username}
+    </select>
+    <insert id="registerUser" keyProperty="id" useGeneratedKeys="true" parameterType="com.mobilecourse.backend.model.User">
+        INSERT INTO User
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            username, password, email, nickname
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            #{username}, #{password}, #{email}, #{nickname}
+        </trim>;
+    </insert>
+</mapper>
