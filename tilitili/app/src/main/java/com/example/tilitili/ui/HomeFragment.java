@@ -101,10 +101,10 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                 Toast.makeText(this.context, "加载数据失败", Toast.LENGTH_LONG).show();
                 dismissDialog();
 
-                if (pager.STATE_REFREH == pager.getState()) {
-                    pager.getBuilder().getmRefreshLayout().finishRefresh();
-                } else if (pager.STATE_MORE == pager.getState()) {
-                    pager.getBuilder().getmRefreshLayout().finishRefreshLoadMore();
+                if (Pager.STATE_REFREH == pager.getState()) {
+                    Pager.getBuilder().getmRefreshLayout().finishRefresh();
+                } else if (Pager.STATE_MORE == pager.getState()) {
+                    Pager.getBuilder().getmRefreshLayout().finishRefreshLoadMore();
                 }
             }
         };
