@@ -57,8 +57,7 @@ public class GeneralController extends CommonController {
     private JavaMailSender mailSender;
     @Value("${spring.mail.username}")
     private String mailFromAddr;
-//    private String urlFormat = "http://129.211.37.216:8080/verify/%s";
-    private String urlFormat = "http://localhost:8080/verify/%s";
+    private String urlFormat = "http://129.211.37.216:8888/verify/%s";
 
     /**
      * 用户注册, 会发送验证邮件
