@@ -154,11 +154,11 @@ public class GeneralController extends CommonController {
             throw new BusinessException(HttpStatus.BAD_REQUEST, 1, "Password is wrong.");
         }
         // 登录成功, 存储登录状态
-        session.setAttribute(LoginConfig.LOGIN_KEY, true);
-        session.setAttribute("id", existUser.getId());
-        session.setAttribute("username", existUser.getUsername());
-        session.setAttribute("privilege", existUser.getPrivilege());
-        session.setAttribute("nickname", existUser.getNickname());
+        putInfoToSession(session, LoginConfig.LOGIN_KEY, true);
+        putInfoToSession(session, "id", existUser.getId());
+        putInfoToSession(session, "username", existUser.getUsername());
+        putInfoToSession(session, "privilege", existUser.getPrivilege());
+        putInfoToSession(session, "nickname", existUser.getNickname());
         // 返回userShort
         jsonObject.put("id", existUser.getId());
         jsonObject.put("username", existUser.getUsername());
