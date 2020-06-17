@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,12 +13,15 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.User;
 import com.example.tilitili.data.UserLocalData;
 import com.example.tilitili.http.CountingRequestBody;
+import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.ToastUtils;
@@ -53,10 +58,19 @@ public class EditorActivity extends Activity {
     private RichEditor mEditor;
     @ViewInject(R.id.progressBar)
     private ProgressBar progressBar;
+    @ViewInject(R.id.edit_choose_cover_image_view)
+    private ImageView cover_image_view;
+    @ViewInject(R.id.text_title_edit_text)
+    private EditText title_edit_text;
+
     private static final int SELECT_PHOTO_CODE = 879;
-    private String html_text;
+    private static final int SELECT_COVER_CODE = 880;
+
     private HttpHelper httpHelper;
     private User user;
+
+    private String html_text = "";
+    private String cover_url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -303,9 +317,22 @@ public class EditorActivity extends Activity {
                 if (resultCode == RESULT_OK) {
                     Uri uri = data.getData();
                     progressBar.setVisibility(View.VISIBLE);
-                    uploadImage(uri);
+                    uploadImage(uri, SELECT_PHOTO_CODE);
                 }
                 break;
+            case SELECT_COVER_CODE:
+                if (resultCode == RESULT_OK) {
+                    Uri uri = data.getData();
+                    String[] filePathColumns = {MediaStore.Images.Media.DATA};
+                    Cursor c = getContentResolver().query(uri, filePathColumns, null, null, null);
+                    c.moveToFirst();
+                    int columnIndex = c.getColumnIndex(filePathColumns[0]);
+                    String imagePath = c.getString(columnIndex);
+                    Bitmap bm = BitmapFactory.decodeFile(imagePath);
+                    cover_image_view.setImageBitmap(bm);
+                    c.close();
+                    uploadImage(uri, SELECT_COVER_CODE);
+                }
         }
     }
 
@@ -316,12 +343,12 @@ public class EditorActivity extends Activity {
         return cursor.getString(idx);
     }
 
-    public void uploadImage(Uri filepath) {
+    public void uploadImage(Uri filepath, final int code) {
         final File imageFile = new File(getRealPathFromURI(filepath));
         Uri uris = Uri.fromFile(imageFile);
         String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uris.toString());
         String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase());
-        String imageName = imageFile.getName();
+        final String imageName = imageFile.getName();
 
         Log.e("filepath", imageFile.getName() + " " + mime + " " + filepath);
         RequestBody requestBody = new MultipartBody.Builder()
@@ -399,11 +426,14 @@ public class EditorActivity extends Activity {
                     public void run() {
                         try {
                             JSONObject jsonObject = new JSONObject(mMessage);
-                            mEditor.insertImage((String) jsonObject.get("image_url"), "dachshund");
+                            if (code == SELECT_PHOTO_CODE)
+                                mEditor.insertImage((String) jsonObject.get("image_url"), "dachshund");
+                            else if (code == SELECT_COVER_CODE) {
+                                cover_url = (String) jsonObject.get("image_url");
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Log.e("TAG", mMessage);
                     }
                 });
             }
@@ -412,8 +442,22 @@ public class EditorActivity extends Activity {
 
     @OnClick(R.id.text_edit_confirm_btn)
     public void submissionPublish(View view) {
-        Map<String, String> map = new HashMap<>(1);
+
+        if (cover_url.equals("")) {
+            ToastUtils.show(this, "未选择封面");
+            return;
+        } else if (html_text.equals("")) {
+            ToastUtils.show(this, "未填写内容");
+            return;
+        } else if (title_edit_text.getText().toString().equals("")) {
+            ToastUtils.show(this, "未填写标题");
+            return;
+        }
+
+        Map<String, String> map = new HashMap<>(3);
+        map.put("title", title_edit_text.getText().toString());
         map.put("content", html_text);
+        map.put("cover", cover_url);
 
         SpotsCallBack<User> stringSpotsCallBack = new SpotsCallBack<User>(this) {
             @Override
@@ -425,13 +469,20 @@ public class EditorActivity extends Activity {
             }
 
             @Override
-            public void onError(Response response, int code, Exception e) {
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
                 dismissDialog();
-                ToastUtils.show(EditorActivity.this, R.string.login_error);
+                ToastUtils.show(EditorActivity.this, errorMessage.getErrorMessage());
             }
         };
         stringSpotsCallBack.setMessage(R.string.logining);
         httpHelper.post(Contants.API.getUrlWithID(Contants.API.SUBMISSION_UPLOAD_URL, String.valueOf(user.getUserId())), map, stringSpotsCallBack);
+    }
+
+    @OnClick(R.id.edit_choose_cover_image_view)
+    public void chooseCover(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intent, SELECT_COVER_CODE);
     }
 
 }

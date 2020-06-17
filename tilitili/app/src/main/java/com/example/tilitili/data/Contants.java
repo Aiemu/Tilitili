@@ -9,6 +9,7 @@ public class Contants {
     public static final String TOKEN = "token";
 
     public static class API {
+        // url最后有/表示需要进行getUrlWithID操作，如果后面不加id则不需要/
         public static final String BASE_URL = Config.host + ":" + Config.port;
         public static final String LOGIN_URL = BASE_URL + "/login";
         public static final String CHANGE_PASSWORD = BASE_URL + "/user/%s/password"; // %s username
@@ -16,6 +17,7 @@ public class Contants {
         public static final String REGISTER_URL = BASE_URL + "/signup";
         public static final String IMAGE_UPLOAD_URL = BASE_URL + "/image/upload/";
         public static final String SUBMISSION_UPLOAD_URL = BASE_URL + "/submission/upload/";
+        public static final String GET_USER_PROFILE_URL = BASE_URL + "/user/profile/info/";
 
         public static String getUrlWithID(String url, String ID) {
             return String.format(url, ID);

@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.example.tilitili.data.Page;
+import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
 
@@ -241,7 +242,7 @@ public class Pager {
         }
 
         @Override
-        public void onError(Response response, int code, Exception e) {
+        public void onError(Response response, ErrorMessage errorMessage, Exception e) {
             Toast.makeText(builder.mContext, "加载数据失败", Toast.LENGTH_LONG).show();
             dismissDialog();
 

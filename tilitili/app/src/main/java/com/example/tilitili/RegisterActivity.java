@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.tilitili.data.Contants;
+import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.CaptchaUtil;
@@ -84,9 +85,9 @@ public class RegisterActivity extends Activity {
                 }
 
                 @Override
-                public void onError(Response response, int code, Exception e) {
+                public void onError(Response response, ErrorMessage errorMessage, Exception e) {
                     dismissDialog();
-                    ToastUtils.show(RegisterActivity.this, R.string.login_error);
+                    ToastUtils.show(RegisterActivity.this, errorMessage.getErrorMessage());
                 }
             };
             stringSpotsCallBack.setMessage(R.string.registering);

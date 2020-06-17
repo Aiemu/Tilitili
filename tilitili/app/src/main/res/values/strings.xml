@@ -40,6 +40,25 @@
     <string name="register_duplicate_password_hint">再次输入密码</string>
     <string name="register_captcha_hint">输入验证码</string>
     <string name="register_to_login_hint">已有帐号？返回登录</string>
+    <string name="login_username_hint">用户名/邮箱</string>
+    <string name="login_password_hint">密码</string>
+    <string name="reset_password_username_hint">用户名/邮箱</string>
+    <string name="reset_password_verify_code_hint">验证码</string>
+    <string name="reset_password_new_password_hint">新密码</string>
+    <string name="reset_password_confirm_password_hint">确认密码</string>
     <string name="label_cancel_dislike">撤消</string>
+    <string name="choose_cover_hint">选择封面：</string>
+    <string name="user_profile_avatar_hint">头像</string>
+    <string name="user_profile_nickname_hint">昵称</string>
+    <string name="user_profile_nickname_default">清华大学</string>
+    <string name="user_profile_joinat_hint">注册日期</string>
+    <string name="user_profile_joinat_default">2020年6月1日</string>
+    <string name="user_profile_bio_hint">个性签名</string>
+    <string name="user_profile_bio_default">人生无处不青山</string>
+    <string name="user_profile_department_hint">院系</string>
+    <string name="user_profile_department_default">未知</string>
+    <string name="user_profile_organization_hint">社团</string>
+    <string name="user_profile_organization_default">未知</string>
+    <string name="user_profile_submission_upload_hint">投稿</string>
 
 </resources>

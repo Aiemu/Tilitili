@@ -51,10 +51,10 @@ public abstract class BaseHttpCallback<T> {
      * 状态码400，404，403，500等时调用此方法
      *
      * @param response
-     * @param code
+     * @param errorMessage
      * @param e
      */
-    public abstract void onError(Response response, int code, Exception e);
+    public abstract void onError(Response response, ErrorMessage errorMessage, Exception e);
 
     /**
      * Token 验证失败。状态码401,402,403 等时调用此方法
