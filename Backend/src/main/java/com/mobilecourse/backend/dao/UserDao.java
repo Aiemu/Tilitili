@@ -10,6 +10,7 @@ public interface UserDao {
     int userCount();
     User getUserByUsername(String username);
     User getUserByEmail(String email);
+    User getUserById(Integer id);
     void registerUser(User user);
     List<User> searchUser(String subUsername, Integer maxNumber);
 }

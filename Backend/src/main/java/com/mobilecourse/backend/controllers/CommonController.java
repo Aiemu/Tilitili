@@ -37,9 +37,8 @@ public class CommonController {
     }
 
     // 添加信息到session之中，此部分用途很广泛，比如可以通过session获取到对应的用户名或者用户ID，避免繁冗操作
-    public void putInfoToSession(HttpServletRequest request, String keyName, Object info)
+    public void putInfoToSession(HttpSession session, String keyName, Object info)
     {
-        HttpSession session = request.getSession();
         //设置session过期时间，单位为秒(s)
         session.setMaxInactiveInterval(MAXTIME);
         //将信息存入session

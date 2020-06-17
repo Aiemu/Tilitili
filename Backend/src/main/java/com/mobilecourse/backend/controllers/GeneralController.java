@@ -57,8 +57,7 @@ public class GeneralController extends CommonController {
     private JavaMailSender mailSender;
     @Value("${spring.mail.username}")
     private String mailFromAddr;
-//    private String urlFormat = "http://129.211.37.216:8080/verify/%s";
-    private String urlFormat = "http://localhost:8080/verify/%s";
+    private String urlFormat = "http://129.211.37.216:8888/verify/%s";
 
     /**
      * 用户注册, 会发送验证邮件
@@ -84,7 +83,7 @@ public class GeneralController extends CommonController {
         User existEmail = userMapper.getUserByEmail(email);
         if (existEmail != null) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, 1,
-                    String.format("The email (%s) in the register process has already existed in Database.", username));
+                    String.format("The email (%s) in the register process has already existed in Database.", email));
         }
 
         //随机生成验证码
@@ -132,6 +131,7 @@ public class GeneralController extends CommonController {
             user.setEmail(cache.email);
             user.setNickname(cache.nickname);
             userMapper.registerUser(user);
+            LOG.warn(String.format("The verifyCode (%s) registered successfully.", code));
             return wrapperResponse(HttpStatus.OK, "success");
         } else {
             LOG.warn(String.format("The verifyCode (%s) has not registered yet.", code));
@@ -154,11 +154,11 @@ public class GeneralController extends CommonController {
             throw new BusinessException(HttpStatus.BAD_REQUEST, 1, "Password is wrong.");
         }
         // 登录成功, 存储登录状态
-        session.setAttribute(LoginConfig.LOGIN_KEY, true);
-        session.setAttribute("id", existUser.getId());
-        session.setAttribute("username", existUser.getUsername());
-        session.setAttribute("privilege", existUser.getPrivilege());
-        session.setAttribute("nickname", existUser.getNickname());
+        putInfoToSession(session, LoginConfig.LOGIN_KEY, true);
+        putInfoToSession(session, "id", existUser.getId());
+        putInfoToSession(session, "username", existUser.getUsername());
+        putInfoToSession(session, "privilege", existUser.getPrivilege());
+        putInfoToSession(session, "nickname", existUser.getNickname());
         // 返回userShort
         jsonObject.put("id", existUser.getId());
         jsonObject.put("username", existUser.getUsername());
