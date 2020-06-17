@@ -27,8 +27,7 @@ public class BusinessExceptionController extends BasicErrorController {
      */
     @Override
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
-        Map<String, Object> body = getErrorAttributes(request,
-                isIncludeStackTrace(request, MediaType.ALL));
+        Map<String, Object> body = getErrorAttributes(request, false);
         HttpStatus status = getStatus(request);
 
         LOG.error(String.format("Exception in %s", body.get("path")));
