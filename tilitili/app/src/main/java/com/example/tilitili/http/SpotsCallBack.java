@@ -14,9 +14,11 @@ import okhttp3.Response;
 public abstract class SpotsCallBack<T> extends SimpleCallback<T> {
 
     private SpotsDialog dialog;
+    private Context context;
 
     public SpotsCallBack(Context context) {
         super(context);
+        this.context = context;
         this.initSpotsDialog();
     }
 
@@ -54,5 +56,9 @@ public abstract class SpotsCallBack<T> extends SimpleCallback<T> {
     public void onFailure(Request request, Exception e) {
         Log.d("asd", Objects.requireNonNull(e.getMessage()));
         dismissDialog();
+    }
+
+    public Context getContext() {
+        return context;
     }
 }

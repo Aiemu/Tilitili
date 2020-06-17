@@ -135,6 +135,20 @@ router.post('/image/upload', async function(ctx, next) {
     next()
 });
 
+router.get('/user/profile/info/1', async function(ctx, next) {
+    console.log("/user/profile/info/:id已被访问")
+    ctx.body = {
+        "email": "list17@mails.tsinghua.edu.cn",
+        "nickname": "list",
+        "department": "软件学院",
+        "organization": "天文协会",
+        "joinAt": 1592413723,
+        "bio": "大家好"
+    }
+    ctx.response.status = 200
+    next()
+})
+
 app.use(bodyParser())
 app.use(router.routes())
 app.use(async(ctx, next) => {

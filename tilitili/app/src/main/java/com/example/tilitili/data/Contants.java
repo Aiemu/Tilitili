@@ -20,7 +20,7 @@ public class Contants {
         public static final String GET_USER_PROFILE_URL = BASE_URL + "/user/profile/info/";
 
         public static String getUrlWithID(String url, String ID) {
-            return String.format(url, ID);
+            return url + ID;
         }
 
         public String getUrl(String url, Object... args) {

@@ -25,4 +25,9 @@ public class UserLocalData {
         PreferencesUtils.putString(context, Contants.USER_JSON, "");
     }
 
+    public static void updateUser(Context context, User user) {
+        clearUser(context);
+        putUser(context, user);
+    }
+
 }
