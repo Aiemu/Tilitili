@@ -55,7 +55,7 @@ public class LoginActivity extends Activity {
             public void onSuccess(Response response, User user) {
                 UserManagerApplication application = UserManagerApplication.getInstance();
                 application.putUser(user);
-                Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent register_intent = new Intent(LoginActivity.this, EditorActivity.class);
                 startActivity(register_intent);
             }
 

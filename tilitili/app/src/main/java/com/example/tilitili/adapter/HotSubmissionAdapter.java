@@ -31,8 +31,8 @@ public class HotSubmissionAdapter extends SimpleAdapter<Submission> {
         viewHolder.getTextView(R.id.text_plate).setText(plate);
     }
 
-    public void resetLayout(int layoutId){
-        this.layoutResId  = layoutId;
-        notifyItemRangeChanged(0,getDatas().size());
+    public void resetLayout(int layoutId) {
+        this.layoutResId = layoutId;
+        notifyItemRangeChanged(0, getDatas().size());
     }
 }

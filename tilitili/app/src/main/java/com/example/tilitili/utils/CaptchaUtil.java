@@ -35,7 +35,7 @@ public class CaptchaUtil {
     private static final int DEFAULT_COLOR = 0xDF;//默认背景颜色值
 
     public static CaptchaUtil getInstance() {
-        if(captchaUtil == null) {
+        if (captchaUtil == null) {
             captchaUtil = new CaptchaUtil();
         }
         return captchaUtil;
@@ -57,7 +57,7 @@ public class CaptchaUtil {
         for (int i = 0; i < captcha.length(); i++) {
             randomTextStyle(paint);
             randomPadding();
-            canvas.drawText(captcha.charAt(i) + "" , mPaddingLeft, mPaddingTop, paint);
+            canvas.drawText(captcha.charAt(i) + "", mPaddingLeft, mPaddingTop, paint);
         }
         //干扰线
         for (int i = 0; i < DEFAULT_LINE_NUMBER; i++) {

@@ -46,4 +46,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.1.0'
+    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'jp.wasabeef:richeditor-android:1.2.2'
+    implementation 'com.karumi:dexter:5.0.0'
+    implementation 'org.json:json:20200518'
 }

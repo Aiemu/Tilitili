@@ -7,6 +7,7 @@ import com.mobilecourse.backend.annotation.LoginAuth;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.exception.BusinessException;
 import com.mobilecourse.backend.model.User;
+import com.mobilecourse.backend.util.LoginConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 @RestController
@@ -138,22 +141,31 @@ public class GeneralController extends CommonController {
 
     @RequestMapping(value = "/login", method = { RequestMethod.POST })
     public ResponseEntity<JSONObject> loginUser(@RequestParam(value = "username") String username,
-                                                @RequestParam(value = "password") String password) {
+                                                @RequestParam(value = "password") String password,
+                                                HttpSession session) {
         User existUser = userMapper.getUserByUsername(username);
         JSONObject jsonObject = new JSONObject();
         if (existUser == null) {
             //用户不存在
-            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "User could not be found.");
+            throw new BusinessException(HttpStatus.BAD_REQUEST, 1, "User could not be found.");
         }
         if (!existUser.getPassword().equals(password)) {
             //用户密码错误
             throw new BusinessException(HttpStatus.BAD_REQUEST, 1, "Password is wrong.");
         }
         // 登录成功, 存储登录状态
+        session.setAttribute(LoginConfig.LOGIN_KEY, true);
+        session.setAttribute("id", existUser.getId());
+        session.setAttribute("username", existUser.getUsername());
+        session.setAttribute("privilege", existUser.getPrivilege());
+        session.setAttribute("nickname", existUser.getNickname());
+        // 返回userShort
         jsonObject.put("id", existUser.getId());
         jsonObject.put("username", existUser.getUsername());
         jsonObject.put("privilege", existUser.getPrivilege());
         jsonObject.put("nickname", existUser.getNickname());
+
+        LOG.info(String.format("The user (%s) login.", existUser.getUsername()));
         return wrapperResponse(HttpStatus.OK, jsonObject);
     }
 
@@ -165,5 +177,33 @@ public class GeneralController extends CommonController {
         return wrapperResponse(HttpStatus.OK, "logout successfully.");
     }
 
+    @LoginAuth
+    @RequestMapping(value = "/whoami", method = { RequestMethod.GET })
+    public ResponseEntity<JSONObject> whoAmI(HttpSession session) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", session.getAttribute("id"));
+        jsonObject.put("username", session.getAttribute("username"));
+        jsonObject.put("privilege", session.getAttribute("privilege"));
+        jsonObject.put("nickname", session.getAttribute("nickname"));
+        return wrapperResponse(HttpStatus.OK, jsonObject);
+    }
+
+    @RequestMapping(value = "/user_search", method = { RequestMethod.GET })
+    public ResponseEntity<JSONObject> userSearch(@RequestParam(value = "username") String subUsername) {
+        List<User> matchedUsers = userMapper.searchUser(subUsername, 5);
+        JSONObject jsonObject = new JSONObject();
+        JSONObject userJSON;
+        ArrayList<JSONObject> userShorts = new ArrayList<>();
+        for (User u: matchedUsers) {
+            userJSON = new JSONObject();
+            userJSON.put("id", u.getId());
+            userJSON.put("username", u.getUsername());
+            userJSON.put("privilege", u.getPrivilege());
+            userJSON.put("nickname", u.getNickname());
+            userShorts.add(userJSON);
+        }
+        jsonObject.put("userShorts", userShorts);
+        return wrapperResponse(HttpStatus.OK, jsonObject);
+    }
 
 }

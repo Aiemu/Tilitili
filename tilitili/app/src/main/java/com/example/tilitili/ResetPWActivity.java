@@ -17,7 +17,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ResetPWActivity extends Activity {
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +35,8 @@ public class ResetPWActivity extends Activity {
             @Override
             public void onClick(View v) {
                 final String username = edit_username.getText().toString();
-                final String password = edit_password.getText().toString();;
+                final String password = edit_password.getText().toString();
+                ;
                 final String password_con = edit_password_con.getText().toString();
 
                 if (password.equals(password_con)) {
@@ -53,8 +56,7 @@ public class ResetPWActivity extends Activity {
 
                         }
                     }).start();
-                }
-                else {
+                } else {
                     Toast.makeText(ResetPWActivity.this, "两次密码不一致", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -88,16 +90,13 @@ public class ResetPWActivity extends Activity {
                 InputStream is = conn.getInputStream();
                 String response = getStringFromInputStream(is);
                 return response;
-            }
-            else {
-                throw new NetworkErrorException("response status is "+responseCode);
+            } else {
+                throw new NetworkErrorException("response status is " + responseCode);
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             if (conn != null) {
                 conn.disconnect();// 关闭连接
             }
@@ -124,14 +123,12 @@ public class ResetPWActivity extends Activity {
                 String response = getStringFromInputStream(is);
                 return response;
             } else {
-                throw new NetworkErrorException("response status is "+responseCode);
+                throw new NetworkErrorException("response status is " + responseCode);
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
 
             if (conn != null) {
                 conn.disconnect();

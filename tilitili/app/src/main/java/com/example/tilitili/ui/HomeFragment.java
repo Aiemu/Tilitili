@@ -1,5 +1,6 @@
 package com.example.tilitili.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cjj.MaterialRefreshLayout;
 import com.example.tilitili.R;
+import com.example.tilitili.TextDetailActivity;
 import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.HotSubmissionAdapter;
 import com.example.tilitili.data.Contants;
@@ -22,7 +24,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 
 import java.util.List;
 
-public class HomeFragment extends BaseFragment implements Pager.OnPageListener<Submission>{
+public class HomeFragment extends BaseFragment implements Pager.OnPageListener<Submission> {
     private HotSubmissionAdapter hotSubmissionAdapter;
     @ViewInject(R.id.recyclerview)
     private RecyclerView recyclerView;
@@ -42,7 +44,8 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                 .setOnPageListener(this)
                 .setPageSize(5)
                 .setRefreshLayout(materialRefreshLayout)
-                .build(this.getActivity(), new TypeToken<Page<Submission>>() {}.getType());
+                .build(this.getActivity(), new TypeToken<Page<Submission>>() {
+                }.getType());
         pager.request();
     }
 
@@ -53,8 +56,8 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
             @Override
             public void onItemClick(View view, int position) {
                 Submission submission = hotSubmissionAdapter.getItem(position);
-//                Intent intent = new Intent(getContext(), )
-                // todo 跳转到详情界面
+                Intent intent = new Intent(getContext(), TextDetailActivity.class);
+                startActivity(intent);
             }
         });
 

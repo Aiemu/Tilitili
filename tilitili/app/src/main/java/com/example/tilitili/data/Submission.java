@@ -7,11 +7,11 @@ public class Submission {
     private String resource;
     private String title;
     private String introduction;
-//    private String snapshot;
+    //    private String snapshot;
     private long submissionTime;
     private long watchTimes;
 
-    public Submission(int submissionId, int plateId, int type, String resource, String title, String introduction, long submissionTime, long watchTimes){
+    public Submission(int submissionId, int plateId, int type, String resource, String title, String introduction, long submissionTime, long watchTimes) {
         this.submissionId = submissionId;
         this.plateId = plateId;
         this.type = type;

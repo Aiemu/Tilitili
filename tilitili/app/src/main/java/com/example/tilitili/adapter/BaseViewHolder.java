@@ -13,13 +13,13 @@ public class BaseViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     private SparseArray<View> views;
 
-    private BaseAdapter.OnItemClickListener mOnItemClickListener ;
+    private BaseAdapter.OnItemClickListener mOnItemClickListener;
 
-    public BaseViewHolder(View itemView,BaseAdapter.OnItemClickListener onItemClickListener){
+    public BaseViewHolder(View itemView, BaseAdapter.OnItemClickListener onItemClickListener) {
         super(itemView);
         itemView.setOnClickListener(this);
 
-        this.mOnItemClickListener =onItemClickListener;
+        this.mOnItemClickListener = onItemClickListener;
         this.views = new SparseArray<View>();
     }
 
@@ -56,7 +56,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     @Override
     public void onClick(View v) {
         if (mOnItemClickListener != null) {
-            mOnItemClickListener.onItemClick(v,getLayoutPosition());
+            mOnItemClickListener.onItemClick(v, getLayoutPosition());
         }
     }
 }

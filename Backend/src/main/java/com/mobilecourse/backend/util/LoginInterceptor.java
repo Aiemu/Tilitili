@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 import java.util.Date;
 
 public class LoginInterceptor implements HandlerInterceptor {
-    public static final String LOGIN_KEY = "LOGIN";
+
     private final Logger LOG = LoggerFactory.getLogger(BackendApplication.class);
 
     @Override
@@ -32,16 +32,17 @@ public class LoginInterceptor implements HandlerInterceptor {
         Method method = handlerMethod.getMethod();
         if (method.isAnnotationPresent(LoginAuth.class)) {
             HttpSession session = request.getSession();
-            Object loginStatus = session.getAttribute(LOGIN_KEY);
+            Object loginStatus = session.getAttribute(LoginConfig.LOGIN_KEY);
             if (loginStatus == null) {
                 // 未登录
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("timestamp", new Date());
+                jsonObject.put("timestamp", new Date().toString());
                 jsonObject.put("errorCode", 1);
                 jsonObject.put("errorMessage", "Need Login.");
                 jsonObject.put("uri", request.getRequestURI());
                 response.getWriter().append(jsonObject.toJSONString());
+                response.setHeader("Content-Type", "application/json;charset=UTF-8");
                 LOG.warn("A user try to use API without login authorization");
                 return false;
             }

@@ -25,4 +25,10 @@
             #{username}, #{password}, #{email}, #{nickname}
         </trim>;
     </insert>
+    <select id="searchUser" resultType="com.mobilecourse.backend.model.User">
+        SELECT *
+        FROM User
+        WHERE username like "%"#{subUsername}"%"
+        LIMIT #{maxNumber};
+    </select>
 </mapper>

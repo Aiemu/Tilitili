@@ -86,3 +86,4 @@ lint/tmp/
 
 node_modules/
 .DS_Store
+src/main/java/com/example/tilitili/Config.java
