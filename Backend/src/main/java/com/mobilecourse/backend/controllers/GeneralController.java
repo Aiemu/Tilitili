@@ -84,7 +84,7 @@ public class GeneralController extends CommonController {
         User existEmail = userMapper.getUserByEmail(email);
         if (existEmail != null) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, 1,
-                    String.format("The email (%s) in the register process has already existed in Database.", username));
+                    String.format("The email (%s) in the register process has already existed in Database.", email));
         }
 
         //随机生成验证码
