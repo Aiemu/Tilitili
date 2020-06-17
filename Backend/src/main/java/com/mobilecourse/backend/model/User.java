@@ -10,6 +10,9 @@ public class User {
     private String password;
     private int privilege;
     private String organization;
+    private String department;
+    private Timestamp joinAt;
+    private int avatar;
 
     public int getId() {
         return id;
@@ -91,7 +94,4 @@ public class User {
         this.avatar = avatar;
     }
 
-    private String department;
-    private Timestamp joinAt;
-    private int avatar;
 }

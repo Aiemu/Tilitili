@@ -1,11 +1,16 @@
 package com.mobilecourse.backend.controllers;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mobilecourse.backend.dao.UserDao;
+import com.mobilecourse.backend.exception.BusinessException;
+import com.mobilecourse.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.HashMap;
 
 @RestController
@@ -19,10 +24,17 @@ public class UserController extends CommonController {
      * 查看注册用户的个数.
      * @return
      */
-    @RequestMapping(value = "/user/stat")
+    @RequestMapping(value = "/stat")
     public String getUserCount() {
         return wrapperMsg(200, "Tilitili当前一共有" + userMapper.userCount() + "名用户.");
     }
 
+//    @RequestMapping(value = "/profile/info/{id}", method = { RequestMethod.GET })
+//    public ResponseEntity<JSONObject> getInfo(@PathVariable(value = "id") Integer id) {
+//        User user = userMapper.getUserById(id);
+//        if (user == null) {
+//            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The user does not exist.");
+//        }
+//    }
 
 }

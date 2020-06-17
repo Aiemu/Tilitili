@@ -1,6 +1,6 @@
-drop database tilitili;
-create database tilitili;
-use tilitili;
+drop database Tilitili;
+create database Tilitili;
+use Tilitili;
 
 create table User(id int primary key AUTO_INCREMENT,
 username varchar(20) not null unique,

@@ -16,6 +16,11 @@
         FROM User
         WHERE email=#{email}
     </select>
+    <select id="getUserById" resultType="com.mobilecourse.backend.model.User">
+        SELECT *
+        FROM User
+        WHERE id=#{id}
+    </select>
     <insert id="registerUser" keyProperty="id" useGeneratedKeys="true" parameterType="com.mobilecourse.backend.model.User">
         INSERT INTO User
         <trim prefix="(" suffix=")" suffixOverrides="," >
