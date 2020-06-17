@@ -131,6 +131,7 @@ public class GeneralController extends CommonController {
             user.setEmail(cache.email);
             user.setNickname(cache.nickname);
             userMapper.registerUser(user);
+            LOG.warn(String.format("The verifyCode (%s) registered successfully.", code));
             return wrapperResponse(HttpStatus.OK, "success");
         } else {
             LOG.warn(String.format("The verifyCode (%s) has not registered yet.", code));

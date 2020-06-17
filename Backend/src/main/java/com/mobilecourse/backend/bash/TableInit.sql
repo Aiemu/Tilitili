@@ -11,4 +11,5 @@ privilege int DEFAULT 0,
 organization varchar(20),
 department varchar(20),
 joinAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-avatar int);
+avatar int,
+bio varchar(100));

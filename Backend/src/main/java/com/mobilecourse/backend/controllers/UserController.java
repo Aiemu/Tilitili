@@ -29,12 +29,20 @@ public class UserController extends CommonController {
         return wrapperMsg(200, "Tilitili当前一共有" + userMapper.userCount() + "名用户.");
     }
 
-//    @RequestMapping(value = "/profile/info/{id}", method = { RequestMethod.GET })
-//    public ResponseEntity<JSONObject> getInfo(@PathVariable(value = "id") Integer id) {
-//        User user = userMapper.getUserById(id);
-//        if (user == null) {
-//            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The user does not exist.");
-//        }
-//    }
+    @RequestMapping(value = "/profile/info/{id}", method = { RequestMethod.GET })
+    public ResponseEntity<JSONObject> getInfo(@PathVariable(value = "id") Integer id) {
+        User user = userMapper.getUserById(id);
+        if (user == null) {
+            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The user does not exist.");
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("email", user.getEmail());
+        jsonObject.put("nickname", user.getNickname());
+        jsonObject.put("department", user.getDepartment());
+        jsonObject.put("organization", user.getOrganization());
+        jsonObject.put("joinAt", user.getJoinAt());
+        jsonObject.put("bio", user.getBio());
+        return wrapperResponse(HttpStatus.OK, jsonObject);
+    }
 
 }
