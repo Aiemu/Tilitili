@@ -21,6 +21,7 @@ import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.User;
 import com.example.tilitili.data.UserLocalData;
 import com.example.tilitili.http.CountingRequestBody;
+import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.ToastUtils;
@@ -468,9 +469,9 @@ public class EditorActivity extends Activity {
             }
 
             @Override
-            public void onError(Response response, int code, Exception e) {
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
                 dismissDialog();
-                ToastUtils.show(EditorActivity.this, R.string.login_error);
+                ToastUtils.show(EditorActivity.this, errorMessage.getErrorMessage());
             }
         };
         stringSpotsCallBack.setMessage(R.string.logining);

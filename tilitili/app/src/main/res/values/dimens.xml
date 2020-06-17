@@ -3,6 +3,8 @@
 
     <dimen name="hot_submission_img_height">90dp</dimen>
     <dimen name="hot_submission_img_width">120dp</dimen>
+    <dimen name="user_profile_avatar_height">90dp</dimen>
+    <dimen name="user_profile_avatar_width">90dp</dimen>
     <dimen name="abc_config_prefDialogWidth">320.0dip</dimen>
     <dimen name="abc_action_bar_stacked_tab_max_width">180.0dip</dimen>
     <dimen name="abc_action_bar_stacked_max_height">48.0dip</dimen>

@@ -48,5 +48,17 @@
     <string name="reset_password_confirm_password_hint">确认密码</string>
     <string name="label_cancel_dislike">撤消</string>
     <string name="choose_cover_hint">选择封面：</string>
+    <string name="user_profile_avatar_hint">头像</string>
+    <string name="user_profile_nickname_hint">昵称</string>
+    <string name="user_profile_nickname_default">清华大学</string>
+    <string name="user_profile_joinat_hint">注册日期</string>
+    <string name="user_profile_joinat_default">2020年6月1日</string>
+    <string name="user_profile_bio_hint">个性签名</string>
+    <string name="user_profile_bio_default">人生无处不青山</string>
+    <string name="user_profile_department_hint">院系</string>
+    <string name="user_profile_department_default">未知</string>
+    <string name="user_profile_organization_hint">社团</string>
+    <string name="user_profile_organization_default">未知</string>
+    <string name="user_profile_submission_upload_hint">投稿</string>
 
 </resources>
