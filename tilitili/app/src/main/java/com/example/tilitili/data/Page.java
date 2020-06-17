@@ -11,6 +11,14 @@ public class Page<T> {
 
     private List<T> list;
 
+    public Page(int currentPage, int pageSize, int totalPage, int totalCount, List<T> list) {
+        this.currentPage = currentPage;
+        this.pageSize = pageSize;
+        this.totalCount = totalCount;
+        this.totalPage = totalPage;
+        this.list = list;
+    }
+
     public int getCurrentPage() {
         return currentPage;
     }

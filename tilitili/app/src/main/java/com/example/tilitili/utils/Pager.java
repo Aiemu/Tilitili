@@ -5,32 +5,28 @@ import android.widget.Toast;
 
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
-import com.example.tilitili.data.Page;
-import com.example.tilitili.http.ErrorMessage;
+import com.example.tilitili.http.BaseHttpCallback;
 import com.example.tilitili.http.HttpHelper;
-import com.example.tilitili.http.SpotsCallBack;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class Pager {
 
     private static Builder builder;
     private HttpHelper httpHelper;
+    private BaseHttpCallback callback;
 
-    private static final int STATE_NORMAL = 0;
-    private static final int STATE_REFREH = 1;
-    private static final int STATE_MORE = 2;
+    public static final int STATE_NORMAL = 0;
+    public static final int STATE_REFREH = 1;
+    public static final int STATE_MORE = 2;
 
     private int state = STATE_NORMAL;
 
-    private Pager() {
+    private Pager(BaseHttpCallback callback) {
         httpHelper = HttpHelper.getInstance();
+        this.callback = callback;
         initRefreshLayout();
     }
 
@@ -74,13 +70,13 @@ public class Pager {
      */
     private void requestData() {
         String url = buildUrl();
-        httpHelper.get(url, new RequestCallBack(builder.mContext));
+        httpHelper.get(url, callback);
     }
 
     /**
      * 显示数据
      */
-    private <T> void showData(List<T> datas, int totalPage, int totalCount) {
+    public <T> void showData(List<T> datas, int totalPage, int totalCount) {
         if (datas == null || datas.size() <= 0) {
             Toast.makeText(builder.mContext, "加载不到数据", Toast.LENGTH_LONG).show();
             return;
@@ -152,7 +148,6 @@ public class Pager {
      */
     public static class Builder {
         private Context mContext;
-        private Type mType;
         private String mUrl;
 
         private MaterialRefreshLayout mRefreshLayout;
@@ -160,6 +155,7 @@ public class Pager {
         private boolean canLoadMore;
 
         private int totalPage = 1;
+
         private int pageIndex = 1;
         private int pageCount = 5;
         private HashMap<String, Object> params = new HashMap<>(5);
@@ -169,6 +165,26 @@ public class Pager {
         public Builder setUrl(String url) {
             builder.mUrl = url;
             return builder;
+        }
+
+        public MaterialRefreshLayout getmRefreshLayout() {
+            return this.mRefreshLayout;
+        }
+
+        public Context getmContext() {
+            return this.mContext;
+        }
+
+        public void setTotalPage(int totalPage) {
+            this.totalPage = totalPage;
+        }
+
+        public void setPageIndex(int pageIndex) {
+            this.pageIndex = pageIndex;
+        }
+
+        public void setPageCount(int pageCount) {
+            this.pageCount = pageCount;
         }
 
         public Builder setPageSize(int pageCount) {
@@ -196,11 +212,10 @@ public class Pager {
             return builder;
         }
 
-        public Pager build(Context context, Type type) {
-            this.mType = type;
+        public Pager build(Context context, BaseHttpCallback callback) {
             this.mContext = context;
             valid();
-            return new Pager();
+            return new Pager(callback);
         }
 
         private void valid() {
@@ -215,45 +230,6 @@ public class Pager {
         }
     }
 
-    class RequestCallBack<T> extends SpotsCallBack<Page<T>> {
-        public RequestCallBack(Context context) {
-            super(context);
-            super.type = builder.mType;
-        }
-
-        @Override
-        public void onFailure(Request request, Exception e) {
-            dismissDialog();
-            Toast.makeText(builder.mContext, "请求出错：" + e.getMessage(), Toast.LENGTH_LONG).show();
-            if (STATE_REFREH == state) {
-                builder.mRefreshLayout.finishRefresh();
-            } else if (STATE_MORE == state) {
-                builder.mRefreshLayout.finishRefreshLoadMore();
-            }
-        }
-
-        @Override
-        public void onSuccess(Response response, Page<T> page) {
-            dismissDialog();
-            builder.pageIndex = page.getCurrentPage();
-            builder.pageCount = page.getPageSize();
-            builder.totalPage = page.getTotalPage();
-            showData(page.getList(), page.getTotalPage(), page.getTotalCount());
-        }
-
-        @Override
-        public void onError(Response response, ErrorMessage errorMessage, Exception e) {
-            Toast.makeText(builder.mContext, "加载数据失败", Toast.LENGTH_LONG).show();
-            dismissDialog();
-
-            if (STATE_REFREH == state) {
-                builder.mRefreshLayout.finishRefresh();
-            } else if (STATE_MORE == state) {
-                builder.mRefreshLayout.finishRefreshLoadMore();
-            }
-        }
-    }
-
     public interface OnPageListener<T> {
         void load(List<T> datas, int totalPage, int totalCount);
 
@@ -262,4 +238,11 @@ public class Pager {
         void loadMore(List<T> datas, int totalPage, int totalCount);
     }
 
+    public int getState() {
+        return state;
+    }
+
+    public static Builder getBuilder() {
+        return builder;
+    }
 }

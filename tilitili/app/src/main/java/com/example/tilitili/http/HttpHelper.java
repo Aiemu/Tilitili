@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -131,11 +130,11 @@ public class HttpHelper {
                     String error = response.body().string();
                     Log.d("sad", error);
                     JSONObject jsonObject = new JSONObject(error);
-                    errorMessage = new ErrorMessage(jsonObject.getString("errorMessage"), jsonObject.getInt("errorCode") , jsonObject.getString("uri"), jsonObject.getString("timestamp"));
+                    errorMessage = new ErrorMessage(jsonObject.getString("errorMessage"), jsonObject.getInt("errorCode"), jsonObject.getString("uri"), jsonObject.getString("timestamp"));
                 } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
-                callback.onError(response, errorMessage , e);
+                callback.onError(response, errorMessage, e);
             }
         });
     }
