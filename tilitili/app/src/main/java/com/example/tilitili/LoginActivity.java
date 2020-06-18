@@ -3,6 +3,7 @@ package com.example.tilitili;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -54,15 +55,13 @@ public class LoginActivity extends Activity {
         map.put("username", username);
         map.put("password", password);
 
-        // for test
-//        Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
-//        startActivity(register_intent);
 
         SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(this) {
             @Override
             public void onSuccess(Response response, String userString) {
                 User user = null;
                 try {
+                    Log.d("user", userString);
                     JSONObject jsonObject = new JSONObject(userString);
                     user = new User(jsonObject.getInt("id"), jsonObject.getString("username")
                             , jsonObject.getInt("privilege"), jsonObject.getString("nickname"));

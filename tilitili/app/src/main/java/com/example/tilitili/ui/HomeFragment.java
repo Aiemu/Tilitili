@@ -23,6 +23,7 @@ import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.Pager;
+import com.example.tilitili.utils.ToastUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -59,7 +60,7 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
             @Override
             public void onFailure(Request request, Exception e) {
                 dismissDialog();
-                Toast.makeText(this.getContext(), "请求出错：" + e.getMessage(), Toast.LENGTH_LONG).show();
+                ToastUtils.show(this.getContext(), "请求出错：" + e.getMessage(), Toast.LENGTH_LONG);
                 if (Pager.STATE_REFREH == pager.getState()) {
                     Pager.getBuilder().getmRefreshLayout().finishRefresh();
                 } else if (Pager.STATE_MORE == pager.getState()) {
