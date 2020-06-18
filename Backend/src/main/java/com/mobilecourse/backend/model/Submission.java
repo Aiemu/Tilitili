@@ -3,7 +3,7 @@ package com.mobilecourse.backend.model;
 import java.sql.Timestamp;
 
 public class Submission {
-    private int id;
+    private int sid;
     private int type;
     private int pid;
     private String title;
@@ -11,15 +11,14 @@ public class Submission {
     private String introduction;
     private String resource;
     private Timestamp submissionTime;
-    private int likes;
     private int watchTimes;
 
-    public int getId() {
-        return id;
+    public int getSid() {
+        return sid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSid(int sid) {
+        this.sid = sid;
     }
 
     public int getType() {
@@ -76,14 +75,6 @@ public class Submission {
 
     public void setSubmissionTime(Timestamp submissionTime) {
         this.submissionTime = submissionTime;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
     }
 
     public int getWatchTimes() {

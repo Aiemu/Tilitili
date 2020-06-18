@@ -1,6 +1,5 @@
 package com.mobilecourse.backend.controllers;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mobilecourse.backend.annotation.LoginAuth;
 import com.mobilecourse.backend.dao.UserDao;
@@ -14,13 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.ResourceUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,8 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.*;
 
 @RestController
@@ -54,7 +49,7 @@ public class GeneralController extends CommonController {
     }
 
     @Autowired
-    private UserDao userMapper;
+    private UserDao userDao;
 
     // 邮件部分
     private final HashMap<String, UserInfoCache> verifyCodesHashMap = new HashMap<>();
@@ -79,13 +74,13 @@ public class GeneralController extends CommonController {
                                              @RequestParam(value = "nickname") @Length(max = 20) String nickname,
                                              HttpServletRequest request) {
         //检查用户名是否重复
-        User existUser = userMapper.getUserByUsername(username);
+        User existUser = userDao.getUserByUsername(username);
         if (existUser != null) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, 1,
                     String.format("The username (%s) in the register process has already existed in Database.", username));
         }
         //检查邮箱是否重复.
-        User existEmail = userMapper.getUserByEmail(email);
+        User existEmail = userDao.getUserByEmail(email);
         if (existEmail != null) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, 1,
                     String.format("The email (%s) in the register process has already existed in Database.", email));
@@ -133,7 +128,7 @@ public class GeneralController extends CommonController {
             user.setPassword(cache.password);
             user.setEmail(cache.email);
             user.setNickname(cache.nickname);
-            userMapper.registerUser(user);
+            userDao.registerUser(user);
             LOG.warn(String.format("The verifyCode (%s) registered successfully.", code));
             return wrapperResponse(HttpStatus.OK, "success");
         } else {
@@ -146,7 +141,7 @@ public class GeneralController extends CommonController {
     public ResponseEntity<JSONObject> loginUser(@RequestParam(value = "username") String username,
                                                 @RequestParam(value = "password") String password,
                                                 HttpSession session) {
-        User existUser = userMapper.getUserByUsername(username);
+        User existUser = userDao.getUserByUsername(username);
         JSONObject jsonObject = new JSONObject();
         if (existUser == null) {
             //用户不存在
@@ -190,7 +185,7 @@ public class GeneralController extends CommonController {
 
     @RequestMapping(value = "/user_search", method = { RequestMethod.GET })
     public ResponseEntity<JSONObject> userSearch(@RequestParam(value = "username") String subUsername) {
-        List<User> matchedUsers = userMapper.searchUser(subUsername, 5);
+        List<User> matchedUsers = userDao.searchUser(subUsername, 5);
         JSONObject jsonObject = new JSONObject();
         JSONObject userJSON;
         ArrayList<JSONObject> userShorts = new ArrayList<>();

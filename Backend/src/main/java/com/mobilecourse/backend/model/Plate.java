@@ -1,16 +1,16 @@
 package com.mobilecourse.backend.model;
 
 public class Plate {
-    private int id;
+    private int pid;
     private String title;
     private String description;
 
-    public int getId() {
-        return id;
+    public int getPid() {
+        return pid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setPid(int pid) {
+        this.pid = pid;
     }
 
     public String getTitle() {
