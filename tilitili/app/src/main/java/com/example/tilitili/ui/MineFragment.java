@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.tilitili.EditorActivity;
 import com.example.tilitili.R;
+import com.example.tilitili.UserProfileUpdateActivity;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.User;
 import com.example.tilitili.data.UserLocalData;
@@ -91,6 +92,12 @@ public class MineFragment extends BaseFragment {
     @OnClick(R.id.user_profile_submit)
     void goToSubmit(View view) {
         Intent intent = new Intent(this.getContext(), EditorActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.user_profile_change)
+    void updateUserProfile(View view) {
+        Intent intent = new Intent(this.getContext(), UserProfileUpdateActivity.class);
         startActivity(intent);
     }
 }

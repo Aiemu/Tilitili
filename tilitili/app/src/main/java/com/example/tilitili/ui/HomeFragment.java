@@ -18,6 +18,7 @@ import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.HotSubmissionAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Page;
+import com.example.tilitili.data.Plate;
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;
@@ -76,14 +77,21 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                     JSONArray items = jsonObject.getJSONArray("list");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
+                        JSONObject plateString = item.getJSONObject("plate");
+                        Plate plate = new Plate(plateString.getInt("id"),
+                                plateString.getString("title"),
+                                plateString.getInt("owner"),
+                                plateString.getLong("startTime"),
+                                plateString.getString("description"));
                         submissions.add(new Submission(item.getInt("id"),
-                                item.getInt("pid"),
+                                plate,
                                 item.getInt("type"),
                                 item.getString("resource"),
                                 item.getString("title"),
                                 item.getString("introduction"),
                                 item.getInt("submissionTime"),
-                                item.getInt("watchTimes")));
+                                item.getInt("watchTimes"),
+                                item.getInt("likes")));
                     }
                     submissionPage = new Page<>(jsonObject.getInt("currentPage"),
                             jsonObject.getInt("pageSize"),

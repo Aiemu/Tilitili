@@ -353,6 +353,7 @@ public class EditorActivity extends Activity {
         Log.e("filepath", imageFile.getName() + " " + mime + " " + filepath);
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
+                .addFormDataPart("type", String.valueOf(Contants.API.UploadType.IMAGE))
                 .addFormDataPart("file", imageName,
                         RequestBody.create(imageFile, MediaType.parse(mime)))
                 .build();
@@ -405,7 +406,7 @@ public class EditorActivity extends Activity {
                 })
                 .build();
         Request request = new Request.Builder()
-                .url(Contants.API.IMAGE_UPLOAD_URL)
+                .url(Contants.API.UPLOAD_URL)
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
                 .post(requestBody)

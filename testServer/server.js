@@ -27,40 +27,48 @@ var account_2 = {
     "joinAt": 3030303030,
 }
 
+var plate1 = {
+    "id": "1",
+    "title": "软件学院",
+    "startTime": 3030303030,
+    "owner": 1,
+    "description": "清华大学软件学院简介"
+}
+
 var submission_1 = {
     "id": 1,
-    "pid": 1,
+    "plate": plate1,
     "type": 1,
     "resource": "123",
     "title": "庆祝清华大学109年校庆",
     "introduction": "庆祝清华大学校庆",
-    //    public String snapshot;
     "submissionTime": 1590600906,
-    "watchTimes": 20
+    "watchTimes": 20,
+    "likes": 1
 }
 
 var submission_2 = {
     "id": 2,
-    "pid": 1,
+    "plate": plate1,
     "type": 1,
     "resource": "123",
     "title": "庆祝清华大学110年校庆",
     "introduction": "庆祝清华大学校庆",
-    //    public String snapshot;
     "submissionTime": 1590600906,
-    "watchTimes": 20
+    "watchTimes": 20,
+    "likes": 1
 }
 
 var submission_3 = {
     "id": 2,
-    "pid": 1,
+    "plate": plate1,
     "type": 1,
     "resource": "123",
     "title": "庆祝清华大学111年校庆",
     "introduction": "庆祝清华大学校庆",
-    //    public String snapshot;
     "submissionTime": 1590600906,
-    "watchTimes": 20
+    "watchTimes": 20,
+    "likes": 1
 }
 
 

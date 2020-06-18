@@ -63,4 +63,12 @@
     <string name="user_profile_all_submission_hint">查看历史稿件</string>
     <string name="user_profile_change">修改个人信息</string>
 
+    <string-array name="departments">
+        <item>软件学院</item>
+        <item>计算机系</item>
+        <item>社科学院</item>
+        <item>土木工程</item>
+        <item>建筑学院</item>
+        <item>电子系</item>
+    </string-array>
 </resources>
