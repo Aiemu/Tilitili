@@ -1,5 +1,7 @@
 package com.example.tilitili.http;
 
+import android.content.Context;
+
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -11,6 +13,8 @@ import okio.Okio;
 import okio.Sink;
 
 public class CountingRequestBody extends RequestBody {
+
+    private Context context;
 
     protected RequestBody delegate;
     protected Listener listener;
@@ -68,4 +72,7 @@ public class CountingRequestBody extends RequestBody {
         public void onRequestProgress(long bytesWritten, long contentLength);
     }
 
+    public Context getContext() {
+        return context;
+    }
 }
