@@ -6,6 +6,7 @@ import com.mobilecourse.backend.annotation.LoginAuth;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.exception.BusinessException;
 import com.mobilecourse.backend.model.User;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
@@ -42,19 +43,43 @@ public class UserController extends CommonController {
         jsonObject.put("email", user.getEmail());
         jsonObject.put("nickname", user.getNickname());
         jsonObject.put("department", user.getDepartment());
-        jsonObject.put("organization", user.getOrganization());
         jsonObject.put("joinAt", user.getJoinAt());
         jsonObject.put("bio", user.getBio());
+        jsonObject.put("avatar", user.getAvatar());
         return wrapperResponse(HttpStatus.OK, jsonObject);
     }
 
     @LoginAuth
     @RequestMapping(value = "/profile/edit", method = { RequestMethod.POST })
-    public ResponseEntity<JSONObject> editInfo(@RequestParam(value = "nickname") String nickname,
+    public ResponseEntity<JSONObject> editInfo(@RequestParam(value = "nickname", required = false) String nickname,
+                                               @RequestParam(value = "bio", required = false) String bio,
+                                               @RequestParam(value = "avatar", required = false) String avatar,
                                                HttpSession session) {
         Integer id = (Integer) session.getAttribute("id");
+        User updateUser = new User();
+        updateUser.setNickname(nickname);
+        updateUser.setBio(bio);
+        updateUser.setAvatar(avatar);
+        updateUser.setId(id);
+        userMapper.updateUser(updateUser);
+        if (nickname != null) {
+            session.setAttribute("nickname", nickname);
+        }
         return wrapperResponse(HttpStatus.OK, new JSONObject());
     }
 
-
+    @RequestMapping(value = "/password", method = { RequestMethod.POST })
+    public ResponseEntity<JSONObject> updatePassword(@RequestParam(value = "id") Integer id,
+                                                     @RequestParam(value = "old") String oldPassword,
+                                                     @RequestParam(value = "new") String newPassword) {
+        User user = userMapper.getUserById(id);
+        if (user == null) {
+            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "User could not be found!");
+        }
+        if (!user.getPassword().equals(oldPassword)) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, 2, "The password is wrong!");
+        }
+        userMapper.updatePassword(id, newPassword);
+        return wrapperResponse(HttpStatus.OK, "OK.");
+    }
 }

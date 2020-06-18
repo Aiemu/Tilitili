@@ -36,4 +36,18 @@
         WHERE username like "%"#{subUsername}"%"
         LIMIT #{maxNumber};
     </select>
+    <update id="updateUser" parameterType="com.mobilecourse.backend.model.User">
+        UPDATE User
+        <set>
+            <if test="nickname != null">nickname = #{nickname}, </if>
+            <if test="bio != null">bio = #{bio}, </if>
+            <if test="avatar != null">avatar = #{avatar}</if>
+        </set>
+        WHERE id = #{id};
+    </update>
+    <update id="updatePassword">
+        UPDATE User
+        SET password=#{password}
+        WHERE id = #{id};
+    </update>
 </mapper>
