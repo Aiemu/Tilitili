@@ -50,6 +50,10 @@ public class LoginActivity extends Activity {
         map.put("username", username);
         map.put("password", password);
 
+        // for test
+        Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(register_intent);
+
         SpotsCallBack<User> stringSpotsCallBack = new SpotsCallBack<User>(this) {
             @Override
             public void onSuccess(Response response, User user) {

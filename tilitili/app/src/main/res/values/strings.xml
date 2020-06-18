@@ -34,18 +34,22 @@
     <string name="my_star">我的收藏</string>
     <string name="my_following">我的关注</string>
     <string name="nickname">昵称</string>
+
     <string name="register_username_hint">用户名(用于登录）</string>
     <string name="register_email_hint">清华邮箱</string>
     <string name="register_password_hint">密码</string>
     <string name="register_duplicate_password_hint">再次输入密码</string>
     <string name="register_captcha_hint">输入验证码</string>
     <string name="register_to_login_hint">已有帐号？返回登录</string>
+
     <string name="login_username_hint">用户名/邮箱</string>
     <string name="login_password_hint">密码</string>
+
     <string name="reset_password_username_hint">用户名/邮箱</string>
     <string name="reset_password_verify_code_hint">验证码</string>
     <string name="reset_password_new_password_hint">新密码</string>
     <string name="reset_password_confirm_password_hint">确认密码</string>
+
     <string name="label_cancel_dislike">撤消</string>
 
 </resources>
