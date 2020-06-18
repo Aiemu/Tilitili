@@ -8,6 +8,7 @@ import android.widget.EditText;
 
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.User;
+import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.ToastUtils;
@@ -15,6 +16,9 @@ import com.google.gson.Gson;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,24 +53,32 @@ public class LoginActivity extends Activity {
         Map<String, String> map = new HashMap<>(2);
         map.put("username", username);
         map.put("password", password);
-
+        
         // for test
         Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(register_intent);
 
-        SpotsCallBack<User> stringSpotsCallBack = new SpotsCallBack<User>(this) {
+        SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(this) {
             @Override
-            public void onSuccess(Response response, User user) {
+            public void onSuccess(Response response, String userString) {
+                User user = null;
+                try {
+                    JSONObject jsonObject = new JSONObject(userString);
+                    user = new User(jsonObject.getInt("id"), jsonObject.getString("username")
+                            , jsonObject.getInt("privilege"), jsonObject.getString("nickname"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 UserManagerApplication application = UserManagerApplication.getInstance();
                 application.putUser(user);
-                Intent register_intent = new Intent(LoginActivity.this, EditorActivity.class);
+                Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(register_intent);
             }
 
             @Override
-            public void onError(Response response, int code, Exception e) {
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
                 dismissDialog();
-                ToastUtils.show(LoginActivity.this, R.string.login_error);
+                ToastUtils.show(LoginActivity.this, errorMessage.getErrorMessage());
             }
         };
         stringSpotsCallBack.setMessage(R.string.logining);

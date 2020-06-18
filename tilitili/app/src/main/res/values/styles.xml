@@ -121,9 +121,26 @@
         <item name="android:drawablePadding">0.0dip</item>
     </style>
 
+    <style name="next_view" parent="@style/title_bar_button">
+        <item name="android:gravity">right|center</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:paddingLeft">12.0dip</item>
+        <item name="android:paddingRight">0.0dip</item>
+        <item name="android:layout_marginLeft">0.0dip</item>
+        <item name="android:layout_marginRight">0.0dip</item>
+        <item name="android:text">@null</item>
+        <item name="android:drawableLeft">@drawable/btn_next</item>
+        <item name="android:drawablePadding">0.0dip</item>
+    </style>
+
     <style name="detail_back_view" parent="@style/back_view">
         <item name="android:background">@color/transparent</item>
         <item name="android:drawableLeft">@drawable/btn_back_detail</item>
+    </style>
+
+    <style name="detail_next_view" parent="@style/next_view">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:drawableLeft">@drawable/btn_next</item>
     </style>
 
     <style name="title_bar_button" parent="@style/common_button">

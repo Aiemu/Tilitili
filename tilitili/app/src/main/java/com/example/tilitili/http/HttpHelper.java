@@ -2,11 +2,14 @@ package com.example.tilitili.http;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Map;
@@ -122,7 +125,16 @@ public class HttpHelper {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                callback.onError(response, response.code(), e);
+                ErrorMessage errorMessage = null;
+                try {
+                    String error = response.body().string();
+                    Log.d("sad", error);
+                    JSONObject jsonObject = new JSONObject(error);
+                    errorMessage = new ErrorMessage(jsonObject.getString("errorMessage"), jsonObject.getInt("errorCode"), jsonObject.getString("uri"), jsonObject.getString("timestamp"));
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
+                callback.onError(response, errorMessage, e);
             }
         });
     }

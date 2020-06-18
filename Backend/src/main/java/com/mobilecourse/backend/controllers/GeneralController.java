@@ -8,6 +8,7 @@ import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.exception.BusinessException;
 import com.mobilecourse.backend.model.User;
 import com.mobilecourse.backend.util.LoginConfig;
+import org.hibernate.validator.constraints.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Null;
 import javax.websocket.Session;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +35,7 @@ import java.util.Random;
 @RestController
 @EnableAutoConfiguration
 //@RequestMapping("")
+@Validated
 public class GeneralController extends CommonController {
 
     private final Logger LOG = LoggerFactory.getLogger(GeneralController.class);
@@ -68,10 +73,10 @@ public class GeneralController extends CommonController {
      * @return
      */
     @RequestMapping(value = "/signup", method = { RequestMethod.POST })
-    public ResponseEntity<JSONObject> signUp(@RequestParam(value = "username") String username,
-                                             @RequestParam(value = "password") String password,
-                                             @RequestParam(value = "email") String email,
-                                             @RequestParam(value = "nickname") String nickname,
+    public ResponseEntity<JSONObject> signUp(@RequestParam(value = "username") @Length(max = 20) String username,
+                                             @RequestParam(value = "password") @Length(max = 100) String password,
+                                             @RequestParam(value = "email") @Length(max = 100) String email,
+                                             @RequestParam(value = "nickname") @Length(max = 20) String nickname,
                                              HttpServletRequest request) {
         //检查用户名是否重复
         User existUser = userMapper.getUserByUsername(username);
