@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="5dp"
-    android:layout_marginTop="2dp"
+    android:layout_marginTop="10dp"
     android:layout_marginRight="5dp"
     android:layout_marginBottom="2dp"
     app:cardBackgroundColor="#fff"
@@ -121,20 +122,21 @@
 
             <ImageView
                 android:id="@+id/share_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/activity_icon_height"
+                android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:tint="#9C27B0"
+                android:gravity="right"
                 app:srcCompat="@android:drawable/ic_menu_share" />
 
             <TextView
                 android:id="@+id/share_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
-                android:text="0"
+                android:layout_weight="12"
+                android:text=""
                 android:textColor="#9C27B0"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/imageView17"
                 app:layout_constraintTop_toBottomOf="@+id/textView31" />
@@ -151,10 +153,10 @@
                 android:id="@+id/comment_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_weight="10"
                 android:text="0"
                 android:textColor="#9C27B0"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/imageView17"
                 app:layout_constraintTop_toBottomOf="@+id/textView31" />
@@ -174,10 +176,10 @@
                 android:id="@+id/star_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_weight="5"
                 android:text="0"
                 android:textColor="#9C27B0"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/imageView17"
                 app:layout_constraintTop_toBottomOf="@+id/textView31" />
@@ -186,4 +188,4 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

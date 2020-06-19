@@ -92,7 +92,8 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                                 item.getString("introduction"),
                                 item.getInt("submissionTime"),
                                 item.getInt("watchTimes"),
-                                item.getInt("likes")));
+                                item.getInt("likes"),
+                                item.getInt("post_time")));
                     }
                     submissionPage = new Page<>(jsonObject.getInt("currentPage"),
                             jsonObject.getInt("pageSize"),

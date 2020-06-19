@@ -17,8 +17,9 @@ public class Submission {
     private long submissionTime;
     private long watchTimes;
     private int likes;
+    private int post_time;
 
-    public Submission(int submissionId, Plate plate, int type, String resource, String title, String introduction, long submissionTime, long watchTimes, int likes) {
+    public Submission(int submissionId, Plate plate, int type, String resource, String title, String introduction, long submissionTime, long watchTimes, int likes, int post_time) {
         this.submissionId = submissionId;
         this.plate = plate;
         this.type = type;
@@ -28,6 +29,7 @@ public class Submission {
         this.submissionTime = submissionTime;
         this.watchTimes = watchTimes;
         this.likes = likes;
+        this.post_time = post_time;
     }
 
     public int getSubmissionId() {
@@ -65,5 +67,9 @@ public class Submission {
 
     public int getLikes() {
         return likes;
+    }
+
+    public int getPost_time() {
+        return post_time;
     }
 }
