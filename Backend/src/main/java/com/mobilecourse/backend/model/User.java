@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 public class User {
 
-    private int id;
+    private int uid;
     private String username;
     private String nickname;
     private String email;
@@ -14,20 +14,12 @@ public class User {
     private String avatar;
     private String bio;
 
-    public String getBio() {
-        return bio;
+    public int getUid() {
+        return uid;
     }
 
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 
     public String getUsername() {
@@ -86,4 +78,11 @@ public class User {
         this.avatar = avatar;
     }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
 }

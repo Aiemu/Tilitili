@@ -4,6 +4,7 @@ public class Plate {
     private int pid;
     private String title;
     private String description;
+    private String cover;
 
     public int getPid() {
         return pid;
@@ -27,5 +28,13 @@ public class Plate {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 }

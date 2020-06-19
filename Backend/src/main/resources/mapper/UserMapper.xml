@@ -16,12 +16,12 @@
         FROM User
         WHERE email=#{email}
     </select>
-    <select id="getUserById" resultType="com.mobilecourse.backend.model.User">
+    <select id="getUserByUid" resultType="com.mobilecourse.backend.model.User">
         SELECT *
         FROM User
-        WHERE id=#{id}
+        WHERE uid=#{uid}
     </select>
-    <insert id="registerUser" keyProperty="id" useGeneratedKeys="true" parameterType="com.mobilecourse.backend.model.User">
+    <insert id="registerUser" parameterType="com.mobilecourse.backend.model.User">
         INSERT INTO User
         <trim prefix="(" suffix=")" suffixOverrides="," >
             username, password, email, nickname
@@ -34,13 +34,15 @@
         SELECT *
         FROM User
         WHERE username like "%"#{subUsername}"%"
-        LIMIT #{maxNumber};
+        ORDER BY LENGTH(username) ASC, uid DESC
+        LIMIT #{maxNumber}
     </select>
     <update id="updateUser" parameterType="com.mobilecourse.backend.model.User">
         UPDATE User
         <set>
             <if test="nickname != null">nickname = #{nickname}, </if>
             <if test="bio != null">bio = #{bio}, </if>
+            <if test="department != null">department = #{department}</if>
             <if test="avatar != null">avatar = #{avatar}</if>
         </set>
         WHERE id = #{id};
@@ -48,6 +50,6 @@
     <update id="updatePassword">
         UPDATE User
         SET password=#{password}
-        WHERE id = #{id};
+        WHERE uid = #{uid};
     </update>
 </mapper>

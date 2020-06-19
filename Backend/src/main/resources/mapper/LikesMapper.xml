@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.LikesDao">
+    <select id="getLike" resultType="com.mobilecourse.backend.model.Likes">
+        SELECT *
+        FROM Likes
+        WHERE sid=#{sid} AND uid=#{uid}
+    </select>
+    <select id="getSubmissionLikes">
+        SELECT COUNT(*)
+        FROM Likes
+        WHERE sid=#{sid}
+    </select>
+    <insert id="putLike">
+        INSERT INTO Likes(uid, sid)
+        VALUES (#{uid}, #{sid})
+    </insert>
+    <delete id="deleteLike">
+        DELETE FROM Likes
+        WHERE sid=#{sid} AND uid=#{uid}
+    </delete>
+</mapper>

@@ -8,12 +8,13 @@
         WHERE sid=#{sid}
     </select>
     <insert id="putSubmission" parameterType="com.mobilecourse.backend.model.Submission">
-        INSERT INTO Submission(type, pid, title, cover, introduction, resource)
-        values (#{type}, #{pid}, #{title}, #{cover}, #{introduction}, #{resource})
+        INSERT INTO Submission(uid, type, pid, title, cover, introduction, resource)
+        values (#{uid}, #{type}, #{pid}, #{title}, #{cover}, #{introduction}, #{resource})
     </insert>
     <update id="setSubmission" parameterType="com.mobilecourse.backend.model.Submission">
         UPDATE Submission
         <set>
+            <if test="uid != null">uid = #{uid}, </if>
             <if test="type != null">type = #{type}, </if>
             <if test="pid != null">pid = #{pid}, </if>
             <if test="title != null">title = #{title}, </if>
@@ -21,6 +22,38 @@
             <if test="introduction != null">introduction = #{introduction}, </if>
             <if test="resource != null">resource = #{resource}, </if>
         </set>
+        WHERE sid=#{sid}
+    </update>
+    <select id="getCount">
+        SELECT COUNT(*)
+        FROM SUBMISSION
+        <if test="pid != null">WHERE pid = #{pid}</if>
+    </select>
+    <delete id="deleteSubmission">
+        DELETE FROM Submission
+        WHERE sid=#{sid}
+    </delete>
+    <select id="getSubmissionNewPage" resultType="com.mobilecourse.backend.model.Submission">
+        SELECT *
+        FROM Submission
+        <if test="pid != null">
+            WHERE pid=#{pid}
+        </if>
+        ORDER BY submissionTime DESC, sid DESC
+        LIMIT #{offset}, #{size}
+    </select>
+    <select id="getSubmissionNewPage" resultType="com.mobilecourse.backend.model.Submission">
+        SELECT *
+        FROM Submission
+        <if test="pid != null">
+            WHERE pid=#{pid}
+        </if>
+        ORDER BY watchTimes DESC, sid DESC
+        LIMIT #{offset}, #{size}
+    </select>
+    <update id="increaseWatchTimes">
+        UPDATE Submission
+        SET watchTimes=watchTimes+1
         WHERE sid=#{sid}
     </update>
 </mapper>

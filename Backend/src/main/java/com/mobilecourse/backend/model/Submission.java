@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class Submission {
     private int sid;
+    private int uid;
     private int type;
     private int pid;
     private String title;
@@ -19,6 +20,14 @@ public class Submission {
 
     public void setSid(int sid) {
         this.sid = sid;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 
     public int getType() {

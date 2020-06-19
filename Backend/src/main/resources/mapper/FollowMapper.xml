@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.FollowDao">
+    <select id="getFollow" resultType="com.mobilecourse.backend.model.Follow">
+        SELECT *
+        WHERE followerUid=#{followerUid} AND followedUid=#{followedUid}
+    </select>
+    <select id="getFollowers">
+        SELECT followerUid
+        WHERE followedUid=#{followedUid}
+    </select>
+    <select id="getFolloweds">
+        SELECT followedUid
+        WHERE followerUid#={followerUid}
+    </select>
+    <insert id="putFollow">
+        INSERT INTO Follow(followerUid, followedUid)
+        VALUES(#{followerUid}, #{followedUid})
+    </insert>
+    <delete id="deleteFollow">
+        DELETE FROM Follow
+        WHERE followerUid=#{followerUid} AND followedUid=#{followedUid}
+    </delete>
+</mapper>

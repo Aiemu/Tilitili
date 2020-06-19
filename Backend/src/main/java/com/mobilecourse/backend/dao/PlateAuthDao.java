@@ -7,8 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface PlateAuthDao {
-    List<PlateAuth> getAuths(Integer uid);
-    Integer getAuth(Integer uid, Integer pid);
+    List<Integer> getAuths(Integer uid);
     void putAuth(PlateAuth plateAuth);
-    void setAuth(PlateAuth plateAuth);
+    void deleteAuth(PlateAuth plateAuth);
 }

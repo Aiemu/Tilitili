@@ -3,11 +3,20 @@ package com.mobilecourse.backend.model;
 import java.sql.Timestamp;
 
 public class Comment {
+    private int cid;
     private int sid;
     private int uid;
     private String content;
     private int like;
     private Timestamp commentTime;
+
+    public int getCid() {
+        return cid;
+    }
+
+    public void setCid(int cid) {
+        this.cid = cid;
+    }
 
     public int getSid() {
         return sid;

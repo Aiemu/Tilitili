@@ -3,7 +3,7 @@ create database Tilitili;
 use Tilitili;
 
 create table User
-(id int primary key AUTO_INCREMENT,
+(uid int primary key AUTO_INCREMENT,
 username varchar(20) not null unique,
 nickname varchar(20) default '',
 email varchar(100) not null unique,
@@ -14,23 +14,19 @@ avatar varchar(200) default '',
 bio varchar(100) default '');
 
 create table Plate
-(pid int primary key AUTO_INCREMENT,
+(pid int primary key,
  title varchar(20) not null,
- description varchar(100) default '');
+ description varchar(100) default '',
+ cover varchar(200) default '');
 
 create table PlateAuth
 (pid int not null,
  uid int not null,
- auth int not null,
  primary key (pid, uid));
-
-# create table Department
-# (id int primary key AUTO_INCREMENT,
-#  name varchar(20) not null unique,
-#  pid int);
 
 create table Submission
 (sid int primary key AUTO_INCREMENT,
+ uid int not null,
  type int not null,
  pid int,
  title varchar(100),
@@ -46,11 +42,17 @@ create table Likes
  primary key (sid, uid));
 
 create table Comment
-(sid int not null,
+(cid int primary key AUTO_INCREMENT,
+ sid int not null,
  uid int not null,
  content varchar(200),
  likes int default 0,
  commentTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+
+create table Follow
+(followerUid int not null,
+ followedUid int not null,
+ primary key (followerUid, followedUid));
 
 insert into User(username, nickname, email, password, department, bio)
 values ('Shion', 'ShionChan', 'shinoa_zwx@outlook.com', '12345678', 'Software', 'ShionChan Saikyo!');
@@ -60,5 +62,5 @@ values ('Matsuri', 'MatsuriChan', 'shinoa_sama@outlook.com', '12345678', 'Softwa
 insert into Plate(title, description)
 values ('Hololive', 'Idol Project');
 
-insert into PlateAuth(pid, uid, auth)
-values (1, 1, 1);
+insert into PlateAuth(pid, uid)
+values (1, 1);

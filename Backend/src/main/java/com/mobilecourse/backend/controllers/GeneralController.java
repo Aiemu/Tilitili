@@ -152,15 +152,13 @@ public class GeneralController extends CommonController {
             throw new BusinessException(HttpStatus.BAD_REQUEST, 1, "Password is wrong.");
         }
         // 登录成功, 存储登录状态
-        putInfoToSession(session, LoginConfig.LOGIN_KEY, true);
-        putInfoToSession(session, "id", existUser.getId());
-        putInfoToSession(session, "username", existUser.getUsername());
-        putInfoToSession(session, "nickname", existUser.getNickname());
-        // 返回userShort
-        jsonObject.put("id", existUser.getId());
-        jsonObject.put("username", existUser.getUsername());
-        jsonObject.put("nickname", existUser.getNickname());
+        session.setAttribute(LoginConfig.LOGIN_KEY, true);
+        session.setAttribute("uid", existUser.getUid());
+        session.setAttribute("username", existUser.getUsername());
+        session.setMaxInactiveInterval(3600);
 
+        // 返回userShort
+        jsonObject.put("uid", existUser.getUid());
         LOG.info(String.format("The user (%s) login.", existUser.getUsername()));
         return wrapperResponse(HttpStatus.OK, jsonObject);
     }
@@ -177,30 +175,19 @@ public class GeneralController extends CommonController {
     @RequestMapping(value = "/whoami", method = { RequestMethod.GET })
     public ResponseEntity<JSONObject> whoAmI(HttpSession session) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", session.getAttribute("id"));
+        jsonObject.put("uid", session.getAttribute("uid"));
         jsonObject.put("username", session.getAttribute("username"));
-        jsonObject.put("nickname", session.getAttribute("nickname"));
         return wrapperResponse(HttpStatus.OK, jsonObject);
     }
 
-    @RequestMapping(value = "/user_search", method = { RequestMethod.GET })
-    public ResponseEntity<JSONObject> userSearch(@RequestParam(value = "username") String subUsername) {
-        List<User> matchedUsers = userDao.searchUser(subUsername, 5);
-        JSONObject jsonObject = new JSONObject();
-        JSONObject userJSON;
-        ArrayList<JSONObject> userShorts = new ArrayList<>();
-        for (User u: matchedUsers) {
-            userJSON = new JSONObject();
-            userJSON.put("id", u.getId());
-            userJSON.put("username", u.getUsername());
-            userJSON.put("nickname", u.getNickname());
-            userShorts.add(userJSON);
-        }
-        jsonObject.put("userShorts", userShorts);
-        return wrapperResponse(HttpStatus.OK, jsonObject);
-    }
 
     @LoginAuth
+    @RequestMapping(value = "/checklogin", method = { RequestMethod.GET })
+    public ResponseEntity<JSONObject> checkLogin(HttpSession session) {
+        session.setMaxInactiveInterval(3600);
+        return wrapperResponse(HttpStatus.OK, "OK.");
+    }
+
     @RequestMapping(value = "/upload", method = { RequestMethod.POST })
     public ResponseEntity<JSONObject> uploadFile(@RequestParam(value = "file") MultipartFile file,
                                                  @RequestParam(value = "type") @Range(min = 0, max = 2) Integer type) {

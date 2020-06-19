@@ -2,23 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 指定了mapper对应的dao -->
 <mapper namespace="com.mobilecourse.backend.dao.PlateAuthDao">
-    <select id="getAuths" resultType="com.mobilecourse.backend.dao.PlateAuthDao">
-        SELECT *
+    <select id="getAuths">
+        SELECT pid
         FROM PlateAuth
         WHERE uid=#{uid}
     </select>
-    <select id="getAuth">
-        SELECT auth
-        FROM PlateAuth
-        WHERE uid=#{uid} AND pid=#{pid}
-    </select>
-    <insert id="putAuth" parameterType="com.mobilecourse.backend.dao.PlateAuthDao">
-        INSERT INTO PlateAuth(uid, pid, auth)
-        VALUES (#{uid}, #{pid}, #{auth})
+    <insert id="putAuth" parameterType="com.mobilecourse.backend.model.PlateAuth">
+        INSERT INTO PlateAuth(uid, pid)
+        VALUES (#{uid}, #{pid})
     </insert>
-    <update id="setAuth" parameterType="com.mobilecourse.backend.dao.PlateAuthDao">
-        UPDATE PlateAuth
-        SET auth=#{auth}
+    <delete id="deleteAuth" parameterType="com.mobilecourse.backend.model.PlateAuth">
+        DELETE FROM PlateAuth
         WHERE uid=#{uid} AND pid=#{pid}
-    </update>
+    </delete>
 </mapper>

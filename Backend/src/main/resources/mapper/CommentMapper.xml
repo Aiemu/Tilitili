@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.CommentDao">
+    <select id="getCommentCounts">
+        SELECT COUNT(*)
+        FROM Comment
+        WHERE sid=#{sid}
+    </select>
+    <select id="getAllComments" resultType="com.mobilecourse.backend.model.Comment">
+        SELECT *
+        FROM Comment
+        WHERE sid=#{sid}
+    </select>
+    <select id="getCommentPage" resultType="com.mobilecourse.backend.model.Comment">
+        SELECT *
+        FROM Comment
+        WHERE sid=#{sid}
+        ORDER BY commentTime DESC, cid DESC
+        LIMIT #{offset}, #{size}
+    </select>
+    <insert id="putComment" parameterType="com.mobilecourse.backend.model.Comment">
+        INSERT INTO Comment(sid, uid, content)
+        VALUES (#{sid}, #{uid}, #{content})
+    </insert>
+    <delete id="deleteComment">
+        DELETE FROM Comment
+        WHERE cid=#{cid}
+    </delete>
+</mapper>

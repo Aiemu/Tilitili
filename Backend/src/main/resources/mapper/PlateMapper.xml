@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.PlateDao">
+    <select id="getPlate" resultType="com.mobilecourse.backend.model.Plate">
+        SELECT *
+        FROM Plate
+        WHERE pid=#{pid}
+    </select>
+    <select id="getAllPlates" resultType="com.mobilecourse.backend.model.Plate">
+        SELECT *
+        FROM Plate
+    </select>
+    <insert id="putPlate" parameterType="com.mobilecourse.backend.model.Plate">
+        INSERT INTO Plate(pid, title, description, cover)
+        VALUES (#{pid}, #{title}, #{description}, #{cover})
+    </insert>
+    <update id="setPlate" parameterType="com.mobilecourse.backend.model.Plate">
+        UPDATE Plate
+        <set>
+            <if test="title != null">title = #{title}, </if>
+            <if test="description != null">description = #{description} </if>
+            <if test="cover != null">cover = #{cover}, </if>
+        </set>
+        WHERE pid=#{pid}
+    </update>
+</mapper>
