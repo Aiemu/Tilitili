@@ -13,6 +13,9 @@ import com.example.tilitili.data.Contants;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 import okhttp3.Callback;
 import okhttp3.Interceptor;
@@ -87,7 +90,6 @@ public class UploadHttpHelper {
         String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase());
         final String fileName = file.getName();
 
-        Log.e("filepath", file.getName() + " " + mime + " " + file);
         assert mime != null;
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -107,5 +109,11 @@ public class UploadHttpHelper {
 
     public void upload(Request request, Callback callback) {
         httpClient.newCall(request).enqueue(callback);
+    }
+
+    public String generateString(int length) {
+        byte[] array = new byte[length];
+        new Random().nextBytes(array);
+        return new String(array, StandardCharsets.UTF_8);
     }
 }

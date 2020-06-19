@@ -18,7 +18,11 @@ public class UserLocalData {
     }
 
     public static String getSession(Context context) {
-        return PreferencesUtils.getString(context, Contants.SESSION_PREFERENCE, "null");
+        return PreferencesUtils.getString(context, Contants.SESSION_PREFERENCE, "");
+    }
+
+    public static void cleanSession(Context context) {
+        PreferencesUtils.putString(context, Contants.SESSION_PREFERENCE, "");
     }
 
     public static User getUser(Context context) {

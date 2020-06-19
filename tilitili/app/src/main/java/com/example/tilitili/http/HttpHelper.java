@@ -2,6 +2,7 @@ package com.example.tilitili.http;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.example.tilitili.UserManagerApplication;
 import com.google.gson.Gson;
@@ -126,6 +127,10 @@ public class HttpHelper {
         handler.post(new Runnable() {
             @Override
             public void run() {
+                if(response.code() == 401) {
+                    callback.onTokenError(response, 401);
+                    return;
+                }
                 ErrorMessage errorMessage = null;
                 try {
                     String error = response.body().string();

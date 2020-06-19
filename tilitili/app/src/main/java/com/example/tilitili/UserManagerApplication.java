@@ -48,4 +48,8 @@ public class UserManagerApplication extends Application {
     public String getSessionId() {
         return UserLocalData.getSession(this);
     }
+
+    public void cleanSessionId() {
+        UserLocalData.cleanSession(this);
+    }
 }

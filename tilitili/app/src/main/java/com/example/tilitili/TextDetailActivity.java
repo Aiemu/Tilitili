@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.utils.NewsDetailsUtil;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import java.util.ArrayList;
 
@@ -35,9 +37,10 @@ public class TextDetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.submission_text_detail);
+        ViewUtils.inject(this);
         submission = (Submission) getIntent().getSerializableExtra("submission");
         initView();
-        initWebView();
+//        initWebView();
     }
 
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
@@ -65,7 +68,7 @@ public class TextDetailActivity extends Activity {
         progressBar.setVisibility(View.VISIBLE);
         title.setTextSize(13);
         title.setVisibility(View.VISIBLE);
-        title.setText(submission.getResource());
+//        title.setText(submission.getResource());
         action_comment_count.setText(String.valueOf(1));
     }
 
@@ -167,5 +170,10 @@ public class TextDetailActivity extends Activity {
             }
             super.onProgressChanged(view, newProgress);
         }
+    }
+
+    @OnClick(R.id.detail_back)
+    public void goBack(View view) {
+        finish();
     }
 }

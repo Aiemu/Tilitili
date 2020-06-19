@@ -33,6 +33,7 @@ public abstract class SimpleCallback<T> extends BaseHttpCallback<T> {
     @Override
     public void onTokenError(Response response, int code) {
         ToastUtils.show(context, context.getString(R.string.token_error));
+        UserManagerApplication.getInstance().cleanSessionId();
         Intent intent = new Intent();
         intent.setClass(context, LoginActivity.class);
         context.startActivity(intent);

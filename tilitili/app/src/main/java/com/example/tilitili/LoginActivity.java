@@ -45,8 +45,25 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         ViewUtils.inject(this);
+        if(!UserManagerApplication.getInstance().getSessionId().equals(""))
+            isLogin();
     }
 
+    private void isLogin() {
+        httpHelper.get(Contants.API.CHECK_LOGIN_URL, new SpotsCallBack<String>(this) {
+
+            @Override
+            public void onSuccess(Response response, String s) {
+                Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(register_intent);
+            }
+
+            @Override
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
+
+            }
+        });
+    }
 
     @OnClick(R.id.btn_login)
     public void login(View view) {
@@ -72,13 +89,19 @@ public class LoginActivity extends Activity {
 
                 Headers headers = response.headers();
                 List<String> cookies = headers.values("Set-Cookie");
-                String session = (String) cookies.get(0);
-                String sessionid = session.substring(0, session.indexOf(";"));
-
-                application.putSessionId(sessionid);
-                application.putUser(user);
-                Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(register_intent);
+                try {
+                    String session = (String) cookies.get(0);
+                    String sessionid = session.substring(0, session.indexOf(";"));
+                    application.putSessionId(sessionid);
+                    application.putUser(user);
+                    Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(register_intent);
+                } catch (IndexOutOfBoundsException e) {
+                    dismissDialog();
+                    e.printStackTrace();
+                    ToastUtils.show(LoginActivity.this, "登录失败");
+                }
+                dismissDialog();
             }
 
             @Override
