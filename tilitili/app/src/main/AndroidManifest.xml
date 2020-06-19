@@ -50,8 +50,17 @@
             android:label="@string/app_name" />
 
         <activity
+            android:name=".PlateDetailsActivity"
+            android:label="@string/app_name" />
+
+        <activity
             android:name=".UserProfileUpdateActivity"
             android:label="@string/app_name" />
+
+        <activity
+            android:name=".GetUserSubmissionActivity"
+            android:label="@string/app_name" />
+
 
     </application>
 

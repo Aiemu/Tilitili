@@ -1,10 +1,12 @@
-package com.example.tilitili.ui;
+package com.example.tilitili;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -12,8 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cjj.MaterialRefreshLayout;
-import com.example.tilitili.R;
-import com.example.tilitili.TextDetailActivity;
 import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.HotSubmissionAdapter;
 import com.example.tilitili.data.Contants;
@@ -37,26 +37,34 @@ import java.util.List;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class HomeFragment extends BaseFragment implements Pager.OnPageListener<Submission> {
+public class GetUserSubmissionActivity extends Activity implements Pager.OnPageListener<Submission> {
+    @ViewInject(R.id.user_submission_title_bar_title)
+    private TextView title_text;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.user_submission);
+        ViewUtils.inject(this);
+
+        Intent getIntent = getIntent();
+        String titleStr = getIntent.getStringExtra("title");
+        System.out.println(titleStr);
+        title_text.setText(titleStr);
+        init();
+    }
+
     private HotSubmissionAdapter hotSubmissionAdapter;
-    @ViewInject(R.id.home_recyclerview)
+    @ViewInject(R.id.recyclerview_user_submission)
     private RecyclerView recyclerView;
-    @ViewInject(R.id.home_refresh_view)
+    @ViewInject(R.id.refresh_user_submission_view)
     private MaterialRefreshLayout materialRefreshLayout;
 
     Pager pager;
     SpotsCallBack<String> callBack;
 
-    @Override
-    public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        ViewUtils.inject(this, view);
-        return view;
-    }
-
-    @Override
     public void init() {
-        callBack = new SpotsCallBack<String>(this.getActivity()) {
+        callBack = new SpotsCallBack<String>(this) {
             @Override
             public void onFailure(Request request, Exception e) {
                 dismissDialog();
@@ -121,8 +129,8 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                 }
             }
         };
-        pager = new Pager(this.getActivity(), callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_HOT);
+        pager = new Pager(this, callBack, materialRefreshLayout);
+        pager.setUrl(Contants.API.GET_USER_SUBMISSION);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);
@@ -132,18 +140,18 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
 
     @Override
     public void load(List<Submission> datas, int totalPage, int totalCount) {
-        hotSubmissionAdapter = new HotSubmissionAdapter(this.getContext(), datas);
+        hotSubmissionAdapter = new HotSubmissionAdapter(this, datas);
         hotSubmissionAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Submission submission = hotSubmissionAdapter.getItem(position);
-                Intent intent = new Intent(getContext(), TextDetailActivity.class);
+                Intent intent = new Intent(GetUserSubmissionActivity.this, TextDetailActivity.class);
                 startActivity(intent);
             }
         });
 
         recyclerView.setAdapter(hotSubmissionAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 

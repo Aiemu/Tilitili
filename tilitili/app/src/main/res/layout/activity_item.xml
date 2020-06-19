@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="5dp"
-    android:layout_marginTop="2dp"
+    android:layout_marginTop="10dp"
     android:layout_marginRight="5dp"
     android:layout_marginBottom="2dp"
     app:cardBackgroundColor="#fff"
@@ -34,7 +34,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/avatar_view"
+                android:id="@+id/avatar_activity_item_view"
                 android:layout_alignParentStart="true"
                 android:layout_width="@dimen/activity_avatar_width"
                 android:layout_height="@dimen/activity_avatar_height"
@@ -53,7 +53,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/text_username"
+                    android:id="@+id/text_activity_item_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="清华大学官方"
@@ -63,7 +63,7 @@
                     android:layout_marginStart="10dp" />
 
                 <TextView
-                    android:id="@+id/text_post_time"
+                    android:id="@+id/text_activity_item_post_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
@@ -76,7 +76,7 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <TextView
-            android:id="@+id/text_topic"
+            android:id="@+id/text_activity_item_topic"
             style="@style/submission_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/cover_view"
+            android:id="@+id/cover_activity_item_view"
             android:layout_alignParentStart="true"
             android:layout_width="match_parent"
             android:layout_height="100dp"
@@ -98,7 +98,7 @@
             app:viewAspectRatio="1" />
 
         <TextView
-            android:id="@+id/text_title"
+            android:id="@+id/text_activity_item_title"
             style="@style/submission_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -121,20 +121,22 @@
 
             <ImageView
                 android:id="@+id/share_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/activity_icon_height"
+                android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:tint="#9C27B0"
+                android:gravity="right"
                 app:srcCompat="@android:drawable/ic_menu_share" />
 
             <TextView
-                android:id="@+id/share_num"
+                android:id="@+id/activity_item_share_num"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="7"
-                android:text="0"
+                android:layout_height="match_parent"
+                android:layout_weight="12"
+                android:text=""
+                android:gravity="center_vertical"
                 android:textColor="#9C27B0"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/imageView17"
                 app:layout_constraintTop_toBottomOf="@+id/textView31" />
@@ -148,13 +150,14 @@
                 app:srcCompat="@android:drawable/sym_action_chat" />
 
             <TextView
-                android:id="@+id/comment_num"
+                android:id="@+id/activity_item_comment_num"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
                 android:text="0"
+                android:gravity="center_vertical"
                 android:textColor="#9C27B0"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/imageView17"
                 app:layout_constraintTop_toBottomOf="@+id/textView31" />
@@ -171,13 +174,14 @@
                 app:srcCompat="@android:drawable/btn_star" />
 
             <TextView
-                android:id="@+id/star_num"
+                android:id="@+id/activity_item_star_num"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
                 android:text="0"
+                android:gravity="center_vertical"
                 android:textColor="#9C27B0"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/imageView17"
                 app:layout_constraintTop_toBottomOf="@+id/textView31" />
@@ -186,4 +190,4 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

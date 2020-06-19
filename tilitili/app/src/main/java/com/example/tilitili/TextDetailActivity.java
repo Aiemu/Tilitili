@@ -18,7 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.tilitili.data.News;
+import com.example.tilitili.data.Submission;
 import com.example.tilitili.utils.NewsDetailsUtil;
 
 import java.util.ArrayList;
@@ -27,11 +27,7 @@ public class TextDetailActivity extends Activity {
     private TextView title;
     private ProgressBar progressBar;
     private FrameLayout customview_layout;
-    private String news_url;
-    private String news_title;
-    private String news_source;
-    private String news_date;
-    private News news;
+    private Submission submission;
     private TextView action_comment_count;
     WebView webView;
 
@@ -39,52 +35,38 @@ public class TextDetailActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.submission_text_detail);
-
+        submission = (Submission) getIntent().getSerializableExtra("submission");
+        initView();
+        initWebView();
     }
 
-    /* 获取传递过来的数据 */
-    private void getData() {
-        news = (News) getIntent().getSerializableExtra("news");
-        news_url = news.getSource_url();
-        news_title = news.getTitle();
-        news_source = news.getSource();
-//        news_date = DateTools.getNewsDetailsDate(String.valueOf(news.getPublishTime()));
-    }
-
-    @SuppressLint("JavascriptInterface")
+    @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     private void initWebView() {
         webView = (WebView) findViewById(R.id.wb_details);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        if (!TextUtils.isEmpty(news_url)) {
+        if (!TextUtils.isEmpty(submission.getResource())) {
             WebSettings settings = webView.getSettings();
-            settings.setJavaScriptEnabled(true);//设置可以运行JS脚本
-//			settings.setTextZoom(120);//Sets the text zoom of the page in percent. The default is 100.
-            settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-//			settings.setUseWideViewPort(true); //打开页面时， 自适应屏幕
-//			settings.setLoadWithOverviewMode(true);//打开页面时， 自适应屏幕
-            settings.setSupportZoom(false);// 用于设置webview放大
+            settings.setJavaScriptEnabled(true);
+            settings.setSupportZoom(false);
             settings.setBuiltInZoomControls(false);
             webView.setBackgroundResource(R.color.transparent);
-            // 添加js交互接口类，并起别名 imagelistner
             webView.addJavascriptInterface(new JavascriptInterface(getApplicationContext()), "imagelistner");
             webView.setWebChromeClient(new MyWebChromeClient());
             webView.setWebViewClient(new MyWebViewClient());
-            new MyAsnycTask().execute(news_url, news_title, news_source + " " + news_date);
+            new MyAsnycTask().execute(submission.getResource(), submission.getTitle(), submission.getPlate().getTitle() + " " + submission.getSubmissionTime() + "发布");
         }
     }
 
     private void initView() {
-        title = (TextView) findViewById(R.id.title);
-        progressBar = (ProgressBar) findViewById(R.id.ss_htmlprogessbar);
-//        customview_layout = (FrameLayout) findViewById(R.id.customview_layout);
-        //底部栏目
-        action_comment_count = (TextView) findViewById(R.id.action_comment_count);
+        title = findViewById(R.id.title);
+        progressBar = findViewById(R.id.ss_htmlprogessbar);
+        action_comment_count = findViewById(R.id.action_comment_count);
 
         progressBar.setVisibility(View.VISIBLE);
         title.setTextSize(13);
         title.setVisibility(View.VISIBLE);
-        title.setText(news_url);
-        action_comment_count.setText(String.valueOf(news.getCommentNum()));
+        title.setText(submission.getResource());
+        action_comment_count.setText(String.valueOf(1));
     }
 
     @Override

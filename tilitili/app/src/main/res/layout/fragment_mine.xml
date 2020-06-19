@@ -42,15 +42,14 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.5" />
 
-                    <com.facebook.drawee.view.SimpleDraweeView
+                    <ImageView
                         android:id="@+id/user_profile_avatar"
-                        android:layout_width="@dimen/hot_submission_img_width"
-                        android:layout_height="@dimen/hot_submission_img_height"
+                        android:layout_width="@dimen/user_profile_avatar_width"
+                        android:layout_height="@dimen/user_profile_avatar_width"
                         android:layout_alignParentStart="true"
                         android:background="@drawable/default_head"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:viewAspectRatio="1" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

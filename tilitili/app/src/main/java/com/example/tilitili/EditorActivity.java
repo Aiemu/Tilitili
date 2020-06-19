@@ -55,6 +55,8 @@ public class EditorActivity extends Activity {
     private ImageView cover_image_view;
     @ViewInject(R.id.text_title_edit_text)
     private EditText title_edit_text;
+    @ViewInject(R.id.text_introduction_edit_text)
+    private EditText introduction_edit_text;
 
     private static final int SELECT_PHOTO_CODE = 879;
     private static final int SELECT_COVER_CODE = 880;
@@ -64,7 +66,7 @@ public class EditorActivity extends Activity {
     private User user;
 
     private String html_text = "";
-    private String cover_url = "";
+    private String cover_uri = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -356,9 +358,9 @@ public class EditorActivity extends Activity {
                         try {
                             JSONObject jsonObject = new JSONObject(mMessage);
                             if (code == SELECT_PHOTO_CODE)
-                                mEditor.insertImage((String) jsonObject.get("image_url"), "dachshund");
+                                mEditor.insertImage(Config.getFullUrl((String) jsonObject.get("uri")), "dachshund");
                             else if (code == SELECT_COVER_CODE) {
-                                cover_url = (String) jsonObject.get("image_url");
+                                cover_uri = (String) jsonObject.get("uri");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -371,8 +373,7 @@ public class EditorActivity extends Activity {
 
     @OnClick(R.id.text_edit_confirm_btn)
     public void submissionPublish(View view) {
-
-        if (cover_url.equals("")) {
+        if (cover_uri.equals("")) {
             ToastUtils.show(this, "未选择封面");
             return;
         } else if (html_text.equals("")) {
@@ -381,12 +382,17 @@ public class EditorActivity extends Activity {
         } else if (title_edit_text.getText().toString().equals("")) {
             ToastUtils.show(this, "未填写标题");
             return;
+        } else if (introduction_edit_text.getText().toString().equals("")) {
+            ToastUtils.show(this, "未填写简介");
+            return;
         }
 
-        Map<String, String> map = new HashMap<>(3);
+        Map<String, String> map = new HashMap<>(5);
         map.put("title", title_edit_text.getText().toString());
-        map.put("content", html_text);
-        map.put("cover", cover_url);
+        map.put("introduction", introduction_edit_text.getText().toString());
+        map.put("resource", html_text);//todo
+        map.put("cover", cover_uri);
+        map.put("type", String.valueOf(0));
 
         SpotsCallBack<User> stringSpotsCallBack = new SpotsCallBack<User>(this) {
             @Override

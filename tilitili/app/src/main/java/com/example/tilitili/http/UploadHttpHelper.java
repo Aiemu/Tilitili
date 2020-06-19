@@ -8,6 +8,7 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ProgressBar;
 
+import com.example.tilitili.UserManagerApplication;
 import com.example.tilitili.data.Contants;
 
 import java.io.File;
@@ -26,9 +27,11 @@ public class UploadHttpHelper {
     private UploadHttpHelper instance;
     private OkHttpClient httpClient;
     private Handler handler;
+    private UserManagerApplication userManagerApplication;
 
     public UploadHttpHelper(final ProgressBar progressBar) {
         handler = new Handler(Looper.getMainLooper());
+        userManagerApplication = UserManagerApplication.getInstance();
         final CountingRequestBody.Listener progressListener = new CountingRequestBody.Listener() {
             @Override
             public void onRequestProgress(long bytesRead, long contentLength) {
@@ -96,6 +99,7 @@ public class UploadHttpHelper {
                 .url(Contants.API.UPLOAD_URL)
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
+                .header("cookie", userManagerApplication.getSessionId())
                 .post(requestBody)
                 .build();
         return request;

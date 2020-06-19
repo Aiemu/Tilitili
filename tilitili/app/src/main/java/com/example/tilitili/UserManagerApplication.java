@@ -41,4 +41,11 @@ public class UserManagerApplication extends Application {
         UserLocalData.clearUser(this);
     }
 
+    public void putSessionId(String sessionId) {
+        UserLocalData.putSession(this, sessionId);
+    }
+
+    public String getSessionId() {
+        return UserLocalData.getSession(this);
+    }
 }

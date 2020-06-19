@@ -13,6 +13,14 @@ public class UserLocalData {
         PreferencesUtils.putString(context, Contants.USER_JSON, user_json);
     }
 
+    public static void putSession(Context context, String session) {
+        PreferencesUtils.putString(context, Contants.SESSION_PREFERENCE, session);
+    }
+
+    public static String getSession(Context context) {
+        return PreferencesUtils.getString(context, Contants.SESSION_PREFERENCE, "null");
+    }
+
     public static User getUser(Context context) {
         String user_json = PreferencesUtils.getString(context, Contants.USER_JSON);
         if (!TextUtils.isEmpty(user_json)) {

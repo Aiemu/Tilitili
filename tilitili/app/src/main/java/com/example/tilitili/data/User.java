@@ -2,6 +2,8 @@ package com.example.tilitili.data;
 
 import android.annotation.SuppressLint;
 
+import com.example.tilitili.Config;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -9,18 +11,16 @@ public class User {
     private int userId;
     private String username;
     private String nickname;
-    private int privilege;
+    private String avatar;
     private String bio;
     private long joinAt;
     private String department;
     private String organization;
-
     private String email;
 
-    public User(int id, String username, int privilege, String nickname) {
+    public User(int id, String username, String nickname) {
         this.userId = id;
         this.username = username;
-        this.privilege = privilege;
         this.nickname = nickname;
     }
 
@@ -36,10 +36,6 @@ public class User {
         return nickname;
     }
 
-    public int getPrivilege() {
-        return privilege;
-    }
-
     public String getBio() {
         return bio;
     }
@@ -47,10 +43,6 @@ public class User {
     public void setBio(String bio) {
         this.bio = bio;
     }
-
-//    public int getJoinAt() {
-//        return joinAt;
-//    }
 
     public String getJoinAt() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -84,4 +76,13 @@ public class User {
     public void setOrganization(String organization) {
         this.organization = organization;
     }
+
+    public String getAvatar() {
+        return Config.getFullUrl(avatar);
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
 }
