@@ -143,6 +143,21 @@ router.get("/submission/hot", async(ctx, next) => {
     next()
 })
 
+router.get("/submission/user", async(ctx, next) => {
+    page = ctx.request.query['page']
+    count = ctx.request.query['count']
+    ctx.header.set
+    ctx.body = {
+        "currentPage": parseInt(page),
+        "pageSize": submission_list.slice((page - 1) * count, page * count).length,
+        "totalPage": Math.ceil(submission_list.length / count),
+        "totalCount": submission_list.length,
+        "list": submission_list.slice((page - 1) * count, page * count)
+    }
+    ctx.response.status = 200
+    next()
+})
+
 router.get("/plate", async(ctx, next) => {
     page = ctx.request.query['page']
     count = ctx.request.query['count']

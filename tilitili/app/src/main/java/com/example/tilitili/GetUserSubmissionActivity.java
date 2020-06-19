@@ -6,14 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,7 +22,6 @@ import com.example.tilitili.data.Plate;
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;
-import com.example.tilitili.ui.BaseFragment;
 import com.example.tilitili.utils.Pager;
 import com.example.tilitili.utils.ToastUtils;
 import com.lidroid.xutils.ViewUtils;
@@ -36,7 +30,6 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,32 +37,27 @@ import java.util.List;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class PlateDetailsActivity extends Activity implements Pager.OnPageListener<Submission> {
-    @ViewInject(R.id.plate_details_title_bar_title)
+public class GetUserSubmissionActivity extends Activity implements Pager.OnPageListener<Submission> {
+    @ViewInject(R.id.user_submission_title_bar_title)
     private TextView title_text;
-
-    @ViewInject(R.id.text_plate_details_intro)
-    private TextView intro_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.plate_details);
+        setContentView(R.layout.user_submission);
         ViewUtils.inject(this);
 
         Intent getIntent = getIntent();
         String titleStr = getIntent.getStringExtra("title");
-        String introStr = getIntent.getStringExtra("intro");
-
+        System.out.println(titleStr);
         title_text.setText(titleStr);
-        intro_text.setText(introStr);
         init();
     }
 
     private HotSubmissionAdapter hotSubmissionAdapter;
-    @ViewInject(R.id.recyclerview_plate_details)
+    @ViewInject(R.id.recyclerview_user_submission)
     private RecyclerView recyclerView;
-    @ViewInject(R.id.refresh_plate_details_view)
+    @ViewInject(R.id.refresh_user_submission_view)
     private MaterialRefreshLayout materialRefreshLayout;
 
     Pager pager;
@@ -142,7 +130,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_HOT);
+        pager.setUrl(Contants.API.GET_USER_SUBMISSION);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);
@@ -157,7 +145,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
             @Override
             public void onItemClick(View view, int position) {
                 Submission submission = hotSubmissionAdapter.getItem(position);
-                Intent intent = new Intent(PlateDetailsActivity.this, TextDetailActivity.class);
+                Intent intent = new Intent(GetUserSubmissionActivity.this, TextDetailActivity.class);
                 startActivity(intent);
             }
         });

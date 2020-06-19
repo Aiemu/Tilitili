@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tilitili.EditorActivity;
+import com.example.tilitili.GetUserSubmissionActivity;
 import com.example.tilitili.R;
 import com.example.tilitili.UserProfileUpdateActivity;
 import com.example.tilitili.data.Contants;
@@ -105,6 +106,14 @@ public class MineFragment extends BaseFragment {
     @OnClick(R.id.user_profile_change)
     void updateUserProfile(View view) {
         Intent intent = new Intent(this.getContext(), UserProfileUpdateActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.user_profile_all_submission)
+    void getUserAllSubmission(View view) {
+        Intent intent = new Intent(this.getContext(), GetUserSubmissionActivity.class);
+
+        intent.putExtra("title",  nicknameTextView.getText().toString());
         startActivity(intent);
     }
 }

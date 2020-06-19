@@ -16,6 +16,7 @@ public class Contants {
         public static final String CHANGE_PASSWORD = BASE_URL + "/user/%s/password"; // %s username
         public static final String GET_HOT = BASE_URL + "/submission/hot";
         public static final String GET_PLATE = BASE_URL + "/plate";
+        public static final String GET_USER_SUBMISSION = BASE_URL + "/submission/user";
         public static final String REGISTER_URL = BASE_URL + "/signup";
         public static final String UPLOAD_URL = BASE_URL + "/upload";
         public static final String SUBMISSION_UPLOAD_URL = BASE_URL + "/submission/upload/";
