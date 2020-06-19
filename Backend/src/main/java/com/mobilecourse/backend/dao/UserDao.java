@@ -13,4 +13,6 @@ public interface UserDao {
     User getUserById(Integer id);
     void registerUser(User user);
     List<User> searchUser(String subUsername, Integer maxNumber);
+    void updateUser(User user);
+    void updatePassword(Integer id, String password);
 }

@@ -1,5 +1,12 @@
 package com.example.tilitili.data;
 
+import android.annotation.SuppressLint;
+
+import com.example.tilitili.Config;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Submission {
     private int submissionId;
     private Plate plate;
@@ -36,7 +43,7 @@ public class Submission {
     }
 
     public String getResource() {
-        return resource;
+        return Config.getFullUrl(resource);
     }
 
     public String getTitle() {
@@ -47,8 +54,9 @@ public class Submission {
         return introduction;
     }
 
-    public long getSubmissionTime() {
-        return submissionTime;
+    public String getSubmissionTime() {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return sdf.format(new Date(this.submissionTime * 1000L));
     }
 
     public long getWatchTimes() {

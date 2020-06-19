@@ -32,7 +32,7 @@ public class CommonController {
 
     ResponseEntity<JSONObject> wrapperResponse(HttpStatus code, String msg) {
         JSONObject body = new JSONObject();
-        body.put("msg", msg);
+        body.put("message", msg);
         return new ResponseEntity<>(body, code);
     }
 

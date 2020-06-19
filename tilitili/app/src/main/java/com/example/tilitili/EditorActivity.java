@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -20,10 +19,10 @@ import android.widget.ProgressBar;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.User;
 import com.example.tilitili.data.UserLocalData;
-import com.example.tilitili.http.CountingRequestBody;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
+import com.example.tilitili.http.UploadHttpHelper;
 import com.example.tilitili.utils.ToastUtils;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -45,12 +44,6 @@ import java.util.Map;
 import jp.wasabeef.richeditor.RichEditor;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Interceptor;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class EditorActivity extends Activity {
@@ -62,15 +55,18 @@ public class EditorActivity extends Activity {
     private ImageView cover_image_view;
     @ViewInject(R.id.text_title_edit_text)
     private EditText title_edit_text;
+    @ViewInject(R.id.text_introduction_edit_text)
+    private EditText introduction_edit_text;
 
     private static final int SELECT_PHOTO_CODE = 879;
     private static final int SELECT_COVER_CODE = 880;
 
     private HttpHelper httpHelper;
+    private UploadHttpHelper uploadHttpHelper;
     private User user;
 
     private String html_text = "";
-    private String cover_url = "";
+    private String cover_uri = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +76,7 @@ public class EditorActivity extends Activity {
         ViewUtils.inject(this);
 
         httpHelper = HttpHelper.getInstance();
+        uploadHttpHelper = new UploadHttpHelper((ProgressBar) findViewById(R.id.progressBar));
         user = UserLocalData.getUser(this);
 
         Dexter.withActivity(this)
@@ -345,74 +342,7 @@ public class EditorActivity extends Activity {
 
     public void uploadImage(Uri filepath, final int code) {
         final File imageFile = new File(getRealPathFromURI(filepath));
-        Uri uris = Uri.fromFile(imageFile);
-        String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uris.toString());
-        String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase());
-        final String imageName = imageFile.getName();
-
-        Log.e("filepath", imageFile.getName() + " " + mime + " " + filepath);
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("type", String.valueOf(Contants.API.UploadType.IMAGE))
-                .addFormDataPart("file", imageName,
-                        RequestBody.create(imageFile, MediaType.parse(mime)))
-                .build();
-
-        final CountingRequestBody.Listener progressListener = new CountingRequestBody.Listener() {
-            @Override
-            public void onRequestProgress(long bytesRead, long contentLength) {
-                if (bytesRead >= contentLength) {
-                    if (progressBar != null)
-                        EditorActivity.this.runOnUiThread(new Runnable() {
-                            public void run() {
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        });
-                } else {
-                    if (contentLength > 0) {
-                        final int progress = (int) (((double) bytesRead / contentLength) * 100);
-                        if (progressBar != null)
-                            EditorActivity.this.runOnUiThread(new Runnable() {
-                                public void run() {
-                                    progressBar.setVisibility(View.VISIBLE);
-                                    progressBar.setProgress(progress);
-                                }
-                            });
-
-                        if (progress >= 100) {
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
-        };
-
-        OkHttpClient imageUploadClient = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request originalRequest = chain.request();
-
-                        if (originalRequest.body() == null) {
-                            return chain.proceed(originalRequest);
-                        }
-                        Request progressRequest = originalRequest.newBuilder()
-                                .method(originalRequest.method(),
-                                        new CountingRequestBody(originalRequest.body(), progressListener))
-                                .build();
-                        return chain.proceed(progressRequest);
-
-                    }
-                })
-                .build();
-        Request request = new Request.Builder()
-                .url(Contants.API.UPLOAD_URL)
-                .header("Accept", "application/json")
-                .header("Content-Type", "application/json")
-                .post(requestBody)
-                .build();
-
-        imageUploadClient.newCall(request).enqueue(new Callback() {
+        uploadHttpHelper.upload(uploadHttpHelper.buildRequest(imageFile, Contants.API.UploadType.IMAGE), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 String mMessage = e.getMessage().toString();
@@ -428,9 +358,9 @@ public class EditorActivity extends Activity {
                         try {
                             JSONObject jsonObject = new JSONObject(mMessage);
                             if (code == SELECT_PHOTO_CODE)
-                                mEditor.insertImage((String) jsonObject.get("image_url"), "dachshund");
+                                mEditor.insertImage(Config.getFullUrl((String) jsonObject.get("uri")), "dachshund");
                             else if (code == SELECT_COVER_CODE) {
-                                cover_url = (String) jsonObject.get("image_url");
+                                cover_uri = (String) jsonObject.get("uri");
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -443,8 +373,7 @@ public class EditorActivity extends Activity {
 
     @OnClick(R.id.text_edit_confirm_btn)
     public void submissionPublish(View view) {
-
-        if (cover_url.equals("")) {
+        if (cover_uri.equals("")) {
             ToastUtils.show(this, "未选择封面");
             return;
         } else if (html_text.equals("")) {
@@ -453,12 +382,17 @@ public class EditorActivity extends Activity {
         } else if (title_edit_text.getText().toString().equals("")) {
             ToastUtils.show(this, "未填写标题");
             return;
+        } else if(introduction_edit_text.getText().toString().equals("")) {
+            ToastUtils.show(this, "未填写简介");
+            return;
         }
 
-        Map<String, String> map = new HashMap<>(3);
+        Map<String, String> map = new HashMap<>(5);
         map.put("title", title_edit_text.getText().toString());
-        map.put("content", html_text);
-        map.put("cover", cover_url);
+        map.put("introduction", introduction_edit_text.getText().toString());
+        map.put("resource", html_text);//todo
+        map.put("cover", cover_uri);
+        map.put("type", String.valueOf(0));
 
         SpotsCallBack<User> stringSpotsCallBack = new SpotsCallBack<User>(this) {
             @Override

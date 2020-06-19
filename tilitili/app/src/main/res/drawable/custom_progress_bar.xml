@@ -5,8 +5,8 @@
     <item android:id="@android:id/background">
         <shape>
             <gradient
-                android:startColor="@color/purple"
-                android:centerColor="#0b131e"
+                android:startColor="@color/white"
+                android:centerColor="@color/white"
                 android:centerY="1.0"
                 android:endColor="@color/design_default_color_primary_dark"
                 android:angle="270" />
@@ -18,10 +18,10 @@
         <clip>
             <shape>
                 <gradient
-                    android:startColor="#007A00"
-                    android:centerColor="#007A00"
+                    android:startColor="@color/material_blue"
+                    android:centerColor="@color/material_blue"
                     android:centerY="1.0"
-                    android:endColor="#06101d"
+                    android:endColor="@color/material_blue"
                     android:angle="270" />
             </shape>
         </clip>

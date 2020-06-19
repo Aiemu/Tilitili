@@ -154,10 +154,9 @@ router.get("/plate", async(ctx, next) => {
     next()
 })
 
-
-router.post('/image/upload', async function(ctx, next) {
+router.post('/upload', async function(ctx, next) {
     ctx.body = {
-        "image_url": "http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG"
+        "uri": "http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG"
     }
     ctx.response.status = 200
     next()

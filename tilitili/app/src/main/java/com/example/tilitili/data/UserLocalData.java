@@ -6,11 +6,21 @@ import android.text.TextUtils;
 import com.example.tilitili.utils.JSONUtils;
 import com.example.tilitili.utils.PreferencesUtils;
 
+import okhttp3.internal.http2.Header;
+
 public class UserLocalData {
 
     public static void putUser(Context context, User user) {
         String user_json = JSONUtils.toJson(user);
         PreferencesUtils.putString(context, Contants.USER_JSON, user_json);
+    }
+
+    public static void putSession(Context context, String session) {
+        PreferencesUtils.putString(context, Contants.SESSION_PREFERENCE, session);
+    }
+
+    public static String getSession(Context context) {
+        return PreferencesUtils.getString(context, Contants.SESSION_PREFERENCE, "null");
     }
 
     public static User getUser(Context context) {

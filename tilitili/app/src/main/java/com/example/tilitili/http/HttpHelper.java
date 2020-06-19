@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.example.tilitili.UserManagerApplication;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
@@ -18,10 +19,12 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.internal.http2.Header;
 
 public class HttpHelper {
     private static OkHttpClient okHttpClient;
@@ -92,6 +95,7 @@ public class HttpHelper {
     private Request buildRequset(String url, Map<String, String> params, HttpMethodType httpMethodType) {
         Request.Builder builder = new Request.Builder();
         builder.url(url);
+        builder.addHeader("cookie", UserManagerApplication.getInstance().getSessionId());
 
         if (httpMethodType == HttpMethodType.GET) {
             builder.get();
@@ -128,7 +132,6 @@ public class HttpHelper {
                 ErrorMessage errorMessage = null;
                 try {
                     String error = response.body().string();
-                    Log.d("sad", error);
                     JSONObject jsonObject = new JSONObject(error);
                     errorMessage = new ErrorMessage(jsonObject.getString("errorMessage"), jsonObject.getInt("errorCode"), jsonObject.getString("uri"), jsonObject.getString("timestamp"));
                 } catch (JSONException | IOException e) {

@@ -9,11 +9,9 @@ public class User {
     private String nickname;
     private String email;
     private String password;
-    private int privilege;
-    private String organization;
     private String department;
     private Timestamp joinAt;
-    private int avatar;
+    private String avatar;
     private String bio;
 
     public String getBio() {
@@ -64,22 +62,6 @@ public class User {
         this.password = password;
     }
 
-    public int getPrivilege() {
-        return privilege;
-    }
-
-    public void setPrivilege(int privilege) {
-        this.privilege = privilege;
-    }
-
-    public String getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(String organization) {
-        this.organization = organization;
-    }
-
     public String getDepartment() {
         return department;
     }
@@ -96,11 +78,11 @@ public class User {
         this.joinAt = joinAt;
     }
 
-    public int getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(int avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

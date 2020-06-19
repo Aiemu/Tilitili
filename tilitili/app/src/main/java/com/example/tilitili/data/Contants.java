@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 public class Contants {
     public static final String USER_JSON = "user_json";
+    public static final String SESSION_PREFERENCE = "header_json";
     public static final String TOKEN = "token";
 
     public static class API {
@@ -15,7 +16,7 @@ public class Contants {
         public static final String CHANGE_PASSWORD = BASE_URL + "/user/%s/password"; // %s username
         public static final String GET_HOT = BASE_URL + "/submission/hot";
         public static final String REGISTER_URL = BASE_URL + "/signup";
-        public static final String UPLOAD_URL = BASE_URL + "/upload/";
+        public static final String UPLOAD_URL = BASE_URL + "/upload";
         public static final String SUBMISSION_UPLOAD_URL = BASE_URL + "/submission/upload/";
         public static final String GET_USER_PROFILE_URL = BASE_URL + "/user/profile/info/";
         public static final String UPDATE_USER_PROFILE_URL = BASE_URL + " /user/profile/edit";
