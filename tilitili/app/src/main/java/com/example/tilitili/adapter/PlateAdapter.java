@@ -21,11 +21,11 @@ public class PlateAdapter extends SimpleAdapter<Plate> {
     @Override
     protected void convert(BaseViewHolder viewHolder, final Plate item) {
         // 封面
-        SimpleDraweeView coverView = (SimpleDraweeView) viewHolder.getView(R.id.cover_view);
+        SimpleDraweeView coverView = (SimpleDraweeView) viewHolder.getView(R.id.cover_plate_item_view);
         coverView.setImageURI(Uri.parse("https://bkimg.cdn.bcebos.com/pic/a5c27d1ed21b0ef4d7a9a534ddc451da81cb3e12?x-bce-process=image/watermark,g_7,image_d2F0ZXIvYmFpa2U4MA==,xp_5,yp_5"));
 
         // 板块名
-        viewHolder.getTextView(R.id.text_title).setText(item.getTitle());
+        viewHolder.getTextView(R.id.text_plate_item_title).setText(item.getTitle());
     }
 
     public void resetLayout(int layoutId) {
