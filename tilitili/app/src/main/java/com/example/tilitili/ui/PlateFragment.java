@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cjj.MaterialRefreshLayout;
+import com.example.tilitili.PlateDetailsActivity;
 import com.example.tilitili.R;
 import com.example.tilitili.TextDetailActivity;
 import com.example.tilitili.adapter.BaseAdapter;
@@ -125,7 +126,12 @@ public class PlateFragment extends BaseFragment implements Pager.OnPageListener<
             @Override
             public void onItemClick(View view, int position) {
                 Plate plate = plateAdapter.getItem(position);
-                Intent intent = new Intent(getContext(), TextDetailActivity.class);
+
+                Intent intent = new Intent(getContext(), PlateDetailsActivity.class);
+
+                intent.putExtra("title", plate.getTitle());
+                intent.putExtra("intro", plate.getDescription());
+
                 startActivity(intent);
             }
         });
