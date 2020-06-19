@@ -1,11 +1,7 @@
 package com.example.tilitili.ui;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +19,12 @@ import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.DownloadImageTask;
 import com.example.tilitili.utils.ToastUtils;
-import com.google.gson.JsonObject;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.InputStream;
 
 import okhttp3.Response;
 
@@ -75,7 +68,7 @@ public class MineFragment extends BaseFragment {
                     user.setBio(jsonObject.getString("bio"));
                     user.setEmail(jsonObject.getString("email"));
                     user.setJoinAt(jsonObject.getLong("joinAt"));
-                    user.setDepartment(jsonObject.getString("department "));
+                    user.setDepartment(jsonObject.getString("department"));
                     user.setAvatar(jsonObject.getString("avatar"));
 
                     bioTextView.setText(user.getBio());

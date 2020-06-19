@@ -49,7 +49,7 @@
                         android:layout_alignParentStart="true"
                         android:background="@drawable/default_head"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

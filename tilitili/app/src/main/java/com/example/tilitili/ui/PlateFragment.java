@@ -7,22 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cjj.MaterialRefreshLayout;
 import com.example.tilitili.R;
 import com.example.tilitili.TextDetailActivity;
-import com.example.tilitili.adapter.ActivityAdapter;
 import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.PlateAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Page;
 import com.example.tilitili.data.Plate;
-import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.Pager;
@@ -41,9 +37,9 @@ import okhttp3.Response;
 
 public class PlateFragment extends BaseFragment implements Pager.OnPageListener<Plate> {
     private PlateAdapter plateAdapter;
-    @ViewInject(R.id.recyclerview)
+    @ViewInject(R.id.plate_recyclerview)
     private RecyclerView recyclerView;
-    @ViewInject(R.id.refresh_view)
+    @ViewInject(R.id.plate_refresh_view)
     private MaterialRefreshLayout materialRefreshLayout;
 
     Pager pager;
@@ -64,9 +60,9 @@ public class PlateFragment extends BaseFragment implements Pager.OnPageListener<
                 dismissDialog();
                 Toast.makeText(this.getContext(), "请求出错：" + e.getMessage(), Toast.LENGTH_LONG).show();
                 if (Pager.STATE_REFREH == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefresh();
+                    pager.getmRefreshLayout().finishRefresh();
                 } else if (Pager.STATE_MORE == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefreshLoadMore();
+                    pager.getmRefreshLayout().finishRefreshLoadMore();
                 }
             }
 
@@ -91,9 +87,9 @@ public class PlateFragment extends BaseFragment implements Pager.OnPageListener<
                             jsonObject.getInt("totalPage"),
                             jsonObject.getInt("totalCount"),
                             plates);
-                    Pager.getBuilder().setPageIndex(platePage.getCurrentPage());
-                    Pager.getBuilder().setPageCount(platePage.getPageSize());
-                    Pager.getBuilder().setTotalPage(platePage.getTotalPage());
+                    pager.setPageIndex(platePage.getCurrentPage());
+                    pager.setPageCount(platePage.getPageSize());
+                    pager.setTotalPage(platePage.getTotalPage());
                     pager.showData(platePage.getList(), platePage.getTotalPage(), platePage.getTotalCount());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -106,20 +102,18 @@ public class PlateFragment extends BaseFragment implements Pager.OnPageListener<
                 dismissDialog();
 
                 if (Pager.STATE_REFREH == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefresh();
+                    pager.getmRefreshLayout().finishRefresh();
                 } else if (Pager.STATE_MORE == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefreshLoadMore();
+                    pager.getmRefreshLayout().finishRefreshLoadMore();
                 }
             }
         };
 
-        pager = Pager.newBuilder()
-                .setUrl(Contants.API.GET_PLATE)
-                .setLoadMore(true)
-                .setOnPageListener(this)
-                .setPageSize(8)
-                .setRefreshLayout(materialRefreshLayout)
-                .build(this.getActivity(), callBack);
+        pager = new Pager(this.getActivity(), callBack, materialRefreshLayout);
+        pager.setUrl(Contants.API.GET_PLATE);
+        pager.setLoadMore(true);
+        pager.setOnPageListener(this);
+        pager.setPageSize(8);
         pager.request();
 
     }
@@ -137,7 +131,7 @@ public class PlateFragment extends BaseFragment implements Pager.OnPageListener<
         });
 
         recyclerView.setAdapter(plateAdapter);
-        GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(),2);
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

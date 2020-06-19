@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +16,6 @@ import com.example.tilitili.R;
 import com.example.tilitili.TextDetailActivity;
 import com.example.tilitili.adapter.ActivityAdapter;
 import com.example.tilitili.adapter.BaseAdapter;
-import com.example.tilitili.adapter.HotSubmissionAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Page;
 import com.example.tilitili.data.Plate;
@@ -40,9 +38,9 @@ import okhttp3.Response;
 
 public class ActivityFragment extends BaseFragment implements Pager.OnPageListener<Submission> {
     private ActivityAdapter activityAdapter;
-    @ViewInject(R.id.recyclerview)
+    @ViewInject(R.id.activity_recyclerview)
     private RecyclerView recyclerView;
-    @ViewInject(R.id.refresh_view)
+    @ViewInject(R.id.activity_refresh_view)
     private MaterialRefreshLayout materialRefreshLayout;
 
     Pager pager;
@@ -63,9 +61,9 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                 dismissDialog();
                 Toast.makeText(this.getContext(), "请求出错：" + e.getMessage(), Toast.LENGTH_LONG).show();
                 if (Pager.STATE_REFREH == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefresh();
+                    pager.getmRefreshLayout().finishRefresh();
                 } else if (Pager.STATE_MORE == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefreshLoadMore();
+                    pager.getmRefreshLayout().finishRefreshLoadMore();
                 }
             }
 
@@ -101,9 +99,9 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                             jsonObject.getInt("totalPage"),
                             jsonObject.getInt("totalCount"),
                             submissions);
-                    Pager.getBuilder().setPageIndex(submissionPage.getCurrentPage());
-                    Pager.getBuilder().setPageCount(submissionPage.getPageSize());
-                    Pager.getBuilder().setTotalPage(submissionPage.getTotalPage());
+                    pager.setPageIndex(submissionPage.getCurrentPage());
+                    pager.setPageCount(submissionPage.getPageSize());
+                    pager.setTotalPage(submissionPage.getTotalPage());
                     pager.showData(submissionPage.getList(), submissionPage.getTotalPage(), submissionPage.getTotalCount());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -116,20 +114,18 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                 dismissDialog();
 
                 if (Pager.STATE_REFREH == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefresh();
+                    pager.getmRefreshLayout().finishRefresh();
                 } else if (Pager.STATE_MORE == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefreshLoadMore();
+                    pager.getmRefreshLayout().finishRefreshLoadMore();
                 }
             }
         };
 
-        pager = Pager.newBuilder()
-                .setUrl(Contants.API.GET_HOT)
-                .setLoadMore(true)
-                .setOnPageListener(this)
-                .setPageSize(5)
-                .setRefreshLayout(materialRefreshLayout)
-                .build(this.getActivity(), callBack);
+        pager = new Pager(this.getActivity(), callBack, materialRefreshLayout);
+        pager.setUrl(Contants.API.GET_HOT);
+        pager.setLoadMore(true);
+        pager.setOnPageListener(this);
+        pager.setPageSize(5);
         pager.request();
 
     }

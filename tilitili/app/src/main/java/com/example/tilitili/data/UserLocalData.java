@@ -6,8 +6,6 @@ import android.text.TextUtils;
 import com.example.tilitili.utils.JSONUtils;
 import com.example.tilitili.utils.PreferencesUtils;
 
-import okhttp3.internal.http2.Header;
-
 public class UserLocalData {
 
     public static void putUser(Context context, User user) {

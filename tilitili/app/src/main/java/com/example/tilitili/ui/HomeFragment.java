@@ -39,9 +39,9 @@ import okhttp3.Response;
 
 public class HomeFragment extends BaseFragment implements Pager.OnPageListener<Submission> {
     private HotSubmissionAdapter hotSubmissionAdapter;
-    @ViewInject(R.id.recyclerview)
+    @ViewInject(R.id.home_recyclerview)
     private RecyclerView recyclerView;
-    @ViewInject(R.id.refresh_view)
+    @ViewInject(R.id.home_refresh_view)
     private MaterialRefreshLayout materialRefreshLayout;
 
     Pager pager;
@@ -62,9 +62,9 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                 dismissDialog();
                 ToastUtils.show(this.getContext(), "请求出错：" + e.getMessage(), Toast.LENGTH_LONG);
                 if (Pager.STATE_REFREH == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefresh();
+                    pager.getmRefreshLayout().finishRefresh();
                 } else if (Pager.STATE_MORE == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefreshLoadMore();
+                    pager.getmRefreshLayout().finishRefreshLoadMore();
                 }
             }
 
@@ -100,9 +100,9 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                             jsonObject.getInt("totalPage"),
                             jsonObject.getInt("totalCount"),
                             submissions);
-                    Pager.getBuilder().setPageIndex(submissionPage.getCurrentPage());
-                    Pager.getBuilder().setPageCount(submissionPage.getPageSize());
-                    Pager.getBuilder().setTotalPage(submissionPage.getTotalPage());
+                    pager.setPageIndex(submissionPage.getCurrentPage());
+                    pager.setPageCount(submissionPage.getPageSize());
+                    pager.setTotalPage(submissionPage.getTotalPage());
                     pager.showData(submissionPage.getList(), submissionPage.getTotalPage(), submissionPage.getTotalCount());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -115,20 +115,17 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                 dismissDialog();
 
                 if (Pager.STATE_REFREH == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefresh();
+                    pager.getmRefreshLayout().finishRefresh();
                 } else if (Pager.STATE_MORE == pager.getState()) {
-                    Pager.getBuilder().getmRefreshLayout().finishRefreshLoadMore();
+                    pager.getmRefreshLayout().finishRefreshLoadMore();
                 }
             }
         };
-
-        pager = Pager.newBuilder()
-                .setUrl(Contants.API.GET_HOT)
-                .setLoadMore(true)
-                .setOnPageListener(this)
-                .setPageSize(5)
-                .setRefreshLayout(materialRefreshLayout)
-                .build(this.getActivity(), callBack);
+        pager = new Pager(this.getActivity(), callBack, materialRefreshLayout);
+        pager.setUrl(Contants.API.GET_HOT);
+        pager.setLoadMore(true);
+        pager.setOnPageListener(this);
+        pager.setPageSize(5);
         pager.request();
 
     }
