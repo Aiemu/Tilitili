@@ -44,7 +44,8 @@ var submission_1 = {
     "introduction": "庆祝清华大学校庆",
     "submissionTime": 1590600906,
     "watchTimes": 20,
-    "likes": 1
+    "likes": 1,
+    "post_time": 59
 }
 
 var submission_2 = {
@@ -56,7 +57,8 @@ var submission_2 = {
     "introduction": "庆祝清华大学校庆",
     "submissionTime": 1590600906,
     "watchTimes": 20,
-    "likes": 1
+    "likes": 1,
+    "post_time": 59
 }
 
 var submission_3 = {
@@ -68,7 +70,8 @@ var submission_3 = {
     "introduction": "庆祝清华大学校庆",
     "submissionTime": 1590600906,
     "watchTimes": 20,
-    "likes": 1
+    "likes": 1,
+    "post_time": 59
 }
 
 
@@ -76,6 +79,8 @@ var accounts = [account_1, account_2]
 var loginAccount = undefined
 
 var submission_list = [submission_1, submission_1, submission_1, submission_1, submission_1, submission_2, submission_2, submission_2, submission_2, submission_2, submission_3, submission_3, submission_3, submission_3, submission_3]
+
+var plate_list = [plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1]
 
 // 用户登录
 router.post("/login", async(ctx, next) => {
@@ -134,6 +139,21 @@ router.get("/submission/hot", async(ctx, next) => {
     ctx.response.status = 200
     next()
 })
+
+router.get("/plate", async(ctx, next) => {
+    page = ctx.request.query['page']
+    count = ctx.request.query['count']
+    ctx.body = {
+        "currentPage": parseInt(page),
+        "pageSize": plate_list.slice((page - 1) * count, page * count).length,
+        "totalPage": Math.ceil(plate_list.length / count),
+        "totalCount": plate_list.length,
+        "list": plate_list.slice((page - 1) * count, page * count)
+    }
+    ctx.response.status = 200
+    next()
+})
+
 
 router.post('/image/upload', async function(ctx, next) {
     ctx.body = {
