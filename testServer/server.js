@@ -6,6 +6,7 @@ const multer = require('koa-multer');
 const app = new Koa()
 const router = new Router()
 
+
 var account_1 = {
     "username": "1",
     "password": "1",
@@ -93,6 +94,7 @@ router.post("/login", async(ctx, next) => {
             "privilege": loginAccount.privilege
         }
         ctx.response.status = 200
+        ctx.cookies.set("JSESSIONID", "123")
         ctx.set('token', loginAccount.token)
     } else {
         ctx.body = {}
@@ -129,6 +131,7 @@ router.post("/user/:username/password", async(ctx, next) => {
 router.get("/submission/hot", async(ctx, next) => {
     page = ctx.request.query['page']
     count = ctx.request.query['count']
+    ctx.header.set
     ctx.body = {
         "currentPage": parseInt(page),
         "pageSize": submission_list.slice((page - 1) * count, page * count).length,
@@ -170,7 +173,8 @@ router.get('/user/profile/info/1', async function(ctx, next) {
         "department": "软件学院",
         "organization": "天文协会",
         "joinAt": 1592413723,
-        "bio": "大家好"
+        "bio": "大家好",
+        "avatar": "123"
     }
     ctx.response.status = 200
     next()

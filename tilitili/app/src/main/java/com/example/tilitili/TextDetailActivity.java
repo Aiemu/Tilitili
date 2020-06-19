@@ -18,7 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.tilitili.data.News;
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.utils.NewsDetailsUtil;
 
@@ -54,7 +53,7 @@ public class TextDetailActivity extends Activity {
             webView.addJavascriptInterface(new JavascriptInterface(getApplicationContext()), "imagelistner");
             webView.setWebChromeClient(new MyWebChromeClient());
             webView.setWebViewClient(new MyWebViewClient());
-            new MyAsnycTask().execute(submission.getResource(), submission.getTitle(), submission.getPlate().getTitle() + " " + submission.getSubmissionTime()+"发布");
+            new MyAsnycTask().execute(submission.getResource(), submission.getTitle(), submission.getPlate().getTitle() + " " + submission.getSubmissionTime() + "发布");
         }
     }
 

@@ -9,7 +9,6 @@ import android.widget.EditText;
 
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.User;
-import com.example.tilitili.data.UserLocalData;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
@@ -71,14 +70,14 @@ public class LoginActivity extends Activity {
                     e.printStackTrace();
                 }
 
-                Headers headers =response.headers();
+                Headers headers = response.headers();
                 List<String> cookies = headers.values("Set-Cookie");
                 String session = (String) cookies.get(0);
-                String sessionid = session.substring(0,session.indexOf(";"));
+                String sessionid = session.substring(0, session.indexOf(";"));
 
                 application.putSessionId(sessionid);
                 application.putUser(user);
-                Intent register_intent = new Intent(LoginActivity.this, EditorActivity.class);
+                Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(register_intent);
             }
 

@@ -14,9 +14,20 @@ import java.util.Map;
 
 public class Pager {
 
-    private static Builder builder;
     private HttpHelper httpHelper;
     private BaseHttpCallback callback;
+    private OnPageListener onPageListener;
+    private Context mContext;
+
+    private MaterialRefreshLayout mRefreshLayout;
+
+    private boolean canLoadMore;
+    private String mUrl;
+
+    private int totalPage = 1;
+    private int pageIndex = 1;
+    private int pageCount = 5;
+    private HashMap<String, Object> params = new HashMap<>(5);
 
     public static final int STATE_NORMAL = 0;
     public static final int STATE_REFREH = 1;
@@ -24,40 +35,33 @@ public class Pager {
 
     private int state = STATE_NORMAL;
 
-    private Pager(BaseHttpCallback callback) {
+    public Pager(Context context, BaseHttpCallback callback, MaterialRefreshLayout refreshLayout) {
         httpHelper = HttpHelper.getInstance();
         this.callback = callback;
-        initRefreshLayout();
-    }
-
-    public static Builder newBuilder() {
-        builder = new Builder();
-        return builder;
+        this.mContext = context;
+        this.mRefreshLayout = refreshLayout;
+        this.initRefreshLayout();
     }
 
     public void request() {
         requestData();
     }
 
-    public void putParam(String key, Object value) {
-        builder.params.put(key, value);
-    }
-
     private void initRefreshLayout() {
-        builder.mRefreshLayout.setLoadMore(builder.canLoadMore);
-        builder.mRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
+        this.mRefreshLayout.setLoadMore(this.canLoadMore);
+        this.mRefreshLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
             @Override
             public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
-                builder.mRefreshLayout.setLoadMore(builder.canLoadMore);
+                mRefreshLayout.setLoadMore(canLoadMore);
                 refresh();
             }
 
             @Override
             public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
-                if (builder.pageIndex < builder.totalPage)
+                if (pageIndex < totalPage)
                     loadMore();
                 else {
-                    Toast.makeText(builder.mContext, "无更多数据", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "无更多数据", Toast.LENGTH_LONG).show();
                     materialRefreshLayout.finishRefreshLoadMore();
                     materialRefreshLayout.setLoadMore(false);
                 }
@@ -78,23 +82,23 @@ public class Pager {
      */
     public <T> void showData(List<T> datas, int totalPage, int totalCount) {
         if (datas == null || datas.size() <= 0) {
-            Toast.makeText(builder.mContext, "加载不到数据", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.mContext, "加载不到数据", Toast.LENGTH_LONG).show();
             return;
         }
         if (STATE_NORMAL == state) {
-            if (builder.onPageListener != null) {
-                builder.onPageListener.load(datas, totalPage, totalCount);
+            if (onPageListener != null) {
+                onPageListener.load(datas, totalPage, totalCount);
             }
         } else if (STATE_REFREH == state) {
-            builder.mRefreshLayout.finishRefresh();
-            if (builder.onPageListener != null) {
-                builder.onPageListener.refresh(datas, totalPage, totalCount);
+            this.mRefreshLayout.finishRefresh();
+            if (onPageListener != null) {
+                onPageListener.refresh(datas, totalPage, totalCount);
             }
 
         } else if (STATE_MORE == state) {
-            builder.mRefreshLayout.finishRefreshLoadMore();
-            if (builder.onPageListener != null) {
-                builder.onPageListener.loadMore(datas, totalPage, totalCount);
+            this.mRefreshLayout.finishRefreshLoadMore();
+            if (onPageListener != null) {
+                onPageListener.loadMore(datas, totalPage, totalCount);
             }
         }
     }
@@ -104,7 +108,7 @@ public class Pager {
      */
     private void refresh() {
         state = STATE_REFREH;
-        builder.pageIndex = 1;
+        this.pageIndex = 1;
         requestData();
     }
 
@@ -113,23 +117,18 @@ public class Pager {
      */
     private void loadMore() {
         state = STATE_MORE;
-        builder.pageIndex = ++builder.pageIndex;
+        this.pageIndex = ++this.pageIndex;
         requestData();
     }
 
-    /**
-     * 构建URL
-     *
-     * @return
-     */
     private String buildUrl() {
-        return builder.mUrl + "?" + buildUrlParams();
+        return this.mUrl + "?" + buildUrlParams();
     }
 
     private String buildUrlParams() {
-        HashMap<String, Object> map = builder.params;
-        map.put("page", builder.pageIndex);
-        map.put("count", builder.pageCount);
+        HashMap<String, Object> map = this.params;
+        map.put("page", this.pageIndex);
+        map.put("count", this.pageCount);
 
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
@@ -143,91 +142,55 @@ public class Pager {
         return s;
     }
 
-    /**
-     *
-     */
-    public static class Builder {
-        private Context mContext;
-        private String mUrl;
+    public void setUrl(String url) {
+        mUrl = url;
+    }
 
-        private MaterialRefreshLayout mRefreshLayout;
+    public MaterialRefreshLayout getmRefreshLayout() {
+        return this.mRefreshLayout;
+    }
 
-        private boolean canLoadMore;
+    public Context getmContext() {
+        return this.mContext;
+    }
 
-        private int totalPage = 1;
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
+    }
 
-        private int pageIndex = 1;
-        private int pageCount = 5;
-        private HashMap<String, Object> params = new HashMap<>(5);
+    public void setPageIndex(int pageIndex) {
+        this.pageIndex = pageIndex;
+    }
 
-        private OnPageListener onPageListener;
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
 
-        public Builder setUrl(String url) {
-            builder.mUrl = url;
-            return builder;
-        }
+    public void setPageSize(int pageCount) {
+        this.pageCount = pageCount;
+    }
 
-        public MaterialRefreshLayout getmRefreshLayout() {
-            return this.mRefreshLayout;
-        }
+    public void putParam(String key, Object value) {
+        params.put(key, value);
+    }
 
-        public Context getmContext() {
-            return this.mContext;
-        }
+    public void setLoadMore(boolean loadMore) {
+        this.canLoadMore = loadMore;
+    }
 
-        public void setTotalPage(int totalPage) {
-            this.totalPage = totalPage;
-        }
+    public void setOnPageListener(OnPageListener onPageListener) {
+        this.onPageListener = onPageListener;
+    }
 
-        public void setPageIndex(int pageIndex) {
-            this.pageIndex = pageIndex;
-        }
+    private void valid() {
+        if (this.mContext == null)
+            throw new RuntimeException("content can't be null");
 
-        public void setPageCount(int pageCount) {
-            this.pageCount = pageCount;
-        }
+        if (this.mUrl == null || "".equals(this.mUrl))
+            throw new RuntimeException("url can't be  null");
 
-        public Builder setPageSize(int pageCount) {
-            this.pageCount = pageCount;
-            return builder;
-        }
-
-        public Builder putParam(String key, Object value) {
-            params.put(key, value);
-            return builder;
-        }
-
-        public Builder setLoadMore(boolean loadMore) {
-            this.canLoadMore = loadMore;
-            return builder;
-        }
-
-        public Builder setRefreshLayout(MaterialRefreshLayout refreshLayout) {
-            this.mRefreshLayout = refreshLayout;
-            return builder;
-        }
-
-        public Builder setOnPageListener(OnPageListener onPageListener) {
-            this.onPageListener = onPageListener;
-            return builder;
-        }
-
-        public Pager build(Context context, BaseHttpCallback callback) {
-            this.mContext = context;
-            valid();
-            return new Pager(callback);
-        }
-
-        private void valid() {
-            if (this.mContext == null)
-                throw new RuntimeException("content can't be null");
-
-            if (this.mUrl == null || "".equals(this.mUrl))
-                throw new RuntimeException("url can't be  null");
-
-            if (this.mRefreshLayout == null)
-                throw new RuntimeException("MaterialRefreshLayout can't be  null");
-        }
+        if (this.mRefreshLayout == null)
+            throw new RuntimeException("MaterialRefreshLayout can't be  null");
     }
 
     public interface OnPageListener<T> {
@@ -242,7 +205,4 @@ public class Pager {
         return state;
     }
 
-    public static Builder getBuilder() {
-        return builder;
-    }
 }

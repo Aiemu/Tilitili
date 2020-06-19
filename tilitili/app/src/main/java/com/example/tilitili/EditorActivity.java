@@ -382,7 +382,7 @@ public class EditorActivity extends Activity {
         } else if (title_edit_text.getText().toString().equals("")) {
             ToastUtils.show(this, "未填写标题");
             return;
-        } else if(introduction_edit_text.getText().toString().equals("")) {
+        } else if (introduction_edit_text.getText().toString().equals("")) {
             ToastUtils.show(this, "未填写简介");
             return;
         }
