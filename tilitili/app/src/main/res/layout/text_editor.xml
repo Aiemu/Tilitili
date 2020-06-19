@@ -26,8 +26,22 @@
                     android:id="@+id/text_title_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="@string/register_username_hint"
                     android:hint="请输入标题"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/text_introduction_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="@string/register_username_hint"
+                    android:hint="请输入简介"
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 

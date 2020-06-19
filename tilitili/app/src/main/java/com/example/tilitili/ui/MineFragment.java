@@ -1,10 +1,15 @@
 package com.example.tilitili.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tilitili.EditorActivity;
@@ -16,7 +21,9 @@ import com.example.tilitili.data.UserLocalData;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
+import com.example.tilitili.utils.DownloadImageTask;
 import com.example.tilitili.utils.ToastUtils;
+import com.google.gson.JsonObject;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -24,12 +31,16 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+
 import okhttp3.Response;
 
 public class MineFragment extends BaseFragment {
 
     HttpHelper httpHelper;
 
+    @ViewInject(R.id.user_profile_avatar)
+    private ImageView avatarImageView;
     @ViewInject(R.id.user_profile_bio_textview)
     private TextView bioTextView;
     @ViewInject(R.id.user_profile_nickname_textview)
@@ -64,14 +75,17 @@ public class MineFragment extends BaseFragment {
                     user.setBio(jsonObject.getString("bio"));
                     user.setEmail(jsonObject.getString("email"));
                     user.setJoinAt(jsonObject.getLong("joinAt"));
-                    user.setDepartment(jsonObject.getString("department"));
-                    user.setOrganization(jsonObject.getString("organization"));
+                    user.setDepartment(jsonObject.getString("department "));
+                    user.setAvatar(jsonObject.getString("avatar"));
 
                     bioTextView.setText(user.getBio());
                     nicknameTextView.setText(user.getNickname());
                     joinAtTextView.setText(user.getJoinAt());
                     departmentTextView.setText(user.getDepartment());
                     organizationTextView.setText(user.getOrganization());
+
+//                    new DownloadImageTask(avatarImageView).execute(user.getAvatar());
+                    new DownloadImageTask(avatarImageView).execute("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3927644377,808105775&fm=26&gp=0.jpg");
 
                     // 更新本地user
                     UserLocalData.updateUser(this.getContext(), user);

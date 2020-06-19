@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.User;
+import com.example.tilitili.data.UserLocalData;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
@@ -22,8 +23,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import okhttp3.Headers;
 import okhttp3.Response;
 
 public class LoginActivity extends Activity {
@@ -55,22 +58,27 @@ public class LoginActivity extends Activity {
         map.put("username", username);
         map.put("password", password);
 
-
         SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(this) {
             @Override
             public void onSuccess(Response response, String userString) {
                 User user = null;
+                UserManagerApplication application = UserManagerApplication.getInstance();
                 try {
                     Log.d("user", userString);
                     JSONObject jsonObject = new JSONObject(userString);
-                    user = new User(jsonObject.getInt("id"), jsonObject.getString("username")
-                            , jsonObject.getInt("privilege"), jsonObject.getString("nickname"));
+                    user = new User(jsonObject.getInt("id"), jsonObject.getString("username"), jsonObject.getString("nickname"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                UserManagerApplication application = UserManagerApplication.getInstance();
+
+                Headers headers =response.headers();
+                List<String> cookies = headers.values("Set-Cookie");
+                String session = (String) cookies.get(0);
+                String sessionid = session.substring(0,session.indexOf(";"));
+
+                application.putSessionId(sessionid);
                 application.putUser(user);
-                Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent register_intent = new Intent(LoginActivity.this, EditorActivity.class);
                 startActivity(register_intent);
             }
 
