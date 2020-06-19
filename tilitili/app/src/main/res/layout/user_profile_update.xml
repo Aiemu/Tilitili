@@ -4,12 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/user_profile_update_title_bar"
+        layout="@layout/user_profile_update_title_bar" />
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/user_profile_update_title_bar" >
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="0dp"
