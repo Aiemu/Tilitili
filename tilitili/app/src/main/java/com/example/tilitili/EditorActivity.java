@@ -453,7 +453,7 @@ public class EditorActivity extends Activity {
         map.put("resource", html_uri);
         map.put("cover", cover_uri);
         map.put("type", String.valueOf(0));
-        map.put("pid", String.valueOf(plates.get(platePosition).getSid()));
+        map.put("pid", String.valueOf(plates.get(platePosition).getPid()));
 
         SpotsCallBack<User> stringSpotsCallBack = new SpotsCallBack<User>(this) {
             @Override

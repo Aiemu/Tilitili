@@ -51,6 +51,8 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
     @ViewInject(R.id.text_plate_details_intro)
     private TextView intro_text;
 
+    private int pid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +62,11 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
         Intent getIntent = getIntent();
         String titleStr = getIntent.getStringExtra("title");
         String introStr = getIntent.getStringExtra("intro");
+        int pidInt = getIntent.getIntExtra("pid", -1);
 
         title_text.setText(titleStr);
         intro_text.setText(introStr);
+        pid = pidInt;
         init();
     }
 
@@ -141,7 +145,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_HOT);
+        pager.setUrl(Contants.API.GET_PLATE + pid);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.example.tilitili.R;
+import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Submission;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -22,7 +23,7 @@ public class ActivityAdapter extends SimpleAdapter<Submission> {
     protected void convert(BaseViewHolder viewHolder, final Submission item) {
         // 头像
         SimpleDraweeView avatarView = (SimpleDraweeView) viewHolder.getView(R.id.avatar_activity_item_view);
-        avatarView.setImageURI(Uri.parse("https://bkimg.cdn.bcebos.com/pic/a5c27d1ed21b0ef4d7a9a534ddc451da81cb3e12?x-bce-process=image/watermark,g_7,image_d2F0ZXIvYmFpa2U4MA==,xp_5,yp_5"));
+        avatarView.setImageURI(Uri.parse(Contants.API.BASE_URL + item.ge));
 
         // 封面
         SimpleDraweeView coverView = (SimpleDraweeView) viewHolder.getView(R.id.cover_activity_item_view);
