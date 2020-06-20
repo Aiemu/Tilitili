@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tilitili.EditorActivity;
+import com.example.tilitili.FollowListActivity;
 import com.example.tilitili.GetUserSubmissionActivity;
+import com.example.tilitili.HistoryActivity;
 import com.example.tilitili.R;
 import com.example.tilitili.UserProfileUpdateActivity;
 import com.example.tilitili.data.Contants;
@@ -95,6 +97,18 @@ public class MineFragment extends BaseFragment {
                 dismissDialog();
             }
         });
+    }
+
+    @OnClick(R.id.user_profile_follow)
+    void goToFollow(View view) {
+        Intent intent = new Intent(this.getContext(), FollowListActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.user_profile_history)
+    void goToHistory(View view) {
+        Intent intent = new Intent(this.getContext(), HistoryActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.user_profile_submit)
