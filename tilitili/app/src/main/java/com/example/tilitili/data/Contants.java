@@ -13,6 +13,7 @@ public class Contants {
         public static final String CHANGE_PASSWORD = BASE_URL + " /user/password/modify";
         public static final String FORGET_PASSWORD = BASE_URL + "/user/password/forget";
         public static final String GET_HOT = BASE_URL + "/submission/hot";
+        public static final String GET_NEW = BASE_URL + "/submission/new";
         public static final String GET_PLATE = BASE_URL + "/plate/getall";
         public static final String GET_USER_ACTIVITY = BASE_URL + "/user/activity";
         public static final String SUBMISSION_LIKE = BASE_URL + "/submission/like/";

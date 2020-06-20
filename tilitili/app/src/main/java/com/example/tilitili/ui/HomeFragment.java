@@ -47,7 +47,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class HomeFragment extends BaseFragment implements Pager.OnPageListener<Submission> {
-    private HotSubmissionAdapter hotSubmissionAdapter;
+
     @ViewInject(R.id.text_home_hot_order)
     private TextView hotText;
     @ViewInject(R.id.text_home_new_order)
@@ -60,7 +60,14 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
     private EditText home_search_edit_text;
 
     Pager pager;
-    SpotsCallBack<String> callBack;
+    SpotsCallBack<String> hotCallBack;
+    SpotsCallBack<String> newCallBack;
+
+    private List<Submission> hotSubmissions = new ArrayList<>();
+    private List<Submission> newSubmissions = new ArrayList<>();
+    private HotSubmissionAdapter hotSubmissionAdapter = new HotSubmissionAdapter(this.getContext(), hotSubmissions);
+    private HotSubmissionAdapter newSubmissionAdapter = new HotSubmissionAdapter(this.getContext(), newSubmissions);
+    private HotSubmissionAdapter submissionAdapter = hotSubmissionAdapter;
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,7 +78,7 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
 
     @Override
     public void init() {
-        callBack = new SpotsCallBack<String>(this.getActivity()) {
+        hotCallBack = new SpotsCallBack<String>(this.getActivity()) {
             @Override
             public void onFailure(Request request, Exception e) {
                 dismissDialog();
@@ -87,13 +94,12 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
             public void onSuccess(Response response, String page) {
                 dismissDialog();
                 Page<Submission> submissionPage = null;
-                List<Submission> submissions = new ArrayList<>();
                 try {
                     JSONObject jsonObject = new JSONObject(page);
                     JSONArray items = jsonObject.getJSONArray("list");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
-                        submissions.add(new Submission(item.getInt("sid"),
+                        hotSubmissions.add(new Submission(item.getInt("sid"),
                                 item.getInt("type"),
                                 item.getString("plateTitle"),
                                 item.getString("title"),
@@ -113,11 +119,12 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                             jsonObject.getInt("pageSize"),
                             jsonObject.getInt("totalPage"),
                             jsonObject.getInt("totalCount"),
-                            submissions);
+                            hotSubmissions);
                     pager.setPageIndex(submissionPage.getCurrentPage());
                     pager.setPageCount(submissionPage.getPageSize());
                     pager.setTotalPage(submissionPage.getTotalPage());
                     pager.showData(submissionPage.getList(), submissionPage.getTotalPage(), submissionPage.getTotalCount());
+                    hotSubmissionAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -135,7 +142,73 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                 }
             }
         };
-        pager = new Pager(this.getActivity(), callBack, materialRefreshLayout);
+
+        newCallBack = new SpotsCallBack<String>(this.getActivity()) {
+            @Override
+            public void onFailure(Request request, Exception e) {
+                dismissDialog();
+                ToastUtils.show(this.getContext(), "请求出错：" + e.getMessage(), Toast.LENGTH_LONG);
+                if (Pager.STATE_REFREH == pager.getState()) {
+                    pager.getmRefreshLayout().finishRefresh();
+                } else if (Pager.STATE_MORE == pager.getState()) {
+                    pager.getmRefreshLayout().finishRefreshLoadMore();
+                }
+            }
+
+            @Override
+            public void onSuccess(Response response, String page) {
+                dismissDialog();
+                Page<Submission> submissionPage = null;
+                try {
+                    JSONObject jsonObject = new JSONObject(page);
+                    JSONArray items = jsonObject.getJSONArray("list");
+                    for (int i = 0; i < items.length(); i++) {
+                        JSONObject item = (JSONObject) items.get(i);
+                        newSubmissions.add(new Submission(item.getInt("sid"),
+                                item.getInt("type"),
+                                item.getString("plateTitle"),
+                                item.getString("title"),
+                                item.getString("cover"),
+                                item.getString("introduction"),
+                                item.getString("resource"),
+                                item.getLong("submissionTime"),
+                                item.getInt("watchTimes"),
+                                item.getInt("likesCount"),
+                                item.getInt("isLike"),
+                                item.getInt("commentsCount"),
+                                item.getInt("uid"),
+                                item.getString("userNickname"),
+                                item.getInt("following")));
+                    }
+                    submissionPage = new Page<>(jsonObject.getInt("currentPage"),
+                            jsonObject.getInt("pageSize"),
+                            jsonObject.getInt("totalPage"),
+                            jsonObject.getInt("totalCount"),
+                            newSubmissions);
+                    pager.setPageIndex(submissionPage.getCurrentPage());
+                    pager.setPageCount(submissionPage.getPageSize());
+                    pager.setTotalPage(submissionPage.getTotalPage());
+                    pager.showData(submissionPage.getList(), submissionPage.getTotalPage(), submissionPage.getTotalCount());
+                    newSubmissionAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
+                Toast.makeText(this.getContext(), "加载数据失败", Toast.LENGTH_LONG).show();
+                dismissDialog();
+
+                if (Pager.STATE_REFREH == pager.getState()) {
+                    pager.getmRefreshLayout().finishRefresh();
+                } else if (Pager.STATE_MORE == pager.getState()) {
+                    pager.getmRefreshLayout().finishRefreshLoadMore();
+                }
+            }
+        };
+
+        pager = new Pager(this.getActivity(), hotCallBack, materialRefreshLayout);
         pager.setUrl(Contants.API.GET_HOT);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
@@ -155,11 +228,7 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                 return false;
             }
         });
-    }
 
-    @Override
-    public void load(List<Submission> datas, int totalPage, int totalCount) {
-        hotSubmissionAdapter = new HotSubmissionAdapter(this.getContext(), datas);
         hotSubmissionAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -170,38 +239,67 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
             }
         });
 
-        recyclerView.setAdapter(hotSubmissionAdapter);
+        newSubmissionAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Submission submission = newSubmissionAdapter.getItem(position);
+                Intent intent = new Intent(getContext(), TextDetailActivity.class);
+                intent.putExtra("submission", (Serializable) submission);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void load(List<Submission> datas, int totalPage, int totalCount) {
+        recyclerView.setAdapter(submissionAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override
     public void refresh(List<Submission> datas, int totalPage, int totalCount) {
-        hotSubmissionAdapter.refreshData(datas);
+        submissionAdapter.refreshData(datas);
         recyclerView.scrollToPosition(0);
     }
 
     @Override
     public void loadMore(List<Submission> datas, int totalPage, int totalCount) {
-        hotSubmissionAdapter.loadMoreData(datas);
-        recyclerView.scrollToPosition(hotSubmissionAdapter.getDatas().size());
+        submissionAdapter.loadMoreData(datas);
+        recyclerView.scrollToPosition(submissionAdapter.getDatas().size());
     }
 
-    @OnClick(R.id.linearLayoutCompatOrderHot)
+    @OnClick(R.id.text_home_hot_order)
     public void setHotOrder(View view) {
         this.hotText.setTextColor(Color.parseColor("#82318E"));
         this.hotText.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 
+        submissionAdapter = hotSubmissionAdapter;
+        pager.setCallback(hotCallBack);
+        pager.setUrl(Contants.API.GET_HOT);
+        newSubmissions.clear();
+        newSubmissionAdapter.notifyDataSetChanged();
+        hotSubmissions.clear();
+        hotSubmissionAdapter.notifyDataSetChanged();
+        pager.request();
 
         this.newText.setTextColor(Color.parseColor("#888888"));
         this.newText.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
     }
 
-    @OnClick(R.id.linearLayoutCompatOrderNew)
+    @OnClick(R.id.text_home_new_order)
     public void setNewOrder(View view) {
         this.newText.setTextColor(Color.parseColor("#82318E"));
         this.newText.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 
+        submissionAdapter = newSubmissionAdapter;
+        pager.setCallback(newCallBack);
+        pager.setUrl(Contants.API.GET_NEW);
+        newSubmissions.clear();
+        newSubmissionAdapter.notifyDataSetChanged();
+        hotSubmissions.clear();
+        hotSubmissionAdapter.notifyDataSetChanged();
+        pager.request();
 
         this.hotText.setTextColor(Color.parseColor("#888888"));
         this.hotText.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));

@@ -205,4 +205,7 @@ public class Pager {
         return state;
     }
 
+    public void setCallback(BaseHttpCallback callback) {
+        this.callback = callback;
+    }
 }
