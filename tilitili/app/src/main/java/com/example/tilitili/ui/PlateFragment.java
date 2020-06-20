@@ -69,27 +69,21 @@ public class PlateFragment extends BaseFragment implements Pager.OnPageListener<
             @Override
             public void onSuccess(Response response, String page) {
                 dismissDialog();
-                Page<Plate> platePage = null;
                 List<Plate> plates = new ArrayList<>();
                 try {
                     JSONObject jsonObject = new JSONObject(page);
-                    JSONArray items = jsonObject.getJSONArray("list");
-                    for (int i = 0; i < items.length(); i++) {
+                    JSONArray items = jsonObject.getJSONArray("plates");
+                    for (int i = 0; i < jsonObject.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
                         plates.add(new Plate(item.getInt("pid"),
                                 item.getString("title"),
                                 item.getString("description"),
                                 item.getString("cover")));
                     }
-                    platePage = new Page<>(jsonObject.getInt("currentPage"),
-                            jsonObject.getInt("pageSize"),
-                            jsonObject.getInt("totalPage"),
-                            jsonObject.getInt("totalCount"),
-                            plates);
-                    pager.setPageIndex(platePage.getCurrentPage());
-                    pager.setPageCount(platePage.getPageSize());
-                    pager.setTotalPage(platePage.getTotalPage());
-                    pager.showData(platePage.getList(), platePage.getTotalPage(), platePage.getTotalCount());
+                    pager.setPageIndex(1);
+                    pager.setPageCount(plates.size());
+                    pager.setTotalPage(1);
+                    pager.showData(plates, 1, plates.size());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -112,7 +106,7 @@ public class PlateFragment extends BaseFragment implements Pager.OnPageListener<
         pager.setUrl(Contants.API.GET_PLATE);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
-        pager.setPageSize(8);
+        pager.setPageSize(40);
         pager.request();
 
     }

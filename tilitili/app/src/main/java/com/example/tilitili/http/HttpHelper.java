@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -132,7 +133,7 @@ public class HttpHelper {
                 }
                 ErrorMessage errorMessage = null;
                 try {
-                    String error = response.body().string();
+                    String error = Objects.requireNonNull(response.body()).string();
                     JSONObject jsonObject = new JSONObject(error);
                     errorMessage = new ErrorMessage(jsonObject.getString("errorMessage"), jsonObject.getInt("errorCode"), jsonObject.getString("uri"), jsonObject.getString("timestamp"));
                 } catch (JSONException | IOException e) {
