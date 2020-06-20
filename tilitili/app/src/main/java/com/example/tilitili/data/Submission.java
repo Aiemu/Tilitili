@@ -69,7 +69,7 @@ public class Submission {
     }
 
     public String getResource() {
-        return Config.getFullUrl(resource);
+        return resource;
     }
 
     public String getSubmissionTime() {
