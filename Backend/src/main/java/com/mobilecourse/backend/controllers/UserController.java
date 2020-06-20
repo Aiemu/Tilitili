@@ -109,7 +109,7 @@ public class UserController extends CommonController {
                                                    HttpSession session) {
         Integer followerUid = (Integer) session.getAttribute("uid");
         Follow isFollow = followDao.getFollow(followerUid, followedUid);
-        if (isFollow == null) {
+        if (isFollow != null) {
             followDao.deleteFollow(followerUid, followedUid);
         }
         return wrapperResponse(HttpStatus.OK, "OK.");
