@@ -150,7 +150,7 @@ public class TextDetailActivity extends Activity {
         httpHelper.post(Contants.API.ADD_WATCH_TIME_URL + submission.getSid(), new HashMap<String, String>(0), new SpotsCallBack<String>(TextDetailActivity.this) {
             @Override
             public void onSuccess(Response response, String s) {
-                Log.d("观看次数","加一");
+                Log.d("观看次数", "加一");
                 dismissDialog();
             }
 

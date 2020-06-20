@@ -30,6 +30,8 @@ public class Contants {
         public static final String GET_ONE_PLATE_SUBMISSION = BASE_URL + "/plate/list/";
         public static final String POST_COMMENT_URL = BASE_URL + "/submission/comment/publish/";
         public static final String ADD_WATCH_TIME_URL = BASE_URL + "/submission/watch/";
+        public static final String SUBMISSION_SEARCH_URL = BASE_URL + "/submission/search";
+        public static final String USER_SEARCH_URL = BASE_URL + "/user/search";
 
         public static String getUrlWithID(String url, String ID) {
             return url + ID;

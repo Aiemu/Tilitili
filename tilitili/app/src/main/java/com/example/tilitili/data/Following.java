@@ -6,6 +6,7 @@ public class Following {
     private int userId;
     private String nickname;
     private String avatar;
+    private int isFollowing;
 
     public Following(int id, String nickname, String avatar) {
         this.nickname = nickname;
@@ -24,5 +25,12 @@ public class Following {
     public String getAvatar() {
         return Config.getFullUrl(avatar);
     }
-}
 
+    public int getIsFollowing() {
+        return isFollowing;
+    }
+
+    public void setIsFollowing(int isFollowing) {
+        this.isFollowing = isFollowing;
+    }
+}

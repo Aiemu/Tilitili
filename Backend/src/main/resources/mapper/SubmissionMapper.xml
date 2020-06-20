@@ -24,7 +24,7 @@
         </set>
         WHERE sid=#{sid}
     </update>
-    <select id="searchSubmission">
+    <select id="searchSubmission" resultType="com.mobilecourse.backend.model.Submission">
         SELECT *
         FROM Submission
         WHERE title like "%"#{title}"%"

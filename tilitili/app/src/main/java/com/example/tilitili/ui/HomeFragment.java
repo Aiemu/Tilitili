@@ -4,9 +4,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cjj.MaterialRefreshLayout;
 import com.example.tilitili.R;
+import com.example.tilitili.SearchResultActivity;
 import com.example.tilitili.TextDetailActivity;
 import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.HotSubmissionAdapter;
@@ -51,6 +56,8 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
     private RecyclerView recyclerView;
     @ViewInject(R.id.home_refresh_view)
     private MaterialRefreshLayout materialRefreshLayout;
+    @ViewInject(R.id.home_search_edit_text)
+    private EditText home_search_edit_text;
 
     Pager pager;
     SpotsCallBack<String> callBack;
@@ -135,6 +142,19 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
         pager.setPageSize(5);
         pager.request();
 
+        home_search_edit_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                Log.d("actionId", String.valueOf(actionId));
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    Log.d("搜索", "开始搜索");
+                    Intent intent = new Intent(HomeFragment.this.getContext(), SearchResultActivity.class);
+                    intent.putExtra("search_content", home_search_edit_text.getText().toString());
+                    startActivity(intent);
+                }
+                return false;
+            }
+        });
     }
 
     @Override

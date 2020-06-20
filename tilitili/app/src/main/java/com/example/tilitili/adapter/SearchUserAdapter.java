@@ -1,21 +1,24 @@
 package com.example.tilitili.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 
 import com.example.tilitili.Config;
 import com.example.tilitili.R;
+import com.example.tilitili.UserManagerApplication;
 import com.example.tilitili.data.Following;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
-public class FollowingAdapter extends SimpleAdapter<Following> {
-    public FollowingAdapter(Context context, List<Following> datas) {
+public class SearchUserAdapter extends SimpleAdapter<Following> {
+
+    public SearchUserAdapter(Context context, List<Following> datas) {
         super(context, R.layout.user_follow_list_item, datas);
     }
 
-    public FollowingAdapter(Context context, int layoutResId, List<Following> datas) {
+    public SearchUserAdapter(Context context, int layoutResId, List<Following> datas) {
         super(context, layoutResId, datas);
     }
 
@@ -29,7 +32,13 @@ public class FollowingAdapter extends SimpleAdapter<Following> {
         viewHolder.getTextView(R.id.follow_item_text_username).setText(item.getNickname());
 
         // 已关注
-        viewHolder.getTextView(R.id.follow_item_text_follow).setText("已关注");
+        if (item.getIsFollowing() == 0 && item.getUserId() != UserManagerApplication.getInstance().getUser().getUserId()) {
+            viewHolder.getTextView(R.id.follow_item_text_follow).setText("未关注");
+            viewHolder.getTextView(R.id.follow_item_text_follow).setTextColor(Color.RED);
+        } else if (item.getIsFollowing() == 1) {
+            viewHolder.getTextView(R.id.follow_item_text_follow).setText("已关注");
+            viewHolder.getTextView(R.id.follow_item_text_follow).setTextColor(Color.YELLOW);
+        }
     }
 
     public void resetLayout(int layoutId) {
