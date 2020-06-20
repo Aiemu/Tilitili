@@ -315,15 +315,19 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp"/>
+
                 <ImageView
                     android:id="@+id/edit_choose_cover_image_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="258dp"
+                    android:layout_height="152dp"
                     android:adjustViewBounds="true"
+                    android:contentDescription="@string/choose_cover_hint"
                     android:maxHeight="500dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/choose_cover"
-                    android:contentDescription="@string/choose_cover_hint" />
+                    android:src="@drawable/choose_cover_default" />
 
                 <TextView
                     android:layout_width="wrap_content"

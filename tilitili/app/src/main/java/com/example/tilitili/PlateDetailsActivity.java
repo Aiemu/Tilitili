@@ -42,8 +42,6 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
     @ViewInject(R.id.text_plate_details_intro)
     private TextView intro_text;
 
-    private int pid;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +51,9 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
         Intent getIntent = getIntent();
         String titleStr = getIntent.getStringExtra("title");
         String introStr = getIntent.getStringExtra("intro");
-        int pidInt = getIntent.getIntExtra("pid", -1);
 
         title_text.setText(titleStr);
         intro_text.setText(introStr);
-        pid = pidInt;
         init();
     }
 
@@ -90,7 +86,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
                 List<Submission> submissions = new ArrayList<>();
                 try {
                     JSONObject jsonObject = new JSONObject(page);
-                    JSONArray items = jsonObject.getJSONArray("list");
+                    JSONArray items = jsonObject.getJSONArray("plates");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
                         submissions.add(new Submission(item.getInt("sid"),
@@ -100,7 +96,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
                                 item.getString("cover"),
                                 item.getString("introduction"),
                                 item.getString("resource"),
-                                item.getInt("submissionTime"),
+                                item.getLong("submissionTime"),
                                 item.getInt("watchTimes"),
                                 item.getInt("likesCount"),
                                 item.getInt("isLike"),
@@ -136,7 +132,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_PLATE_DETAILS + pid);
+        pager.setUrl(Contants.API.GET_ONE_PLATE_SUBMISSION + UserManagerApplication.getInstance().getUser().getUserId());
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);

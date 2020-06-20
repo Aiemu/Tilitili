@@ -21,7 +21,7 @@ public class Contants {
         public static final String SUBMISSION_LIKE = BASE_URL + "/submission/like/";
         public static final String REGISTER_URL = BASE_URL + "/signup";
         public static final String UPLOAD_URL = BASE_URL + "/upload";
-        public static final String SUBMISSION_UPLOAD_URL = BASE_URL + "/submission/upload/";
+        public static final String SUBMISSION_UPLOAD_URL = BASE_URL + "/submission/upload";
         public static final String GET_USER_PROFILE_URL = BASE_URL + "/user/profile/info/";
         public static final String UPDATE_USER_PROFILE_URL = BASE_URL + "/user/profile/edit";
         public static final String CHECK_LOGIN_URL = BASE_URL + "/checklogin";
@@ -30,6 +30,7 @@ public class Contants {
         public static final String GET_HISTORY_UPLOAD_SUBMISSION = BASE_URL + "/submission/upload_history";
         public static final String GET_USER_FOLLOWING_LIST = BASE_URL +"/user/friend";
         public static final String GET_SUBMISSION_COMMENT = BASE_URL +" /submission/comment/get/";
+        public static final String GET_ONE_PLATE_SUBMISSION = BASE_URL + "/plate/list/";
 
         public static String getUrlWithID(String url, String ID) {
             return url + ID;
