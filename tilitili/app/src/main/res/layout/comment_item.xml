@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/avatar_follow_list_item_view"
+            android:id="@+id/avatar_comment_item_view"
             android:layout_alignParentStart="true"
             android:layout_width="@dimen/activity_avatar_width"
             android:layout_height="@dimen/activity_avatar_height"

@@ -29,6 +29,7 @@ public class Contants {
         public static final String GET_HISTORY_SUBMISSIONS = BASE_URL + "/submission/history";
         public static final String GET_HISTORY_UPLOAD_SUBMISSION = BASE_URL + "/submission/upload_history";
         public static final String GET_USER_FOLLOWING_LIST = BASE_URL +"/user/friend";
+        public static final String GET_SUBMISSION_COMMENT = BASE_URL +" /submission/comment/get/";
 
         public static String getUrlWithID(String url, String ID) {
             return url + ID;

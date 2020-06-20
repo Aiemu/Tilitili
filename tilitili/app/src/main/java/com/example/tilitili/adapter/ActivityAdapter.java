@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.tilitili.MainActivity;
 import com.example.tilitili.R;
+import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Submission;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -29,11 +30,7 @@ public class ActivityAdapter extends SimpleAdapter<Submission> {
     protected void convert(BaseViewHolder viewHolder, final Submission item) {
         // 头像
         SimpleDraweeView avatarView = (SimpleDraweeView) viewHolder.getView(R.id.avatar_activity_item_view);
-<<<<<<< HEAD
         avatarView.setImageURI(Uri.parse(Contants.API.BASE_URL + item.getUserAvatar()));
-=======
-//        avatarView.setImageURI(Uri.parse(Contants.API.BASE_URL + item.ge));
->>>>>>> 5e624afe6ceacbe3f9535f0a6605ecc2c058bb16
 
         // 封面
         SimpleDraweeView coverView = (SimpleDraweeView) viewHolder.getView(R.id.cover_activity_item_view);
@@ -53,26 +50,6 @@ public class ActivityAdapter extends SimpleAdapter<Submission> {
         else if (item.getIsLike() == 0) {
             viewHolder.getImageView(R.id.star_icon).setColorFilter(Color.parseColor("#888888"));
         }
-
-        viewHolder.getImageView(R.id.star_icon).setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if (item.getIsLike() == 1) {
-                    // todo: 取消点赞
-                    ImageView icon = (ImageView)v.findViewById(R.id.star_icon);
-                    icon.setColorFilter(Color.parseColor("#888888"));
-                    TextView num = (TextView)v.findViewById(R.id.activity_item_star_num);
-                    num.setText(Integer.parseInt(num.getText().toString()) - 1);
-                }
-                else if (item.getIsLike() == 0) {
-                    // todo: 确认点赞
-                    ImageView icon = (ImageView)v.findViewById(R.id.star_icon);
-                    icon.setColorFilter(Color.parseColor("#9C27B0"));
-                    TextView num = (TextView)v.findViewById(R.id.activity_item_star_num);
-                    num.setText(Integer.parseInt(num.getText().toString()) + 1);
-                }
-            }
-        });
     }
 
     public void resetLayout(int layoutId) {

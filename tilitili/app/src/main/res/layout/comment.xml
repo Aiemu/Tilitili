@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/comment_title_bar">
 
         <com.cjj.MaterialRefreshLayout
-            android:id="@+id/refresh_user_follow_list_view"
+            android:id="@+id/refresh_comment_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:overlay="true"
@@ -44,7 +44,7 @@
             app:wave_height_type="higher">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_user_follow_list"
+                android:id="@+id/recyclerview_comment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </com.cjj.MaterialRefreshLayout>
