@@ -195,6 +195,12 @@ router.get('/user/profile/info/1', async function(ctx, next) {
     next()
 })
 
+
+router.get('/checklogin', async function(ctx, next) {
+    ctx.response.status = 401
+    next()
+})
+
 app.use(bodyParser())
 app.use(router.routes())
 app.use(async(ctx, next) => {

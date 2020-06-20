@@ -49,10 +49,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_plate" />
+            app:layout_constraintStart_toEndOf="@+id/text_username" />
 
         <TextView
-            android:id="@+id/text_plate"
+            android:id="@+id/text_username"
             style="@style/submission_watch_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

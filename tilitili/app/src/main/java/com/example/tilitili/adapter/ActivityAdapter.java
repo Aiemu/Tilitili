@@ -30,9 +30,9 @@ public class ActivityAdapter extends SimpleAdapter<Submission> {
 
         // 其他数据
         viewHolder.getTextView(R.id.text_activity_item_title).setText(item.getTitle());
-        viewHolder.getTextView((R.id.text_activity_item_post_time)).setText(item.getPost_time() + "分钟前");
-        viewHolder.getTextView(R.id.text_activity_item_username).setText(item.getPlate().getTitle());
-        viewHolder.getTextView(R.id.activity_item_star_num).setText(Integer.toString(item.getLikes()));
+        viewHolder.getTextView((R.id.text_activity_item_post_time)).setText(item.getSubmissionTime());
+        viewHolder.getTextView(R.id.text_activity_item_username).setText(item.getTitle());
+        viewHolder.getTextView(R.id.activity_item_star_num).setText(String.valueOf(item.getLikesCount()));
     }
 
     public void resetLayout(int layoutId) {

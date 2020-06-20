@@ -127,7 +127,7 @@ public class Pager {
 
     private String buildUrlParams() {
         HashMap<String, Object> map = this.params;
-        map.put("page", this.pageIndex);
+        map.put("page", this.pageIndex - 1);
         map.put("count", this.pageCount);
 
         StringBuilder sb = new StringBuilder();

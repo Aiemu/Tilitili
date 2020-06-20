@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,11 +32,14 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +69,7 @@ public class EditorActivity extends Activity {
 
     private String html_text = "";
     private String cover_uri = "";
+    private String html_uri = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -345,8 +348,7 @@ public class EditorActivity extends Activity {
         uploadHttpHelper.upload(uploadHttpHelper.buildRequest(imageFile, Contants.API.UploadType.IMAGE), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                String mMessage = e.getMessage().toString();
-                Log.e("failure Response", mMessage);
+                e.printStackTrace();
             }
 
             @Override
@@ -387,10 +389,43 @@ public class EditorActivity extends Activity {
             return;
         }
 
+        File outputFile = null;
+        try {
+            outputFile = File.createTempFile(uploadHttpHelper.generateString(12), ".html", this.getCacheDir());
+            FileWriter fileWriter = new FileWriter(outputFile);
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            printWriter.print(html_text);
+            printWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assert outputFile != null;
+
+        uploadHttpHelper.upload(uploadHttpHelper.buildRequest(outputFile, Contants.API.UploadType.HTML), new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                final String mMessage = response.body().string();
+
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(mMessage);
+                    html_uri = (String) jsonObject.get("uri");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         Map<String, String> map = new HashMap<>(5);
         map.put("title", title_edit_text.getText().toString());
         map.put("introduction", introduction_edit_text.getText().toString());
-        map.put("resource", html_text);//todo
+        map.put("resource", html_uri);
         map.put("cover", cover_uri);
         map.put("type", String.valueOf(0));
 
@@ -409,7 +444,7 @@ public class EditorActivity extends Activity {
                 ToastUtils.show(EditorActivity.this, errorMessage.getErrorMessage());
             }
         };
-        stringSpotsCallBack.setMessage(R.string.logining);
+        stringSpotsCallBack.setMessage(R.string.submitting);
         httpHelper.post(Contants.API.getUrlWithID(Contants.API.SUBMISSION_UPLOAD_URL, String.valueOf(user.getUserId())), map, stringSpotsCallBack);
     }
 

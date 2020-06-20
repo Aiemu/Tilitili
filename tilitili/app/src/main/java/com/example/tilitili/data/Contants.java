@@ -21,7 +21,8 @@ public class Contants {
         public static final String UPLOAD_URL = BASE_URL + "/upload";
         public static final String SUBMISSION_UPLOAD_URL = BASE_URL + "/submission/upload/";
         public static final String GET_USER_PROFILE_URL = BASE_URL + "/user/profile/info/";
-        public static final String UPDATE_USER_PROFILE_URL = BASE_URL + " /user/profile/edit";
+        public static final String UPDATE_USER_PROFILE_URL = BASE_URL + "/user/profile/edit";
+        public static final String CHECK_LOGIN_URL = BASE_URL + "/checklogin";
 
         public static String getUrlWithID(String url, String ID) {
             return url + ID;
