@@ -122,7 +122,7 @@ public class TextDetailActivity extends Activity {
                         "<center><h2 style='font-size:16px;'>" + submission.getTitle() + "</h2></center>";
                 data = data + "<p align='left' style='margin-left:10px'>"
                         + "<span style='font-size:10px;'>"
-                        + submission.getUserNickname()
+                        + "本文章由 "+submission.getUserNickname() + " 于 " + submission.getSubmissionTime() + " 发布"
                         + "</span>"
                         + "</p>";
                 data = data + "<hr size='1' />";
@@ -135,7 +135,6 @@ public class TextDetailActivity extends Activity {
                 }
                 fis.close();
                 data = data + sb.toString() + "</body>";
-                Log.d("msg", "readSaveFile: \n" + sb.toString());
             }
         });
     }

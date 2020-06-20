@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +37,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.nanchen.compresshelper.CompressHelper;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -98,6 +100,20 @@ public class EditorActivity extends Activity {
 
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {/* ... */}
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {/* ... */}
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(com.karumi.dexter.listener.PermissionRequest permission, PermissionToken token) {
+                    }
+                }).check();
+
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {/* ... */}
@@ -358,7 +374,16 @@ public class EditorActivity extends Activity {
     }
 
     public void uploadImage(Uri filepath, final int code) {
-        final File imageFile = new File(getRealPathFromURI(filepath));
+        File imageFile = new File(getRealPathFromURI(filepath));
+        if (SELECT_PHOTO_CODE == code)
+            imageFile = new CompressHelper.Builder(this)
+                .setMaxWidth(180)
+                .setMaxHeight(144)
+                .setQuality(80)
+                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                .build()
+                .compressToFile(imageFile);
         uploadHttpHelper.upload(uploadHttpHelper.buildRequest(imageFile, Contants.API.UploadType.IMAGE), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -377,7 +402,6 @@ public class EditorActivity extends Activity {
                                 mEditor.insertImage(Config.getFullUrl((String) jsonObject.get("uri")), "dachshund");
                             else if (code == SELECT_COVER_CODE) {
                                 cover_uri = (String) jsonObject.get("uri");
-                                Log.e("url", cover_uri);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
