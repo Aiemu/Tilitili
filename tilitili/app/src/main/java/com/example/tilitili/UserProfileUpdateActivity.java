@@ -111,8 +111,8 @@ public class UserProfileUpdateActivity extends Activity {
                 ToastUtils.show(UserProfileUpdateActivity.this, errorMessage.getErrorMessage());
             }
         };
-        stringSpotsCallBack.setMessage(R.string.logining);
-        httpHelper.post(Contants.API.LOGIN_URL, map, stringSpotsCallBack);
+        stringSpotsCallBack.setMessage(R.string.updating);
+        httpHelper.post(Contants.API.UPDATE_USER_PROFILE_URL, map, stringSpotsCallBack);
     }
 
     @OnClick(R.id.edit_choose_avatar_image_view)

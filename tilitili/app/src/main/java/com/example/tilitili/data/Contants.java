@@ -10,7 +10,6 @@ public class Contants {
     public static final String TOKEN = "token";
 
     public static class API {
-        // url最后有/表示需要进行getUrlWithID操作，如果后面不加id则不需要/
         public static final String BASE_URL = Config.host + ":" + Config.port;
         public static final String LOGIN_URL = BASE_URL + "/login";
         public static final String CHANGE_PASSWORD = BASE_URL + " /user/password/modify";
@@ -36,18 +35,4 @@ public class Contants {
             public static final int VIDEO = 2;
         }
     }
-
-    public enum PRIVILEGE {
-        UserPrivilegeNormal,
-        UserPrivilegeOrganizer,
-        UserPrivilegeSuperuser
-    }
-
-    public static HashMap<Integer, PRIVILEGE> privilegeMap = new HashMap<Integer, PRIVILEGE>() {
-        {
-            put(0, PRIVILEGE.UserPrivilegeNormal);
-            put(1, PRIVILEGE.UserPrivilegeOrganizer);
-            put(2, PRIVILEGE.UserPrivilegeSuperuser);
-        }
-    };
 }
