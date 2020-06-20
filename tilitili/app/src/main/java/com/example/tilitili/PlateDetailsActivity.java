@@ -135,7 +135,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_PLATE + pid);
+        pager.setUrl(Contants.API.GET_PLATE_DETAILS + pid);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);

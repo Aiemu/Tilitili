@@ -38,6 +38,8 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
     @ViewInject(R.id.user_submission_title_bar_title)
     private TextView title_text;
 
+    private String uid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +48,9 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
 
         Intent getIntent = getIntent();
         String titleStr = getIntent.getStringExtra("title");
-        System.out.println(titleStr);
+        uid = getIntent.getStringExtra("uid");
         title_text.setText(titleStr);
+
         init();
     }
 
@@ -126,7 +129,7 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_USER_SUBMISSION);
+        pager.setUrl(Contants.API.GET_USER_UPLOAD + uid);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);

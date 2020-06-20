@@ -132,7 +132,11 @@ public class MineFragment extends BaseFragment {
     void getUserAllSubmission(View view) {
         Intent intent = new Intent(this.getContext(), GetUserSubmissionActivity.class);
 
+        User user = UserLocalData.getUser(this.getContext());
+
         intent.putExtra("title", nicknameTextView.getText().toString());
+        assert user != null;
+        intent.putExtra("uid", Integer.toString(user.getUserId()));
         startActivity(intent);
     }
 }

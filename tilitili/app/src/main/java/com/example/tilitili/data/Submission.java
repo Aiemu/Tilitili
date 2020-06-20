@@ -3,6 +3,7 @@ package com.example.tilitili.data;
 import android.annotation.SuppressLint;
 
 import com.example.tilitili.Config;
+import com.example.tilitili.SearchResultActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,6 +14,7 @@ public class Submission {
     private String plateTitle;
     private String title;
     private String cover;
+    private String userAvatar;
     private String introduction;
     private String resource;
     private long submissionTime;
@@ -42,6 +44,26 @@ public class Submission {
         this.uid = uid;
         this.userNickname = userNickname;
         this.following = following;
+        this.userAvatar = "";
+    }
+
+    public Submission(int sid, int type, String plateTitle, String title, String cover, String introduction, String resource, long submissionTime, long watchTimes, int likesCount, int isLike, int commentsCount, int uid, String userNickname, int following, String userAvatar) {
+        this.sid = sid;
+        this.type = type;
+        this.plateTitle = plateTitle;
+        this.title = title;
+        this.cover = cover;
+        this.introduction = introduction;
+        this.resource = resource;
+        this.submissionTime = submissionTime;
+        this.watchTimes = watchTimes;
+        this.likesCount = likesCount;
+        this.isLike = isLike;
+        this.commentsCount = commentsCount;
+        this.uid = uid;
+        this.userNickname = userNickname;
+        this.following = following;
+        this.userAvatar = userAvatar;
     }
 
     public int getSid() {
@@ -102,5 +124,9 @@ public class Submission {
 
     public int getFollowing() {
         return following;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
     }
 }

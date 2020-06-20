@@ -90,7 +90,8 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                                 item.getInt("commentsCount"),
                                 item.getInt("uid"),
                                 item.getString("userNickname"),
-                                item.getInt("following")));
+                                item.getInt("following"),
+                                item.getString("userAvatar")));
                     }
                     submissionPage = new Page<>(jsonObject.getInt("currentPage"),
                             jsonObject.getInt("pageSize"),
@@ -120,7 +121,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
         };
 
         pager = new Pager(this.getActivity(), callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_HOT);
+        pager.setUrl(Contants.API.GET_USER_ACTIVITY);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);

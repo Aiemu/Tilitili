@@ -103,7 +103,7 @@ public class FollowListActivity extends Activity implements Pager.OnPageListener
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_USER_SUBMISSION);
+        pager.setUrl(Contants.API.GET_USER_FRIEND);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(7);
