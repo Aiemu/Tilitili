@@ -29,24 +29,30 @@ var account_2 = {
 }
 
 var plate1 = {
-    "id": "1",
-    "title": "软件学院",
-    "startTime": 3030303030,
-    "owner": 1,
+    "id": 1,
+    "title": "院系/专业",
+    "cover": "http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
     "description": "清华大学软件学院简介"
 }
 
 var submission_1 = {
-    "id": 1,
-    "plate": plate1,
-    "type": 1,
+    "sid": 1,
+    "plateTitle": "板块1",
+    "type": 0,
+    "cover": "http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
     "resource": "123",
     "title": "庆祝清华大学109年校庆",
     "introduction": "庆祝清华大学校庆",
     "submissionTime": 1590600906,
-    "watchTimes": 20,
-    "likes": 1,
-    "post_time": 59
+    "watchTimes": 220,
+    "isLike": 1,
+    "likesCount": 1,
+    "commentsCount": 123,
+    "post_time": 59,
+    "uid": 1,
+    "userNickname": "清华大学软件学院",
+    "following": 1,
+
 }
 
 var submission_2 = {
@@ -79,7 +85,7 @@ var submission_3 = {
 var accounts = [account_1, account_2]
 var loginAccount = undefined
 
-var submission_list = [submission_1, submission_1, submission_1, submission_1, submission_1, submission_2, submission_2, submission_2, submission_2, submission_2, submission_3, submission_3, submission_3, submission_3, submission_3]
+var submission_list = [submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1]
 
 var plate_list = [plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1]
 

@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/avatar_activity_item_view"
+            android:id="@+id/avatar_follow_list_item_view"
             android:layout_alignParentStart="true"
             android:layout_width="@dimen/activity_avatar_width"
             android:layout_height="@dimen/activity_avatar_height"
@@ -58,12 +58,11 @@
                 android:id="@+id/follow_item_text_follow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/to_follow"
+                android:text="@string/is_following"
                 android:textSize="18sp"
                 android:textColor="#82318E"
                 android:textStyle="bold"
                 android:layout_marginEnd="30dp" />
-
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
