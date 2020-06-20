@@ -89,6 +89,7 @@
     <string name="home_new_order">最新</string>
     <string name="comment">评论区</string>
     <string name="to_comment">评论</string>
+    <string name="logout_hint">退出登录</string>
 
     <string-array name="departments">
         <item>软件学院</item>

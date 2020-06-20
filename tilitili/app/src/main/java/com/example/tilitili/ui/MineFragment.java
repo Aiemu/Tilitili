@@ -13,7 +13,9 @@ import com.example.tilitili.EditorActivity;
 import com.example.tilitili.FollowListActivity;
 import com.example.tilitili.GetUserSubmissionActivity;
 import com.example.tilitili.HistoryActivity;
+import com.example.tilitili.LoginActivity;
 import com.example.tilitili.R;
+import com.example.tilitili.UserManagerApplication;
 import com.example.tilitili.UserProfileUpdateActivity;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.User;
@@ -133,6 +135,14 @@ public class MineFragment extends BaseFragment {
         Intent intent = new Intent(this.getContext(), GetUserSubmissionActivity.class);
 
         intent.putExtra("title", nicknameTextView.getText().toString());
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.mine_logout_button)
+    void logout(View v) {
+        UserManagerApplication.getInstance().clearUser();
+        UserManagerApplication.getInstance().cleanSessionId();
+        Intent intent = new Intent(this.getContext(), LoginActivity.class);
         startActivity(intent);
     }
 }
