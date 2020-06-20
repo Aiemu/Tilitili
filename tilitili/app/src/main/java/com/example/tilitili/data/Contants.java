@@ -13,7 +13,8 @@ public class Contants {
         // url最后有/表示需要进行getUrlWithID操作，如果后面不加id则不需要/
         public static final String BASE_URL = Config.host + ":" + Config.port;
         public static final String LOGIN_URL = BASE_URL + "/login";
-        public static final String CHANGE_PASSWORD = BASE_URL + "/user/%s/password"; // %s username
+        public static final String CHANGE_PASSWORD = BASE_URL + " /user/password/modify";
+        public static final String FORGET_PASSWORD = BASE_URL + "/user/password/forget";
         public static final String GET_HOT = BASE_URL + "/submission/hot";
         public static final String GET_PLATE = BASE_URL + "/plate";
         public static final String GET_USER_SUBMISSION = BASE_URL + "/submission/user";

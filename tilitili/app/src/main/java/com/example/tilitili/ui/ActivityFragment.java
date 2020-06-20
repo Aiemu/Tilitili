@@ -18,7 +18,6 @@ import com.example.tilitili.adapter.ActivityAdapter;
 import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Page;
-import com.example.tilitili.data.Plate;
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;

@@ -17,12 +17,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.tilitili.data.Contants;
-import com.example.tilitili.data.Page;
 import com.example.tilitili.data.Plate;
-import com.example.tilitili.data.Submission;
 import com.example.tilitili.data.User;
 import com.example.tilitili.data.UserLocalData;
 import com.example.tilitili.http.ErrorMessage;

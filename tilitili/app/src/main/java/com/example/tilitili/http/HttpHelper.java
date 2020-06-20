@@ -126,7 +126,7 @@ public class HttpHelper {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if(response.code() == 401) {
+                if (response.code() == 401) {
                     callback.onTokenError(response, 401);
                     return;
                 }

@@ -1,9 +1,7 @@
 package com.example.tilitili;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -11,14 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cjj.MaterialRefreshLayout;
-import com.example.tilitili.adapter.BaseAdapter;
-import com.example.tilitili.adapter.HotSubmissionAdapter;
 import com.example.tilitili.adapter.FollowingAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Following;
 import com.example.tilitili.data.Page;
-import com.example.tilitili.data.Submission;
-import com.example.tilitili.data.User;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.Pager;

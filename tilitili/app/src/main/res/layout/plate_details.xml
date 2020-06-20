@@ -27,15 +27,15 @@
             android:text="测试板块"
             android:textColor="@color/black" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/text_plate_details_owner"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:layout_marginBottom="20dp"-->
-<!--            android:gravity="center"-->
-<!--            android:textSize="16sp"-->
-<!--            android:text="测试板块" />-->
+        <!--        <TextView-->
+        <!--            android:id="@+id/text_plate_details_owner"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="20dp"-->
+        <!--            android:layout_marginBottom="20dp"-->
+        <!--            android:gravity="center"-->
+        <!--            android:textSize="16sp"-->
+        <!--            android:text="测试板块" />-->
 
         <com.cjj.MaterialRefreshLayout
             android:id="@+id/refresh_plate_details_view"

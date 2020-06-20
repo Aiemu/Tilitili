@@ -1,18 +1,12 @@
 package com.example.tilitili.http;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.widget.ProgressBar;
-
 import com.example.tilitili.UserManagerApplication;
 
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Callback;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 
 public class DownloadHttpHelper {
     private static DownloadHttpHelper instance;
@@ -29,7 +23,7 @@ public class DownloadHttpHelper {
     }
 
     public static DownloadHttpHelper getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new DownloadHttpHelper();
         }
         return instance;
