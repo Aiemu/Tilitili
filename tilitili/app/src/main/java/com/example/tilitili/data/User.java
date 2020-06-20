@@ -1,7 +1,6 @@
 package com.example.tilitili.data;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import com.example.tilitili.Config;
 

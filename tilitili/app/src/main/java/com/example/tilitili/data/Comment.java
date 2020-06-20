@@ -32,6 +32,6 @@ public class Comment {
 
     public String getCommentTime() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        return sdf.format(new Date(this.commentTime * 1000L));
+        return sdf.format(new Date(this.commentTime));
     }
 }

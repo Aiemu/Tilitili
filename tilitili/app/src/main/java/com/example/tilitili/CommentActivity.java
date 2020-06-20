@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -17,6 +17,7 @@ import com.example.tilitili.data.Comment;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Page;
 import com.example.tilitili.http.ErrorMessage;
+import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.Pager;
 import com.example.tilitili.utils.ToastUtils;
@@ -29,12 +30,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class CommentActivity extends Activity implements Pager.OnPageListener<Comment> {
+
+    private CommentAdapter commentAdapter;
+    @ViewInject(R.id.recyclerview_comment)
+    private RecyclerView recyclerView;
+    @ViewInject(R.id.refresh_comment_view)
+    private MaterialRefreshLayout materialRefreshLayout;
+    @ViewInject(R.id.edit_comment)
+    private EditText commentEditText;
+
+
+    Pager pager;
+    private HttpHelper httpHelper;
+
     private int sid;
 
     @Override
@@ -42,24 +58,15 @@ public class CommentActivity extends Activity implements Pager.OnPageListener<Co
         super.onCreate(savedInstanceState);
         setContentView(R.layout.comment);
         ViewUtils.inject(this);
-
+        httpHelper = HttpHelper.getInstance();
         Intent getIntent = getIntent();
-        int sidInt = getIntent.getIntExtra("sid", -1);
+        sid = getIntent.getIntExtra("sid", -1);
 
         init();
     }
 
-    private CommentAdapter commentAdapter;
-    @ViewInject(R.id.recyclerview_comment)
-    private RecyclerView recyclerView;
-    @ViewInject(R.id.refresh_comment_view)
-    private MaterialRefreshLayout materialRefreshLayout;
-
-    Pager pager;
-    SpotsCallBack<String> callBack;
-
     public void init() {
-        callBack = new SpotsCallBack<String>(this) {
+        SpotsCallBack<String> callBack = new SpotsCallBack<String>(this) {
             @Override
             public void onFailure(Request request, Exception e) {
                 dismissDialog();
@@ -83,7 +90,7 @@ public class CommentActivity extends Activity implements Pager.OnPageListener<Co
                         JSONObject item = (JSONObject) items.get(i);
                         comments.add(new Comment(item.getString("content"),
                                 item.getString("nickname"),
-                                item.getString("description"),
+                                item.getString("avatar"),
                                 item.getLong("commentTime")));
                     }
                     commentPage = new Page<>(jsonObject.getInt("currentPage"),
@@ -113,7 +120,7 @@ public class CommentActivity extends Activity implements Pager.OnPageListener<Co
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_SUBMISSION_COMMENT + sid); // todo: add sid
+        pager.setUrl(Contants.API.GET_SUBMISSION_COMMENT + sid);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);
@@ -153,5 +160,25 @@ public class CommentActivity extends Activity implements Pager.OnPageListener<Co
     @OnClick(R.id.comment_title_bar_back)
     public void back(View view) {
         finish();
+    }
+
+    @OnClick(R.id.btn_post_comment)
+    public void postComment(View view) {
+        Map<String, String> map = new HashMap<>(1);
+        map.put("content", commentEditText.getText().toString());
+        httpHelper.post(Contants.API.POST_COMMENT_URL + sid, map, new SpotsCallBack<String>(CommentActivity.this) {
+            @Override
+            public void onSuccess(Response response, String s) {
+                ToastUtils.show(this.getContext(), "发送成功");
+                dismissDialog();
+                init();
+            }
+
+            @Override
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
+                ToastUtils.show(this.getContext(), "发送失败");
+                dismissDialog();
+            }
+        });
     }
 }

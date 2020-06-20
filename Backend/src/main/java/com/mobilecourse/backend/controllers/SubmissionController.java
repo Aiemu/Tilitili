@@ -224,7 +224,8 @@ public class SubmissionController extends CommonController {
         //装载评论
         ArrayList<JSONObject> list = new ArrayList<>();
         for (Comment c: comments) {
-            list.add(wrapComment(c));
+            User user = commentDao.getCommentUser(c.getUid());
+            list.add(wrapComment(c, user));
         }
         JSONObject jsonObject = wrapPageFormat(list, page, count, commentCounts);
         return wrapperResponse(HttpStatus.OK, jsonObject);

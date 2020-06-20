@@ -1,6 +1,7 @@
 package com.mobilecourse.backend.dao;
 
 import com.mobilecourse.backend.model.Comment;
+import com.mobilecourse.backend.model.User;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface CommentDao {
     List<Comment> getCommentPage(Integer offset, Integer size, Integer sid);
     void putComment(Comment comment);
     void deleteComment(Integer cid);
+    User getCommentUser(Integer uid);
 }

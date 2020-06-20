@@ -40,8 +40,7 @@
             android:layout_marginStart="5dp"
             android:backgroundTint="#82318E"
             android:text="@string/to_comment"
-            android:textColor="#FFFFFF"
-            app:layout_constraintTop_toEndOf="@+id/edit_comment_frame"/>
+            android:textColor="#FFFFFF" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
