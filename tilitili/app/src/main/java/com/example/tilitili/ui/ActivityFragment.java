@@ -56,10 +56,9 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
 
     @Override
     public void init() {
-        callBack = new SpotsCallBack<String>(this.getActivity()) {
+        callBack = new SpotsCallBack<String>(this.getContext()) {
             @Override
             public void onFailure(Request request, Exception e) {
-                dismissDialog();
                 ToastUtils.show(this.getContext(), "请求出错：" + e.getMessage());
                 if (Pager.STATE_REFREH == pager.getState()) {
                     pager.getmRefreshLayout().finishRefresh();

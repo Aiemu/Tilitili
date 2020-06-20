@@ -214,10 +214,11 @@ public class UserController extends CommonController {
         Integer uid = (Integer) session.getAttribute("uid");
         List<Integer> historyUids = followDao.getFolloweds(uid);
         List<Submission> submissions;
-        if (historyUids.size() == 0)
+        Integer submissionCounts = 0;
+        if (historyUids.size() != 0) {
             submissions = submissionDao.getSubmissionHistory(page * count, count, historyUids);
-        else submissions = new ArrayList<>();
-        Integer submissionCounts = submissionDao.getCountOfUser(historyUids);
+            submissionCounts = submissionDao.getCountOfUser(historyUids);
+        } else submissions = new ArrayList<>();
 
         //装载投稿
         ArrayList<JSONObject> list = new ArrayList<>();
