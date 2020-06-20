@@ -81,6 +81,9 @@
     <string name="confirm_update_info">确认更新</string>
     <string name="user_profile_username_hint">用户名</string>
 
+    <string name="home_hot_order">最热</string>
+    <string name="home_new_order">最新</string>
+
     <string-array name="departments">
         <item>软件学院</item>
         <item>计算机系</item>

@@ -1,10 +1,13 @@
 package com.example.tilitili.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -25,6 +28,7 @@ import com.example.tilitili.utils.Pager;
 import com.example.tilitili.utils.ToastUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +43,10 @@ import okhttp3.Response;
 
 public class HomeFragment extends BaseFragment implements Pager.OnPageListener<Submission> {
     private HotSubmissionAdapter hotSubmissionAdapter;
+    @ViewInject(R.id.text_home_hot_order)
+    private TextView hotText;
+    @ViewInject(R.id.text_home_new_order)
+    private TextView newText;
     @ViewInject(R.id.home_recyclerview)
     private RecyclerView recyclerView;
     @ViewInject(R.id.home_refresh_view)
@@ -157,5 +165,25 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
     public void loadMore(List<Submission> datas, int totalPage, int totalCount) {
         hotSubmissionAdapter.loadMoreData(datas);
         recyclerView.scrollToPosition(hotSubmissionAdapter.getDatas().size());
+    }
+
+    @OnClick(R.id.linearLayoutCompatOrderHot)
+    public void setHotOrder(View view) {
+        this.hotText.setTextColor(Color.parseColor("#82318E"));
+        this.hotText.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+
+
+        this.newText.setTextColor(Color.parseColor("#888888"));
+        this.newText.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+    }
+
+    @OnClick(R.id.linearLayoutCompatOrderNew)
+    public void setNewOrder(View view) {
+        this.newText.setTextColor(Color.parseColor("#82318E"));
+        this.newText.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+
+
+        this.hotText.setTextColor(Color.parseColor("#888888"));
+        this.hotText.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
     }
 }
