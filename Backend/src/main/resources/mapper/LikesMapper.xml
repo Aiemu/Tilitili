@@ -7,7 +7,7 @@
         FROM Likes
         WHERE sid=#{sid} AND uid=#{uid}
     </select>
-    <select id="getSubmissionLikes">
+    <select id="getSubmissionLikes" resultType="Integer">
         SELECT COUNT(*)
         FROM Likes
         WHERE sid=#{sid}

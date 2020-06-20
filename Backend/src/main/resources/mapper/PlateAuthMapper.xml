@@ -2,10 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 指定了mapper对应的dao -->
 <mapper namespace="com.mobilecourse.backend.dao.PlateAuthDao">
-    <select id="getAuths">
+    <select id="getSubmissionAuths" resultType="Integer">
         SELECT pid
         FROM PlateAuth
         WHERE uid=#{uid}
+        UNION
+        SELECT pid
+        FROM Plate
+        WHERE type=0
     </select>
     <insert id="putAuth" parameterType="com.mobilecourse.backend.model.PlateAuth">
         INSERT INTO PlateAuth(uid, pid)

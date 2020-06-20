@@ -2,9 +2,18 @@ package com.mobilecourse.backend.model;
 
 public class Plate {
     private int pid;
+    private int type; //0代表公共板块, 1代表权限板块.
     private String title;
     private String description;
     private String cover;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public int getPid() {
         return pid;

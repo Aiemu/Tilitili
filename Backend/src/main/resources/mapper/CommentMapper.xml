@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 指定了mapper对应的dao -->
 <mapper namespace="com.mobilecourse.backend.dao.CommentDao">
-    <select id="getCommentCounts">
+    <select id="getCommentCounts" resultType="Integer">
         SELECT COUNT(*)
         FROM Comment
         WHERE sid=#{sid}
@@ -17,7 +17,9 @@
         FROM Comment
         WHERE sid=#{sid}
         ORDER BY commentTime DESC, cid DESC
-        LIMIT #{offset}, #{size}
+        <if test="size != null">
+            LIMIT <if test="offset != null">#{offset}, </if> #{size}
+        </if>
     </select>
     <insert id="putComment" parameterType="com.mobilecourse.backend.model.Comment">
         INSERT INTO Comment(sid, uid, content)

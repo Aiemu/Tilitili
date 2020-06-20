@@ -45,11 +45,11 @@
             <if test="department != null">department = #{department}</if>
             <if test="avatar != null">avatar = #{avatar}</if>
         </set>
-        WHERE id = #{id};
+        WHERE uid = #{uid};
     </update>
     <update id="updatePassword">
         UPDATE User
         SET password=#{password}
-        WHERE uid = #{uid};
+        WHERE username = #{username};
     </update>
 </mapper>

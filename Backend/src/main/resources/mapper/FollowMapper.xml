@@ -4,15 +4,18 @@
 <mapper namespace="com.mobilecourse.backend.dao.FollowDao">
     <select id="getFollow" resultType="com.mobilecourse.backend.model.Follow">
         SELECT *
+        FROM Follow
         WHERE followerUid=#{followerUid} AND followedUid=#{followedUid}
     </select>
     <select id="getFollowers">
         SELECT followerUid
+        FROM Follow
         WHERE followedUid=#{followedUid}
     </select>
-    <select id="getFolloweds">
+    <select id="getFolloweds" resultType="Integer">
         SELECT followedUid
-        WHERE followerUid#={followerUid}
+        FROM Follow
+        WHERE followerUid=#{followerUid}
     </select>
     <insert id="putFollow">
         INSERT INTO Follow(followerUid, followedUid)

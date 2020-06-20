@@ -10,5 +10,5 @@ public interface PlateDao {
     Plate getPlate(Integer pid);
     List<Plate> getAllPlates();
     void putPlate(Plate plate);
-    void setPlate(Plate plate);
+    void updatePlate(Plate plate);
 }

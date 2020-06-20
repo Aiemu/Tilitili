@@ -1,31 +1,58 @@
 package com.mobilecourse.backend.controllers;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mobilecourse.backend.annotation.LoginAuth;
 import com.mobilecourse.backend.dao.FollowDao;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.exception.BusinessException;
+import com.mobilecourse.backend.model.Follow;
+import com.mobilecourse.backend.model.Likes;
+import com.mobilecourse.backend.model.Submission;
 import com.mobilecourse.backend.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @EnableAutoConfiguration
 @Validated
 @RequestMapping("/user")
 public class UserController extends CommonController {
+
+    private final Logger LOG = LoggerFactory.getLogger(UserController.class);
+
+    // 重置密码部分
+    public class UserInfoCache {
+        String username;
+        String password;
+
+        public UserInfoCache(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+    }
     @Autowired
-    private UserDao userDao;
-    @Autowired
-    private FollowDao followDao;
+    private JavaMailSender mailSender;
+    @Value("${spring.mail.username}")
+    private String mailFromAddr;
+    private final HashMap<String, UserInfoCache> verifyCodesHashMap = new HashMap<>();
+
 
     /**
      * 查看注册用户的个数.
@@ -62,22 +89,43 @@ public class UserController extends CommonController {
         return wrapperResponse(HttpStatus.OK, jsonObject);
     }
 
+    @LoginAuth
     @RequestMapping(value = "/follow", method = { RequestMethod.POST })
-    public ResponseEntity<JSONObject> followUser(@RequestParam(value = "uid") Integer followedUid) {
-        //TODO
+    public ResponseEntity<JSONObject> followUser(@RequestParam(value = "uid") Integer followedUid,
+                                                 HttpSession session) {
+        Integer followerUid = (Integer) session.getAttribute("uid");
+        Follow isFollow = followDao.getFollow(followerUid, followedUid);
+        if (isFollow == null) {
+            followDao.putFollow(followerUid, followedUid);
+        }
+        return wrapperResponse(HttpStatus.OK, "OK.");
     }
 
-    @RequestMapping(value = "/profile/info/{id}", method = { RequestMethod.GET })
-    public ResponseEntity<JSONObject> getInfo(@PathVariable(value = "id") Integer id) {
-        User user = userDao.getUserByUid(id);
+    @LoginAuth
+    @RequestMapping(value = "/unfollow", method = { RequestMethod.POST })
+    public ResponseEntity<JSONObject> unfollowUser(@RequestParam(value = "uid") Integer followedUid,
+                                                   HttpSession session) {
+        Integer followerUid = (Integer) session.getAttribute("uid");
+        Follow isFollow = followDao.getFollow(followerUid, followedUid);
+        if (isFollow == null) {
+            followDao.deleteFollow(followerUid, followedUid);
+        }
+        return wrapperResponse(HttpStatus.OK, "OK.");
+    }
+
+
+    @RequestMapping(value = "/profile/info/{uid}", method = { RequestMethod.GET })
+    public ResponseEntity<JSONObject> getInfo(@PathVariable(value = "uid") Integer uid) {
+        User user = userDao.getUserByUid(uid);
         if (user == null) {
             throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The user does not exist.");
         }
         JSONObject jsonObject = new JSONObject();
+        jsonObject.put("username", user.getUsername());
         jsonObject.put("email", user.getEmail());
         jsonObject.put("nickname", user.getNickname());
         jsonObject.put("department", user.getDepartment());
-        jsonObject.put("joinAt", user.getJoinAt());
+        jsonObject.put("joinAt", user.getJoinAt().getTime());
         jsonObject.put("bio", user.getBio());
         jsonObject.put("avatar", user.getAvatar());
         return wrapperResponse(HttpStatus.OK, jsonObject);
@@ -87,33 +135,110 @@ public class UserController extends CommonController {
     @RequestMapping(value = "/profile/edit", method = { RequestMethod.POST })
     public ResponseEntity<JSONObject> editInfo(@RequestParam(value = "nickname", required = false) String nickname,
                                                @RequestParam(value = "bio", required = false) String bio,
+                                               @RequestParam(value = "department", required = false) String department,
                                                @RequestParam(value = "avatar", required = false) String avatar,
                                                HttpSession session) {
-        Integer id = (Integer) session.getAttribute("id");
+        Integer uid = (Integer) session.getAttribute("uid");
         User updateUser = new User();
+        updateUser.setUid(uid);
         updateUser.setNickname(nickname);
+        updateUser.setDepartment(department);
         updateUser.setBio(bio);
         updateUser.setAvatar(avatar);
-        updateUser.setId(id);
         userDao.updateUser(updateUser);
-        if (nickname != null) {
-            session.setAttribute("nickname", nickname);
-        }
         return wrapperResponse(HttpStatus.OK, new JSONObject());
     }
 
-    @RequestMapping(value = "/password", method = { RequestMethod.POST })
-    public ResponseEntity<JSONObject> updatePassword(@RequestParam(value = "id") Integer id,
+    @RequestMapping(value = "/password/modify", method = { RequestMethod.POST })
+    public ResponseEntity<JSONObject> updatePassword(@RequestParam(value = "uid") Integer uid,
                                                      @RequestParam(value = "old") String oldPassword,
                                                      @RequestParam(value = "new") String newPassword) {
-        User user = userDao.getUserById(id);
+        User user = userDao.getUserByUid(uid);
         if (user == null) {
             throw new BusinessException(HttpStatus.NOT_FOUND, 1, "User could not be found!");
         }
         if (!user.getPassword().equals(oldPassword)) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, 2, "The password is wrong!");
         }
-        userDao.updatePassword(id, newPassword);
+        userDao.updatePassword(user.getUsername(), newPassword);
         return wrapperResponse(HttpStatus.OK, "OK.");
+    }
+
+    @RequestMapping(value = "/password/forget", method = { RequestMethod.POST })
+    public ResponseEntity<JSONObject> forgetPassword(@RequestParam(value = "username") String username,
+                                                     @RequestParam(value = "password") String password) {
+        User user = userDao.getUserByUsername(username);
+        if (user == null) {
+            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The username does not exist in the Database.");
+        }
+        //生成验证码
+        String verifyCode = UUID.randomUUID().toString();
+
+        //向该邮箱发送验证邮件.
+        String urlFormat = "http://129.211.37.216:8888/user/password/verify/%s";
+        SimpleMailMessage verifyMailMessage = new SimpleMailMessage();
+        verifyMailMessage.setFrom(mailFromAddr);
+        verifyMailMessage.setTo(user.getEmail());
+        verifyMailMessage.setSubject("Tilitili账号重置密码验证");
+        verifyMailMessage.setText("请点击以下链接: \n" +
+                String.format(urlFormat, verifyCode) +
+                "\n确认重置密码.");
+        mailSender.send(verifyMailMessage);
+        verifyCodesHashMap.put(verifyCode, new UserInfoCache(username, password));
+        LOG.info("The verification mail sends successfully.");
+        return wrapperResponse(HttpStatus.OK, "success");
+    }
+
+    @RequestMapping(value = "/password/verify/{code}", method = { RequestMethod.GET })
+    public ResponseEntity<JSONObject> resetPassword(@PathVariable String code) {
+        if (verifyCodesHashMap.containsKey(code)) {
+            //获取验证码对应的用户信息, 然后加入到数据库中
+            UserInfoCache cache = verifyCodesHashMap.get(code);
+            verifyCodesHashMap.remove(code);
+            userDao.updatePassword(cache.username, cache.password);
+            LOG.warn(String.format("The verifyCode (%s) is verified successfully.", code));
+            return wrapperResponse(HttpStatus.OK, "success");
+        } else {
+            LOG.warn(String.format("The verifyCode (%s) does not exist.", code));
+            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The verification code could not be found!");
+        }
+    }
+
+    @LoginAuth
+    @RequestMapping(value = "/activity", method = { RequestMethod.GET })
+    public ResponseEntity<JSONObject> getActivity(@RequestParam(value = "page", defaultValue = "0") @Min(0) Integer page,
+                                                  @RequestParam(value = "count", defaultValue = "10") @Min(1) Integer count,
+                                                  HttpSession session) {
+        Integer uid = (Integer) session.getAttribute("uid");
+        List<Integer> historyUids = followDao.getFolloweds(uid);
+        List<Submission> submissions = submissionDao.getSubmissionHistory(page * count, count, historyUids);
+        Integer submissionCounts = submissionDao.getCountOfUser(historyUids);
+
+        //装载投稿
+        ArrayList<JSONObject> list = new ArrayList<>();
+        for (Submission s: submissions) {
+            list.add(wrapSubmission(s, uid));
+        }
+        JSONObject jsonObject = wrapPageFormat(list, page, count, submissionCounts);
+        return wrapperResponse(HttpStatus.OK, jsonObject);
+    }
+
+    @LoginAuth
+    @RequestMapping(value = "/friend", method = { RequestMethod.GET })
+    public ResponseEntity<JSONObject> getAllFriends(HttpSession session) {
+        Integer uid = (Integer) session.getAttribute("uid");
+        List<Integer> followedUids = followDao.getFolloweds(uid);
+        ArrayList<JSONObject> followedUsers = new ArrayList<>();
+        for (Integer followedUid: followedUids) {
+            User followedUser = userDao.getUserByUid(followedUid);
+            JSONObject userJSON = new JSONObject();
+            userJSON.put("uid", followedUser.getUid());
+            userJSON.put("nickname", followedUser.getNickname());
+            userJSON.put("avatar", followedUser.getAvatar());
+            followedUsers.add(userJSON);
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("users", followedUsers);
+        return wrapperResponse(HttpStatus.OK, jsonObject);
     }
 }

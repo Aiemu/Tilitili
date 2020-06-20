@@ -14,7 +14,8 @@ avatar varchar(200) default '',
 bio varchar(100) default '');
 
 create table Plate
-(pid int primary key,
+(pid int primary key AUTO_INCREMENT,
+ type int default 0,
  title varchar(20) not null,
  description varchar(100) default '',
  cover varchar(200) default '');
@@ -28,11 +29,11 @@ create table Submission
 (sid int primary key AUTO_INCREMENT,
  uid int not null,
  type int not null,
- pid int,
- title varchar(100),
- cover varchar(200),
- introduction varchar(200),
- resource varchar(200) not null,
+ pid int not null,
+ title varchar(100) default '',
+ cover varchar(200) default '',
+ introduction varchar(200) default '',
+ resource varchar(200) default '',
  submissionTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  watchTimes int default 0);
 
@@ -45,7 +46,7 @@ create table Comment
 (cid int primary key AUTO_INCREMENT,
  sid int not null,
  uid int not null,
- content varchar(200),
+ content varchar(200) default '',
  likes int default 0,
  commentTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
@@ -53,6 +54,12 @@ create table Follow
 (followerUid int not null,
  followedUid int not null,
  primary key (followerUid, followedUid));
+
+create table History
+(uid int not null,
+ sid int not null,
+ watchTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ primary key (uid, sid));
 
 insert into User(username, nickname, email, password, department, bio)
 values ('Shion', 'ShionChan', 'shinoa_zwx@outlook.com', '12345678', 'Software', 'ShionChan Saikyo!');

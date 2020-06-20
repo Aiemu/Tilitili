@@ -24,15 +24,44 @@
         </set>
         WHERE sid=#{sid}
     </update>
-    <select id="getCount">
+    <select id="searchSubmission">
+        SELECT *
+        FROM Submission
+        WHERE title like "%"#{title}"%"
+        ORDER BY LENGTH(title) ASC, sid DESC
+        <if test="maxCount != null">
+            LIMIT #{maxCount}
+        </if>
+    </select>
+    <select id="getCount" resultType="Integer">
         SELECT COUNT(*)
-        FROM SUBMISSION
+        FROM Submission
         <if test="pid != null">WHERE pid = #{pid}</if>
+    </select>
+    <select id="getCountOfUser" resultType="Integer">
+        SELECT COUNT(*)
+        FROM Submission
+        WHERE uid IN
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </select>
     <delete id="deleteSubmission">
         DELETE FROM Submission
         WHERE sid=#{sid}
     </delete>
+    <select id="getSubmissionHistory" resultType="com.mobilecourse.backend.model.Submission">
+        SELECT *
+        FROM Submission
+        WHERE uid IN
+        <foreach collection="uids" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        ORDER BY submissionTime DESC, sid DESC
+        <if test="size != null">
+            LIMIT <if test="offset != null">#{offset}, </if> #{size}
+        </if>
+    </select>
     <select id="getSubmissionNewPage" resultType="com.mobilecourse.backend.model.Submission">
         SELECT *
         FROM Submission
@@ -40,16 +69,20 @@
             WHERE pid=#{pid}
         </if>
         ORDER BY submissionTime DESC, sid DESC
-        LIMIT #{offset}, #{size}
+        <if test="size != null">
+            LIMIT <if test="offset != null">#{offset}, </if> #{size}
+        </if>
     </select>
-    <select id="getSubmissionNewPage" resultType="com.mobilecourse.backend.model.Submission">
+    <select id="getSubmissionHotPage" resultType="com.mobilecourse.backend.model.Submission">
         SELECT *
         FROM Submission
         <if test="pid != null">
             WHERE pid=#{pid}
         </if>
         ORDER BY watchTimes DESC, sid DESC
-        LIMIT #{offset}, #{size}
+        <if test="size != null">
+            LIMIT <if test="offset != null">#{offset}, </if> #{size}
+        </if>
     </select>
     <update id="increaseWatchTimes">
         UPDATE Submission

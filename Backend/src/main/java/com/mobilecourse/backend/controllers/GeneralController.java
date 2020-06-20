@@ -48,9 +48,6 @@ public class GeneralController extends CommonController {
         }
     }
 
-    @Autowired
-    private UserDao userDao;
-
     // 邮件部分
     private final HashMap<String, UserInfoCache> verifyCodesHashMap = new HashMap<>();
     @Autowired

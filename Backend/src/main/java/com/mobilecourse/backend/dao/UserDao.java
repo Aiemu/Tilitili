@@ -14,5 +14,5 @@ public interface UserDao {
     void registerUser(User user);
     List<User> searchUser(String subUsername, Integer maxNumber);
     void updateUser(User user);
-    void updatePassword(Integer uid, String password);
+    void updatePassword(String username, String password);
 }

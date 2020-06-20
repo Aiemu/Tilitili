@@ -9,6 +9,8 @@ import java.util.List;
 public interface CommentDao {
     int getCommentCounts(Integer sid);
     List<Comment> getAllComments(Integer sid);
+
+    // 根据页数查看某个投稿下的评论, offset为null时默认为0, size为null时默认选择全部(不管offset为多少)
     List<Comment> getCommentPage(Integer offset, Integer size, Integer sid);
     void putComment(Comment comment);
     void deleteComment(Integer cid);
