@@ -22,8 +22,6 @@ public class Submission implements Serializable {
     private int uid;
     private String userNickname;
     private int following;
-    @SuppressLint("SimpleDateFormat")
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public Submission(int sid, int type, String plateTitle, String title, String cover, String introduction, String resource, long submissionTime, long watchTimes, int likesCount, int isLike, int commentsCount, int uid, String userNickname, int following) {
         this.sid = sid;
@@ -72,6 +70,7 @@ public class Submission implements Serializable {
     }
 
     public String getSubmissionTime() {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return sdf.format(new Date(this.submissionTime));
     }
 

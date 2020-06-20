@@ -27,7 +27,7 @@
             android:layout_marginBottom="40dp"
             android:layout_gravity="center"
             android:scaleType="centerInside"
-            android:src="@drawable/choose_cover" />
+            android:background="@drawable/choose_avatar_default" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

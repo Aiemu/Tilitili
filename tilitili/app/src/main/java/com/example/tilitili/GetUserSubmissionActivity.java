@@ -91,7 +91,7 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
                                 item.getString("cover"),
                                 item.getString("introduction"),
                                 item.getString("resource"),
-                                item.getInt("submissionTime"),
+                                item.getLong("submissionTime"),
                                 item.getInt("watchTimes"),
                                 item.getInt("likesCount"),
                                 item.getInt("isLike"),
