@@ -22,6 +22,7 @@ import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.Pager;
+import com.example.tilitili.utils.ToastUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -59,7 +60,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
             @Override
             public void onFailure(Request request, Exception e) {
                 dismissDialog();
-                Toast.makeText(this.getContext(), "请求出错：" + e.getMessage(), Toast.LENGTH_LONG).show();
+                ToastUtils.show(this.getContext(), "请求出错：" + e.getMessage());
                 if (Pager.STATE_REFREH == pager.getState()) {
                     pager.getmRefreshLayout().finishRefresh();
                 } else if (Pager.STATE_MORE == pager.getState()) {
@@ -121,7 +122,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
         };
 
         pager = new Pager(this.getActivity(), callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_HOT);
+        pager.setUrl(Contants.API.GET_USER_ACTIVITY);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);

@@ -120,7 +120,7 @@ public class HistoryActivity extends Activity implements Pager.OnPageListener<Su
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_HOT); // todo
+        pager.setUrl(Contants.API.GET_HISTORY_SUBMISSIONS);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);

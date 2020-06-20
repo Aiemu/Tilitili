@@ -127,7 +127,7 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_USER_SUBMISSION);
+        pager.setUrl(Contants.API.GET_HISTORY_UPLOAD_SUBMISSION);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);

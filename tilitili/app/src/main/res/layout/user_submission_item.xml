@@ -23,7 +23,8 @@
             android:background="@null"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:viewAspectRatio="1" />
+            app:viewAspectRatio="1"
+            android:clickable="true"/>
 
         <TextView
             android:id="@+id/user_submission_text_title"
@@ -31,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            app:layout_constraintStart_toEndOf="@+id/drawee_view"
+            app:layout_constraintStart_toEndOf="@+id/user_submission_drawee_view"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
@@ -40,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_marginBottom="2dp"
             app:layout_constraintBottom_toTopOf="@+id/text_watch_times"
-            app:layout_constraintStart_toEndOf="@+id/drawee_view" />
+            app:layout_constraintStart_toEndOf="@+id/user_submission_drawee_view" />
 
         <TextView
             android:id="@+id/user_submission_text_watch_times"
@@ -49,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_plate" />
+            app:layout_constraintStart_toEndOf="@+id/user_submission_text_title" />
 
         <TextView
             android:id="@+id/user_submission_text_plate"
@@ -58,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/drawee_view" />
+            app:layout_constraintStart_toEndOf="@+id/user_submission_drawee_view" />
 
         <!--        <TextView-->
         <!--            android:id="@+id/following_view"-->

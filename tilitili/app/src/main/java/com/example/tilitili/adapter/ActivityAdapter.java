@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.example.tilitili.R;
-import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Submission;
 import com.facebook.drawee.view.SimpleDraweeView;
 

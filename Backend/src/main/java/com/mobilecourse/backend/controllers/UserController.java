@@ -47,6 +47,7 @@ public class UserController extends CommonController {
             this.password = password;
         }
     }
+
     @Autowired
     private JavaMailSender mailSender;
     @Value("${spring.mail.username}")
@@ -56,6 +57,7 @@ public class UserController extends CommonController {
 
     /**
      * 查看注册用户的个数.
+     *
      * @return
      */
     @RequestMapping(value = "/stat")
@@ -64,7 +66,7 @@ public class UserController extends CommonController {
     }
 
 
-    @RequestMapping(value = "/search", method = { RequestMethod.POST })
+    @RequestMapping(value = "/search", method = {RequestMethod.POST})
     public ResponseEntity<JSONObject> userSearch(@RequestParam(value = "username") String subUsername,
                                                  @RequestParam(value = "maxCount", defaultValue = "10") Integer maxCount,
                                                  HttpSession session) {
@@ -74,7 +76,7 @@ public class UserController extends CommonController {
         ArrayList<JSONObject> userShorts = new ArrayList<>();
         Integer uid = (Integer) session.getAttribute("uid"); //试图获取当前登录用户uid
 
-        for (User u: matchedUsers) {
+        for (User u : matchedUsers) {
             userJSON = new JSONObject();
             userJSON.put("uid", u.getUid());
             userJSON.put("nickname", u.getNickname());
@@ -90,7 +92,7 @@ public class UserController extends CommonController {
     }
 
     @LoginAuth
-    @RequestMapping(value = "/follow", method = { RequestMethod.POST })
+    @RequestMapping(value = "/follow", method = {RequestMethod.POST})
     public ResponseEntity<JSONObject> followUser(@RequestParam(value = "uid") Integer followedUid,
                                                  HttpSession session) {
         Integer followerUid = (Integer) session.getAttribute("uid");
@@ -102,7 +104,7 @@ public class UserController extends CommonController {
     }
 
     @LoginAuth
-    @RequestMapping(value = "/unfollow", method = { RequestMethod.POST })
+    @RequestMapping(value = "/unfollow", method = {RequestMethod.POST})
     public ResponseEntity<JSONObject> unfollowUser(@RequestParam(value = "uid") Integer followedUid,
                                                    HttpSession session) {
         Integer followerUid = (Integer) session.getAttribute("uid");
@@ -114,7 +116,7 @@ public class UserController extends CommonController {
     }
 
 
-    @RequestMapping(value = "/profile/info/{uid}", method = { RequestMethod.GET })
+    @RequestMapping(value = "/profile/info/{uid}", method = {RequestMethod.GET})
     public ResponseEntity<JSONObject> getInfo(@PathVariable(value = "uid") Integer uid) {
         User user = userDao.getUserByUid(uid);
         if (user == null) {
@@ -132,7 +134,7 @@ public class UserController extends CommonController {
     }
 
     @LoginAuth
-    @RequestMapping(value = "/profile/edit", method = { RequestMethod.POST })
+    @RequestMapping(value = "/profile/edit", method = {RequestMethod.POST})
     public ResponseEntity<JSONObject> editInfo(@RequestParam(value = "nickname", required = false) String nickname,
                                                @RequestParam(value = "bio", required = false) String bio,
                                                @RequestParam(value = "department", required = false) String department,
@@ -149,7 +151,7 @@ public class UserController extends CommonController {
         return wrapperResponse(HttpStatus.OK, new JSONObject());
     }
 
-    @RequestMapping(value = "/password/modify", method = { RequestMethod.POST })
+    @RequestMapping(value = "/password/modify", method = {RequestMethod.POST})
     public ResponseEntity<JSONObject> updatePassword(@RequestParam(value = "uid") Integer uid,
                                                      @RequestParam(value = "old") String oldPassword,
                                                      @RequestParam(value = "new") String newPassword) {
@@ -164,7 +166,7 @@ public class UserController extends CommonController {
         return wrapperResponse(HttpStatus.OK, "OK.");
     }
 
-    @RequestMapping(value = "/password/forget", method = { RequestMethod.POST })
+    @RequestMapping(value = "/password/forget", method = {RequestMethod.POST})
     public ResponseEntity<JSONObject> forgetPassword(@RequestParam(value = "username") String username,
                                                      @RequestParam(value = "password") String password) {
         User user = userDao.getUserByUsername(username);
@@ -189,7 +191,7 @@ public class UserController extends CommonController {
         return wrapperResponse(HttpStatus.OK, "success");
     }
 
-    @RequestMapping(value = "/password/verify/{code}", method = { RequestMethod.GET })
+    @RequestMapping(value = "/password/verify/{code}", method = {RequestMethod.GET})
     public ResponseEntity<JSONObject> resetPassword(@PathVariable String code) {
         if (verifyCodesHashMap.containsKey(code)) {
             //获取验证码对应的用户信息, 然后加入到数据库中
@@ -205,18 +207,21 @@ public class UserController extends CommonController {
     }
 
     @LoginAuth
-    @RequestMapping(value = "/activity", method = { RequestMethod.GET })
+    @RequestMapping(value = "/activity", method = {RequestMethod.GET})
     public ResponseEntity<JSONObject> getActivity(@RequestParam(value = "page", defaultValue = "0") @Min(0) Integer page,
                                                   @RequestParam(value = "count", defaultValue = "10") @Min(1) Integer count,
                                                   HttpSession session) {
         Integer uid = (Integer) session.getAttribute("uid");
         List<Integer> historyUids = followDao.getFolloweds(uid);
-        List<Submission> submissions = submissionDao.getSubmissionHistory(page * count, count, historyUids);
+        List<Submission> submissions;
+        if (historyUids.size() == 0)
+            submissions = submissionDao.getSubmissionHistory(page * count, count, historyUids);
+        else submissions = new ArrayList<>();
         Integer submissionCounts = submissionDao.getCountOfUser(historyUids);
 
         //装载投稿
         ArrayList<JSONObject> list = new ArrayList<>();
-        for (Submission s: submissions) {
+        for (Submission s : submissions) {
             list.add(wrapSubmission(s, uid));
         }
         JSONObject jsonObject = wrapPageFormat(list, page, count, submissionCounts);
@@ -224,12 +229,12 @@ public class UserController extends CommonController {
     }
 
     @LoginAuth
-    @RequestMapping(value = "/friend", method = { RequestMethod.GET })
+    @RequestMapping(value = "/friend", method = {RequestMethod.GET})
     public ResponseEntity<JSONObject> getAllFriends(HttpSession session) {
         Integer uid = (Integer) session.getAttribute("uid");
         List<Integer> followedUids = followDao.getFolloweds(uid);
         ArrayList<JSONObject> followedUsers = new ArrayList<>();
-        for (Integer followedUid: followedUids) {
+        for (Integer followedUid : followedUids) {
             User followedUser = userDao.getUserByUid(followedUid);
             JSONObject userJSON = new JSONObject();
             userJSON.put("uid", followedUser.getUid());
