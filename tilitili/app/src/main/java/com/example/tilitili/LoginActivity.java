@@ -3,7 +3,6 @@ package com.example.tilitili;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -13,7 +12,6 @@ import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.ToastUtils;
-import com.google.gson.Gson;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -29,7 +27,6 @@ import okhttp3.Headers;
 import okhttp3.Response;
 
 public class LoginActivity extends Activity {
-    private Gson mGson = new Gson();
     private HttpHelper httpHelper = HttpHelper.getInstance();
 
     @ViewInject(R.id.edit_username)
@@ -80,11 +77,13 @@ public class LoginActivity extends Activity {
                 User user = null;
                 UserManagerApplication application = UserManagerApplication.getInstance();
                 try {
-                    Log.d("user", userString);
                     JSONObject jsonObject = new JSONObject(userString);
-                    user = new User(jsonObject.getInt("id"), jsonObject.getString("username"), jsonObject.getString("nickname"));
+                    user = new User(jsonObject.getInt("uid"));
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    dismissDialog();
+                    ToastUtils.show(LoginActivity.this, "登录失败");
+                    return;
                 }
 
                 Headers headers = response.headers();

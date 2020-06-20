@@ -18,7 +18,6 @@ import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.HotSubmissionAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Page;
-import com.example.tilitili.data.Plate;
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;
@@ -31,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,22 +78,21 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                     JSONArray items = jsonObject.getJSONArray("list");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
-                        JSONObject plateString = item.getJSONObject("plate");
-                        Plate plate = new Plate(plateString.getInt("id"),
-                                plateString.getString("title"),
-                                plateString.getInt("owner"),
-                                plateString.getLong("startTime"),
-                                plateString.getString("description"));
-                        submissions.add(new Submission(item.getInt("id"),
-                                plate,
+                        submissions.add(new Submission(item.getInt("sid"),
                                 item.getInt("type"),
-                                item.getString("resource"),
+                                item.getString("plateTitle"),
                                 item.getString("title"),
+                                item.getString("cover"),
                                 item.getString("introduction"),
+                                item.getString("resource"),
                                 item.getInt("submissionTime"),
                                 item.getInt("watchTimes"),
-                                item.getInt("likes"),
-                                item.getInt("post_time")));
+                                item.getInt("likesCount"),
+                                item.getInt("isLike"),
+                                item.getInt("commentsCount"),
+                                item.getInt("uid"),
+                                item.getString("userNickname"),
+                                item.getInt("following")));
                     }
                     submissionPage = new Page<>(jsonObject.getInt("currentPage"),
                             jsonObject.getInt("pageSize"),
@@ -138,6 +137,7 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
             public void onItemClick(View view, int position) {
                 Submission submission = hotSubmissionAdapter.getItem(position);
                 Intent intent = new Intent(getContext(), TextDetailActivity.class);
+                intent.putExtra("submission", (Serializable) submission);
                 startActivity(intent);
             }
         });

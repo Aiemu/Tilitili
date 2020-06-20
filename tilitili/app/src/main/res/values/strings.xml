@@ -69,6 +69,7 @@
     <string name="user_profile_submission_upload_hint">投稿</string>
     <string name="user_profile_all_submission_hint">查看历史稿件</string>
     <string name="user_profile_change">修改个人信息</string>
+<<<<<<< HEAD
     <string name="home_search">请输入搜索内容</string>
 
     <string name="update_avatar">新头像</string>
@@ -76,6 +77,9 @@
     <string name="update_department">院系/专业</string>
     <string name="update_bio">个性签名</string>
     <string name="confirm_update_info">确认更新</string>
+=======
+    <string name="user_profile_username_hint">用户名</string>
+>>>>>>> 327e91f... fix the api problem and fix the data classes
 
     <string-array name="departments">
         <item>软件学院</item>

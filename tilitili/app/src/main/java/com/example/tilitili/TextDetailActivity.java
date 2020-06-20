@@ -11,6 +11,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -18,20 +20,43 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Submission;
-import com.example.tilitili.utils.NewsDetailsUtil;
+import com.example.tilitili.http.DownloadHttpHelper;
+import com.example.tilitili.http.ErrorMessage;
+import com.example.tilitili.http.HttpHelper;
+import com.example.tilitili.http.SpotsCallBack;
 import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
+import org.jetbrains.annotations.NotNull;
+import org.jsoup.nodes.Document;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class TextDetailActivity extends Activity {
+    @ViewInject(R.id.detail_title)
     private TextView title;
+    @ViewInject(R.id.ss_htmlprogessbar)
     private ProgressBar progressBar;
+    @ViewInject(R.id.action_comment_count)
+    private TextView action_comment_count;
+    @ViewInject(R.id.wb_details)
+    WebView webView;
     private FrameLayout customview_layout;
     private Submission submission;
-    private TextView action_comment_count;
-    WebView webView;
+    private DownloadHttpHelper downloadHttpHelper;
+    private File outputDir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +64,14 @@ public class TextDetailActivity extends Activity {
         setContentView(R.layout.submission_text_detail);
         ViewUtils.inject(this);
         submission = (Submission) getIntent().getSerializableExtra("submission");
+        downloadHttpHelper = DownloadHttpHelper.getInstance();
+        outputDir = this.getCacheDir();
         initView();
-//        initWebView();
+        initWebView();
     }
 
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     private void initWebView() {
-        webView = (WebView) findViewById(R.id.wb_details);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         if (!TextUtils.isEmpty(submission.getResource())) {
             WebSettings settings = webView.getSettings();
@@ -56,20 +82,16 @@ public class TextDetailActivity extends Activity {
             webView.addJavascriptInterface(new JavascriptInterface(getApplicationContext()), "imagelistner");
             webView.setWebChromeClient(new MyWebChromeClient());
             webView.setWebViewClient(new MyWebViewClient());
-            new MyAsnycTask().execute(submission.getResource(), submission.getTitle(), submission.getPlate().getTitle() + " " + submission.getSubmissionTime() + "发布");
+            setContent();
         }
     }
 
     private void initView() {
-        title = findViewById(R.id.title);
-        progressBar = findViewById(R.id.ss_htmlprogessbar);
-        action_comment_count = findViewById(R.id.action_comment_count);
-
         progressBar.setVisibility(View.VISIBLE);
         title.setTextSize(13);
         title.setVisibility(View.VISIBLE);
-//        title.setText(submission.getResource());
-        action_comment_count.setText(String.valueOf(1));
+        title.setText(submission.getResource());
+        action_comment_count.setText(String.valueOf(submission.getCommentsCount()));
     }
 
     @Override
@@ -78,18 +100,43 @@ public class TextDetailActivity extends Activity {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    private class MyAsnycTask extends AsyncTask<String, String, String> {
+    public void setContent() {
+        downloadHttpHelper.download(submission.getResource(), Contants.API.UploadType.HTML, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
 
-        @Override
-        protected String doInBackground(String... urls) {
-            String data = NewsDetailsUtil.getNewsDetails(urls[0], urls[1], urls[2]);
-            return data;
-        }
+            }
 
-        @Override
-        protected void onPostExecute(String data) {
-            webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
-        }
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Failed to download file: " + response);
+                }
+                File outputFile = File.createTempFile("prefix", ".html", outputDir);
+                FileOutputStream fos = new FileOutputStream(outputFile);
+                fos.write(Objects.requireNonNull(response.body()).bytes());
+                fos.close();
+                String data = "<body>" +
+                        "<center><h2 style='font-size:16px;'>" + submission.getTitle() + "</h2></center>";
+                data = data + "<p align='left' style='margin-left:10px'>"
+                        + "<span style='font-size:10px;'>"
+                        + submission.getUserNickname()
+                        + "</span>"
+                        + "</p>";
+                data = data + "<hr size='1' />";
+                FileInputStream fis = new FileInputStream(outputFile);
+                byte[] temp = new byte[1024];
+                StringBuilder sb = new StringBuilder("");
+                int len = 0;
+                while ((len = fis.read(temp)) > 0) {
+                    sb.append(new String(temp, 0, len));
+                }
+                fis.close();
+                data = data + sb.toString() + "</body>";
+                webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
+                Log.d("msg", "readSaveFile: \n" + sb.toString());
+            }
+        });
     }
 
     // 注入js函数监听
@@ -105,7 +152,7 @@ public class TextDetailActivity extends Activity {
     }
 
     // js通信接口
-    public class JavascriptInterface {
+    public static class JavascriptInterface {
 
         private Context context;
 
@@ -114,8 +161,6 @@ public class TextDetailActivity extends Activity {
         }
 
         public void openImage(String img) {
-
-            //
             String[] imgs = img.split(",");
             ArrayList<String> imgsUrl = new ArrayList<String>();
             for (String s : imgs) {
@@ -137,6 +182,7 @@ public class TextDetailActivity extends Activity {
             return super.shouldOverrideUrlLoading(view, url);
         }
 
+        @SuppressLint("SetJavaScriptEnabled")
         @Override
         public void onPageFinished(WebView view, String url) {
             view.getSettings().setJavaScriptEnabled(true);
@@ -147,6 +193,7 @@ public class TextDetailActivity extends Activity {
             webView.setVisibility(View.VISIBLE);
         }
 
+        @SuppressLint("SetJavaScriptEnabled")
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             view.getSettings().setJavaScriptEnabled(true);
@@ -154,10 +201,9 @@ public class TextDetailActivity extends Activity {
         }
 
         @Override
-        public void onReceivedError(WebView view, int errorCode,
-                                    String description, String failingUrl) {
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             progressBar.setVisibility(View.GONE);
-            super.onReceivedError(view, errorCode, description, failingUrl);
+            super.onReceivedError(view, request, error);
         }
     }
 

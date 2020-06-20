@@ -1,11 +1,8 @@
 package com.example.tilitili.http;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.tilitili.R;
-
-import java.util.Objects;
 
 import dmax.dialog.SpotsDialog;
 import okhttp3.Request;
@@ -54,7 +51,7 @@ public abstract class SpotsCallBack<T> extends SimpleCallback<T> {
 
     @Override
     public void onFailure(Request request, Exception e) {
-        Log.d("asd", Objects.requireNonNull(e.getMessage()));
+        e.printStackTrace();
         dismissDialog();
     }
 
