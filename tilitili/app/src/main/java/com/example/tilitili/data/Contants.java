@@ -23,6 +23,7 @@ public class Contants {
         public static final String GET_USER_PROFILE_URL = BASE_URL + "/user/profile/info/";
         public static final String UPDATE_USER_PROFILE_URL = BASE_URL + "/user/profile/edit";
         public static final String CHECK_LOGIN_URL = BASE_URL + "/checklogin";
+        public static final String GET_PRIVILEGE_PLATES = BASE_URL + "/plate/getprivilege";
 
         public static String getUrlWithID(String url, String ID) {
             return url + ID;

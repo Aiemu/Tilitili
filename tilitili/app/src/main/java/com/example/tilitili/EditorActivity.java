@@ -11,11 +11,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.tilitili.data.Contants;
+import com.example.tilitili.data.Page;
+import com.example.tilitili.data.Plate;
+import com.example.tilitili.data.Submission;
 import com.example.tilitili.data.User;
 import com.example.tilitili.data.UserLocalData;
 import com.example.tilitili.http.ErrorMessage;
@@ -33,6 +40,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,7 +48,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import jp.wasabeef.richeditor.RichEditor;
@@ -59,6 +69,8 @@ public class EditorActivity extends Activity {
     private EditText title_edit_text;
     @ViewInject(R.id.text_introduction_edit_text)
     private EditText introduction_edit_text;
+    @ViewInject(R.id.edit_choose_plate_spinner)
+    private Spinner plate_spinner;
 
     private static final int SELECT_PHOTO_CODE = 879;
     private static final int SELECT_COVER_CODE = 880;
@@ -70,6 +82,9 @@ public class EditorActivity extends Activity {
     private String html_text = "";
     private String cover_uri = "";
     private String html_uri = "";
+    private int platePosition = 0;
+    private List<Plate> plates = new ArrayList<>();
+    private List<String> plateTitles = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -302,6 +317,16 @@ public class EditorActivity extends Activity {
                 mEditor.insertTodo();
             }
         });
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, plateTitles);
+        plate_spinner.setAdapter(adapter);
+
+        plate_spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                platePosition = position;
+            }
+        });
     }
 
     public void selectImg() {
@@ -428,6 +453,7 @@ public class EditorActivity extends Activity {
         map.put("resource", html_uri);
         map.put("cover", cover_uri);
         map.put("type", String.valueOf(0));
+        map.put("pid", String.valueOf(plates.get(platePosition).getSid()));
 
         SpotsCallBack<User> stringSpotsCallBack = new SpotsCallBack<User>(this) {
             @Override
@@ -453,6 +479,37 @@ public class EditorActivity extends Activity {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
         startActivityForResult(intent, SELECT_COVER_CODE);
+    }
+
+    private void setPlateSpinner() {
+        httpHelper.get(Contants.API.GET_PRIVILEGE_PLATES, new SpotsCallBack<String>(this) {
+
+            @Override
+            public void onSuccess(Response response, String s) {
+                dismissDialog();
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
+                    JSONArray items = jsonObject.getJSONArray("list");
+                    for (int i = 0; i < items.length(); i++) {
+                        JSONObject item = (JSONObject) items.get(i);
+                        plates.add(new Plate(
+                                item.getInt("pid"),
+                                item.getString("title"),
+                                item.getString("description"),
+                                item.getString("cover")
+                        ));
+                        plateTitles.add(item.getString("title"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
+
+            }
+        });
     }
 
 }

@@ -1,20 +1,20 @@
 package com.example.tilitili.data;
 
 public class Plate {
-    private int id;
+    private int sid;
     private String title;
     private String description;
     private String cover;
 
-    public Plate(int id, String title, String description, String cover) {
-        this.id = id;
+    public Plate(int sid, String title, String description, String cover) {
+        this.sid = sid;
         this.title = title;
         this.description = description;
         this.cover = cover;
     }
 
-    public int getId() {
-        return id;
+    public int getSid() {
+        return sid;
     }
 
     public String getTitle() {

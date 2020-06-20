@@ -80,6 +80,9 @@
     <string name="update_bio">个性签名</string>
     <string name="confirm_update_info">确认更新</string>
     <string name="user_profile_username_hint">用户名</string>
+    <string name="editor_commit_hint">确认发布</string>
+    <string name="editor_exit_hint">退出</string>
+    <string name="editor_choose_plate_hint">选择板块：</string>
 
     <string name="home_hot_order">最热</string>
     <string name="home_new_order">最新</string>
