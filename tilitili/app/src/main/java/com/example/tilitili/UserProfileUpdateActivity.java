@@ -3,15 +3,11 @@ package com.example.tilitili;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -22,7 +18,6 @@ import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.http.UploadHttpHelper;
-import com.example.tilitili.ui.MineFragment;
 import com.example.tilitili.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.lidroid.xutils.ViewUtils;
@@ -36,13 +31,11 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Headers;
 import okhttp3.Response;
 
 public class UserProfileUpdateActivity extends Activity {
@@ -118,8 +111,8 @@ public class UserProfileUpdateActivity extends Activity {
                 ToastUtils.show(UserProfileUpdateActivity.this, errorMessage.getErrorMessage());
             }
         };
-        stringSpotsCallBack.setMessage(R.string.logining);
-        httpHelper.post(Contants.API.LOGIN_URL, map, stringSpotsCallBack);
+        stringSpotsCallBack.setMessage(R.string.updating);
+        httpHelper.post(Contants.API.UPDATE_USER_PROFILE_URL, map, stringSpotsCallBack);
     }
 
     @OnClick(R.id.edit_choose_avatar_image_view)

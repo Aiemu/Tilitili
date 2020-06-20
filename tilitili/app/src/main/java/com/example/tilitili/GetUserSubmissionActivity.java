@@ -3,9 +3,7 @@ package com.example.tilitili;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +16,6 @@ import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.HotSubmissionAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Page;
-import com.example.tilitili.data.Plate;
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;

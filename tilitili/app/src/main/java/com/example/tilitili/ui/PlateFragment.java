@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cjj.MaterialRefreshLayout;
 import com.example.tilitili.PlateDetailsActivity;
 import com.example.tilitili.R;
-import com.example.tilitili.TextDetailActivity;
 import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.PlateAdapter;
 import com.example.tilitili.data.Contants;

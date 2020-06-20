@@ -5,8 +5,6 @@ import android.net.Uri;
 
 import com.example.tilitili.R;
 import com.example.tilitili.data.Following;
-import com.example.tilitili.data.Plate;
-import com.example.tilitili.data.User;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;

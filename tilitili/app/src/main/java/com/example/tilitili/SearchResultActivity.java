@@ -15,7 +15,6 @@ import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.HotSubmissionAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Page;
-import com.example.tilitili.data.Plate;
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;
@@ -34,7 +33,7 @@ import java.util.List;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class SearchResultActivity  extends Activity implements Pager.OnPageListener<Submission> {
+public class SearchResultActivity extends Activity implements Pager.OnPageListener<Submission> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

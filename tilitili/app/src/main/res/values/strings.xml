@@ -24,6 +24,7 @@
     <string name="token_error">登录失效，请重新登录</string>
     <string name="loading">正在加载中…</string>
     <string name="logining">正在登录</string>
+    <string name="updating">正在更新</string>
     <string name="submitting">正在发布</string>
     <string name="registering">正在注册，请稍候</string>
     <string name="register_success">注册成功</string>
@@ -47,7 +48,7 @@
     <string name="login_username_hint">用户名/邮箱</string>
     <string name="login_password_hint">密码</string>
 
-    <string name="reset_password_username_hint">用户名/邮箱</string>
+    <string name="reset_password_username_hint">用户名</string>
     <string name="reset_password_verify_code_hint">验证码</string>
     <string name="reset_password_new_password_hint">新密码</string>
     <string name="reset_password_confirm_password_hint">确认密码</string>

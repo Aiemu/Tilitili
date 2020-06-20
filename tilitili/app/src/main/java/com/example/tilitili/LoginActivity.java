@@ -42,7 +42,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         ViewUtils.inject(this);
-        if(!UserManagerApplication.getInstance().getSessionId().equals(""))
+        if (!UserManagerApplication.getInstance().getSessionId().equals(""))
             isLogin();
     }
 

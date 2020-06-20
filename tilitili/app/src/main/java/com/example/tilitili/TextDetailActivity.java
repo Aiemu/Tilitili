@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,15 +22,11 @@ import android.widget.TextView;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.DownloadHttpHelper;
-import com.example.tilitili.http.ErrorMessage;
-import com.example.tilitili.http.HttpHelper;
-import com.example.tilitili.http.SpotsCallBack;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import org.jetbrains.annotations.NotNull;
-import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
