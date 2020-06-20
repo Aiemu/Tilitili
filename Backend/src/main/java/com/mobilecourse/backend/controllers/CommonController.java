@@ -85,9 +85,10 @@ public class CommonController {
     }
 
     // 评论包装
-    public JSONObject wrapComment(Comment comment) {
+    public JSONObject wrapComment(Comment comment, User user) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("uid", comment.getUid());
+        jsonObject.put("nickname", user.getNickname());
+        jsonObject.put("avatar", user.getAvatar());
         jsonObject.put("content", comment.getContent());
         jsonObject.put("commentTime", comment.getCommentTime().getTime());
         return jsonObject;

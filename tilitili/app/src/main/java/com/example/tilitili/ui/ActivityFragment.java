@@ -1,6 +1,5 @@
 package com.example.tilitili.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,17 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cjj.MaterialRefreshLayout;
 import com.example.tilitili.CommentActivity;
-import com.example.tilitili.LoginActivity;
-import com.example.tilitili.MainActivity;
 import com.example.tilitili.R;
 import com.example.tilitili.TextDetailActivity;
-import com.example.tilitili.UserManagerApplication;
 import com.example.tilitili.adapter.ActivityAdapter;
 import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Page;
 import com.example.tilitili.data.Submission;
-import com.example.tilitili.data.User;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
@@ -47,7 +42,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Headers;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -206,9 +200,9 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                     SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(ActivityFragment.this.getActivity()) { // todo
                         @Override
                         public void onSuccess(Response response, String userString) {
-                            ImageView icon = (ImageView)v.findViewById(R.id.star_icon);
+                            ImageView icon = (ImageView) v.findViewById(R.id.star_icon);
                             icon.setColorFilter(Color.parseColor("#888888"));
-                            TextView num = (TextView)v.findViewById(R.id.activity_item_star_num);
+                            TextView num = (TextView) v.findViewById(R.id.activity_item_star_num);
                             num.setText(Integer.parseInt(num.getText().toString()) - 1);
 
                             dismissDialog();
@@ -221,8 +215,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                     };
                     httpHelper.post(Contants.API.SUBMISSION_LIKE + submission.getSid(), map, stringSpotsCallBack);
 
-                }
-                else if (submission.getIsLike() == 0) {
+                } else if (submission.getIsLike() == 0) {
                     // 点赞
                     Map<String, String> map = new HashMap<>(1);
                     map.put("username", "1");

@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/user_submission_title_bar_back"
-        style="@style/detail_back_view"/>
+        style="@style/detail_back_view" />
 
     <TextView
         android:id="@+id/user_submission_title_bar_title"

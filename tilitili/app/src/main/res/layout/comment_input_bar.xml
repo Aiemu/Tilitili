@@ -40,7 +40,11 @@
             android:layout_marginStart="5dp"
             android:backgroundTint="#82318E"
             android:text="@string/to_comment"
+<<<<<<< HEAD
             android:textColor="#FFFFFF"/>
+=======
+            android:textColor="#FFFFFF" />
+>>>>>>> fae5013c059446d21b68861cfce43136fa15cb0d
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

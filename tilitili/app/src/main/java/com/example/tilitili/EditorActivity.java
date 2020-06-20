@@ -377,8 +377,8 @@ public class EditorActivity extends Activity {
     public void uploadImage(Uri filepath, final int code) {
         File imageFile = new File(getRealPathFromURI(filepath));
         if (SELECT_PHOTO_CODE == code)
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-            imageFile = new CompressHelper.Builder(this)
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        imageFile = new CompressHelper.Builder(this)
                 .setMaxWidth(260)
                 .setMaxHeight(150)
                 .setQuality(80)

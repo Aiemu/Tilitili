@@ -74,7 +74,12 @@
             android:name=".SearchResultActivity"
             android:label="@string/app_name" />
 
-        <activity android:name=".VideoPlayActivity"
+        <activity
+            android:name=".VideoPlayActivity"
+            android:label="@string/app_name" />
+
+        <activity
+            android:name=".CommentActivity"
             android:label="@string/app_name" />
 
     </application>

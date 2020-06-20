@@ -3,17 +3,11 @@ package com.example.tilitili.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.tilitili.MainActivity;
 import com.example.tilitili.R;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Submission;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import java.util.List;
 
@@ -45,9 +39,8 @@ public class ActivityAdapter extends SimpleAdapter<Submission> {
         viewHolder.getTextView(R.id.activity_item_comment_num).setText(String.valueOf(item.getCommentsCount()));
 
         if (item.getIsLike() == 1) {
-                viewHolder.getImageView(R.id.star_icon).setColorFilter(Color.parseColor("#9C27B0"));
-        }
-        else if (item.getIsLike() == 0) {
+            viewHolder.getImageView(R.id.star_icon).setColorFilter(Color.parseColor("#9C27B0"));
+        } else if (item.getIsLike() == 0) {
             viewHolder.getImageView(R.id.star_icon).setColorFilter(Color.parseColor("#888888"));
         }
     }

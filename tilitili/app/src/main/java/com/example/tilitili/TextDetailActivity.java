@@ -122,7 +122,7 @@ public class TextDetailActivity extends Activity {
                         "<center><h2 style='font-size:16px;'>" + submission.getTitle() + "</h2></center>";
                 data = data + "<p align='left' style='margin-left:10px'>"
                         + "<span style='font-size:10px;'>"
-                        + "本文章由 "+submission.getUserNickname() + " 于 " + submission.getSubmissionTime() + " 发布"
+                        + "本文章由 " + submission.getUserNickname() + " 于 " + submission.getSubmissionTime() + " 发布"
                         + "</span>"
                         + "</p>";
                 data = data + "<hr size='1' />";
@@ -221,5 +221,12 @@ public class TextDetailActivity extends Activity {
     @OnClick(R.id.detail_back)
     public void goBack(View view) {
         finish();
+    }
+
+    @OnClick(R.id.action_view_comment)
+    public void viewComments(View view) {
+        Intent intent = new Intent(this, CommentActivity.class);
+        intent.putExtra("sid", submission.getSid());
+        startActivity(intent);
     }
 }

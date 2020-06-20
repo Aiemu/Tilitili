@@ -1,7 +1,6 @@
 package com.example.tilitili.data;
 
 import com.example.tilitili.Config;
-import com.example.tilitili.SearchResultActivity;
 
 public class Contants {
     public static final String USER_JSON = "user_json";
@@ -15,8 +14,6 @@ public class Contants {
         public static final String FORGET_PASSWORD = BASE_URL + "/user/password/forget";
         public static final String GET_HOT = BASE_URL + "/submission/hot";
         public static final String GET_PLATE = BASE_URL + "/plate/getall";
-        public static final String GET_PLATE_DETAILS = BASE_URL + "/plate/list/";
-        public static final String GET_USER_SUBMISSION = BASE_URL + "/submission/user";
         public static final String GET_USER_ACTIVITY = BASE_URL + "/user/activity";
         public static final String SUBMISSION_LIKE = BASE_URL + "/submission/like/";
         public static final String REGISTER_URL = BASE_URL + "/signup";
@@ -28,9 +25,10 @@ public class Contants {
         public static final String GET_PRIVILEGE_PLATES = BASE_URL + "/plate/getprivilege";
         public static final String GET_HISTORY_SUBMISSIONS = BASE_URL + "/submission/history";
         public static final String GET_HISTORY_UPLOAD_SUBMISSION = BASE_URL + "/submission/upload_history";
-        public static final String GET_USER_FOLLOWING_LIST = BASE_URL +"/user/friend";
-        public static final String GET_SUBMISSION_COMMENT = BASE_URL +" /submission/comment/get/";
+        public static final String GET_USER_FOLLOWING_LIST = BASE_URL + "/user/friend";
+        public static final String GET_SUBMISSION_COMMENT = BASE_URL + "/submission/comment/get/";
         public static final String GET_ONE_PLATE_SUBMISSION = BASE_URL + "/plate/list/";
+        public static final String POST_COMMENT_URL = BASE_URL + "/submission/comment/publish/";
 
         public static String getUrlWithID(String url, String ID) {
             return url + ID;
