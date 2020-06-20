@@ -203,7 +203,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                     Map<String, String> map = new HashMap<>(1);
                     map.put("username", "0");
 
-                    SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(this) { // todo
+                    SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(ActivityFragment.this.getActivity()) { // todo
                         @Override
                         public void onSuccess(Response response, String userString) {
                             ImageView icon = (ImageView)v.findViewById(R.id.star_icon);
@@ -227,7 +227,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                     Map<String, String> map = new HashMap<>(1);
                     map.put("username", "1");
 
-                    SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(this) { // todo
+                    SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(ActivityFragment.this.getActivity()) { // todo
                         @Override
                         public void onSuccess(Response response, String userString) {
                             ImageView icon = (ImageView) v.findViewById(R.id.star_icon);
