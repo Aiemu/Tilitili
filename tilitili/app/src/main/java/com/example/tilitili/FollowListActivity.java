@@ -2,6 +2,7 @@ package com.example.tilitili;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -19,6 +20,7 @@ import com.example.tilitili.utils.Pager;
 import com.example.tilitili.utils.ToastUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -138,6 +140,11 @@ public class FollowListActivity extends Activity implements Pager.OnPageListener
     public void loadMore(List<Following> datas, int totalPage, int totalCount) {
         followingAdapter.loadMoreData(datas);
         recyclerView.scrollToPosition(followingAdapter.getDatas().size());
+    }
+
+    @OnClick(R.id.user_follow_list_title_bar_back)
+    public void back(View v) {
+        finish();
     }
 }
 

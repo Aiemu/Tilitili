@@ -23,7 +23,7 @@ public class ActivityAdapter extends SimpleAdapter<Submission> {
     protected void convert(BaseViewHolder viewHolder, final Submission item) {
         // 头像
         SimpleDraweeView avatarView = (SimpleDraweeView) viewHolder.getView(R.id.avatar_activity_item_view);
-        avatarView.setImageURI(Uri.parse(Contants.API.BASE_URL + item.ge));
+//        avatarView.setImageURI(Uri.parse(Contants.API.BASE_URL + item.ge));
 
         // 封面
         SimpleDraweeView coverView = (SimpleDraweeView) viewHolder.getView(R.id.cover_activity_item_view);

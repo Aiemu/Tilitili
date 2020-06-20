@@ -4,10 +4,11 @@ import android.annotation.SuppressLint;
 
 import com.example.tilitili.Config;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Submission {
+public class Submission implements Serializable {
     private int sid;
     private int type;
     private String plateTitle;
