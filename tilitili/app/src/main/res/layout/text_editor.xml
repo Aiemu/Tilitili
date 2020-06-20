@@ -329,6 +329,37 @@
                     android:layout_height="30dp" />
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/editor_choose_plate_hint"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp" />
+
+                <Spinner
+                    android:id="@+id/edit_choose_plate_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center">
@@ -337,7 +368,7 @@
                         android:id="@+id/text_edit_confirm_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="确认发布" />
+                        android:text="@string/editor_commit_hint" />
 
                     <TextView
                         android:layout_width="50dp"
@@ -347,8 +378,12 @@
                         android:id="@+id/text_edit_exit_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="退出" />
+                        android:text="@string/editor_exit_hint" />
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp" />
 
 
             </LinearLayout>
