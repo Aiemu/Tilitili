@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.example.tilitili.MainActivity;
 import com.example.tilitili.R;
-import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Submission;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.lidroid.xutils.view.annotation.event.OnClick;

@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -85,6 +85,7 @@ public class EditorActivity extends Activity {
     private int platePosition = 0;
     private List<Plate> plates = new ArrayList<>();
     private List<String> plateTitles = new ArrayList<>();
+    DisplayMetrics metrics = new DisplayMetrics();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -376,9 +377,10 @@ public class EditorActivity extends Activity {
     public void uploadImage(Uri filepath, final int code) {
         File imageFile = new File(getRealPathFromURI(filepath));
         if (SELECT_PHOTO_CODE == code)
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
             imageFile = new CompressHelper.Builder(this)
-                .setMaxWidth(180)
-                .setMaxHeight(144)
+                .setMaxWidth(260)
+                .setMaxHeight(150)
                 .setQuality(80)
                 .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
                         Environment.DIRECTORY_PICTURES).getAbsolutePath())

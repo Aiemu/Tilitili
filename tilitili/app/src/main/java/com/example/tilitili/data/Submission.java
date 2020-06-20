@@ -2,9 +2,6 @@ package com.example.tilitili.data;
 
 import android.annotation.SuppressLint;
 
-import com.example.tilitili.Config;
-import com.example.tilitili.SearchResultActivity;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -13,7 +13,6 @@ import com.cjj.MaterialRefreshLayout;
 import com.example.tilitili.adapter.FollowingAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Following;
-import com.example.tilitili.data.Page;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;
 import com.example.tilitili.utils.Pager;
@@ -67,26 +66,20 @@ public class FollowListActivity extends Activity implements Pager.OnPageListener
             @Override
             public void onSuccess(Response response, String page) {
                 dismissDialog();
-                Page<Following> followingPage = null;
                 List<Following> followings = new ArrayList<>();
                 try {
                     JSONObject jsonObject = new JSONObject(page);
-                    JSONArray items = jsonObject.getJSONArray("list");
+                    JSONArray items = jsonObject.getJSONArray("users");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
                         followings.add(new Following(item.getInt("uid"),
                                 item.getString("nickname"),
                                 item.getString("avatar")));
                     }
-                    followingPage = new Page<>(jsonObject.getInt("currentPage"),
-                            jsonObject.getInt("pageSize"),
-                            jsonObject.getInt("totalPage"),
-                            jsonObject.getInt("totalCount"),
-                            followings);
-                    pager.setPageIndex(followingPage.getCurrentPage());
-                    pager.setPageCount(followingPage.getPageSize());
-                    pager.setTotalPage(followingPage.getTotalPage());
-                    pager.showData(followingPage.getList(), followingPage.getTotalPage(), followingPage.getTotalCount());
+                    pager.setPageIndex(1);
+                    pager.setPageCount(followings.size());
+                    pager.setTotalPage(1);
+                    pager.showData(followings, 1, followings.size());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -105,10 +98,10 @@ public class FollowListActivity extends Activity implements Pager.OnPageListener
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_USER_FRIEND);
+        pager.setUrl(Contants.API.GET_USER_FOLLOWING_LIST);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
-        pager.setPageSize(7);
+        pager.setPageSize(100);
         pager.request();
 
     }

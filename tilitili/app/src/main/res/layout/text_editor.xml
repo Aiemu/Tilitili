@@ -322,7 +322,8 @@
                     android:adjustViewBounds="true"
                     android:maxHeight="500dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/choose_cover" />
+                    android:src="@drawable/choose_cover"
+                    android:contentDescription="@string/choose_cover_hint" />
 
                 <TextView
                     android:layout_width="wrap_content"
