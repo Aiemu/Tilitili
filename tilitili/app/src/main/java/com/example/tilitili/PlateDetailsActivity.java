@@ -23,6 +23,7 @@ import com.example.tilitili.utils.Pager;
 import com.example.tilitili.utils.ToastUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -170,5 +171,10 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
     public void loadMore(List<Submission> datas, int totalPage, int totalCount) {
         hotSubmissionAdapter.loadMoreData(datas);
         recyclerView.scrollToPosition(hotSubmissionAdapter.getDatas().size());
+    }
+
+    @OnClick(R.id.plate_details_title_bar_back)
+    public void back(View view) {
+        finish();
     }
 }

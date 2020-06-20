@@ -48,10 +48,10 @@ public class TextDetailActivity extends Activity {
     private TextView action_comment_count;
     @ViewInject(R.id.wb_details)
     WebView webView;
-    private FrameLayout customview_layout;
     private Submission submission;
     private DownloadHttpHelper downloadHttpHelper;
     private File outputDir;
+    private String data = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +62,15 @@ public class TextDetailActivity extends Activity {
         downloadHttpHelper = DownloadHttpHelper.getInstance();
         outputDir = this.getCacheDir();
         initView();
-        initWebView();
+        try {
+            initWebView();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
-    private void initWebView() {
+    private void initWebView() throws InterruptedException {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         if (!TextUtils.isEmpty(submission.getResource())) {
             WebSettings settings = webView.getSettings();
@@ -78,6 +82,9 @@ public class TextDetailActivity extends Activity {
             webView.setWebChromeClient(new MyWebChromeClient());
             webView.setWebViewClient(new MyWebViewClient());
             setContent();
+            while (!data.endsWith("</body>"))
+                Thread.sleep(50);
+            webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
         }
     }
 
@@ -96,7 +103,7 @@ public class TextDetailActivity extends Activity {
     }
 
     public void setContent() {
-        downloadHttpHelper.download(submission.getResource(), Contants.API.UploadType.HTML, new Callback() {
+        downloadHttpHelper.download(Config.getFullUrl(submission.getResource()), Contants.API.UploadType.HTML, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
 
@@ -111,11 +118,11 @@ public class TextDetailActivity extends Activity {
                 FileOutputStream fos = new FileOutputStream(outputFile);
                 fos.write(Objects.requireNonNull(response.body()).bytes());
                 fos.close();
-                String data = "<body>" +
+                data = "<body>" +
                         "<center><h2 style='font-size:16px;'>" + submission.getTitle() + "</h2></center>";
                 data = data + "<p align='left' style='margin-left:10px'>"
                         + "<span style='font-size:10px;'>"
-                        + submission.getUserNickname()
+                        + "本文章由 "+submission.getUserNickname() + " 于 " + submission.getSubmissionTime() + " 发布"
                         + "</span>"
                         + "</p>";
                 data = data + "<hr size='1' />";
@@ -128,8 +135,6 @@ public class TextDetailActivity extends Activity {
                 }
                 fis.close();
                 data = data + sb.toString() + "</body>";
-                webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
-                Log.d("msg", "readSaveFile: \n" + sb.toString());
             }
         });
     }

@@ -5,10 +5,11 @@ import android.annotation.SuppressLint;
 import com.example.tilitili.Config;
 import com.example.tilitili.SearchResultActivity;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Submission {
+public class Submission implements Serializable {
     private int sid;
     private int type;
     private String plateTitle;
@@ -95,7 +96,7 @@ public class Submission {
     }
 
     public String getSubmissionTime() {
-        return sdf.format(new Date(this.submissionTime * 1000L));
+        return sdf.format(new Date(this.submissionTime));
     }
 
     public long getWatchTimes() {

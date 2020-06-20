@@ -168,4 +168,9 @@ public class UserProfileUpdateActivity extends Activity {
             }
         });
     }
+
+    @OnClick(R.id.user_profile_update_title_bar_back)
+    public void back(View v) {
+        finish();
+    }
 }

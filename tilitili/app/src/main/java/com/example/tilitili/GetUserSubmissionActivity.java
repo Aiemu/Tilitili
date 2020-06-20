@@ -23,6 +23,7 @@ import com.example.tilitili.utils.Pager;
 import com.example.tilitili.utils.ToastUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,8 +39,6 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
     @ViewInject(R.id.user_submission_title_bar_title)
     private TextView title_text;
 
-    private String uid;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +47,6 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
 
         Intent getIntent = getIntent();
         String titleStr = getIntent.getStringExtra("title");
-        uid = getIntent.getStringExtra("uid");
         title_text.setText(titleStr);
 
         init();
@@ -129,7 +127,7 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_USER_UPLOAD + uid);
+        pager.setUrl(Contants.API.GET_USER_UPLOAD);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);
@@ -164,5 +162,10 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
     public void loadMore(List<Submission> datas, int totalPage, int totalCount) {
         hotSubmissionAdapter.loadMoreData(datas);
         recyclerView.scrollToPosition(hotSubmissionAdapter.getDatas().size());
+    }
+
+    @OnClick(R.id.user_submission_title_bar_back)
+    public void back(View v) {
+        finish();
     }
 }

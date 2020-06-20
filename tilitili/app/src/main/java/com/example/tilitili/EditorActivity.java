@@ -9,7 +9,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,6 +37,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.nanchen.compresshelper.CompressHelper;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -93,9 +96,24 @@ public class EditorActivity extends Activity {
         httpHelper = HttpHelper.getInstance();
         uploadHttpHelper = new UploadHttpHelper((ProgressBar) findViewById(R.id.progressBar));
         user = UserLocalData.getUser(this);
+        setPlateSpinner();
 
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {/* ... */}
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {/* ... */}
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(com.karumi.dexter.listener.PermissionRequest permission, PermissionToken token) {
+                    }
+                }).check();
+
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {/* ... */}
@@ -314,16 +332,6 @@ public class EditorActivity extends Activity {
                 mEditor.insertTodo();
             }
         });
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, plateTitles);
-        plate_spinner.setAdapter(adapter);
-
-        plate_spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                platePosition = position;
-            }
-        });
     }
 
     public void selectImg() {
@@ -366,7 +374,16 @@ public class EditorActivity extends Activity {
     }
 
     public void uploadImage(Uri filepath, final int code) {
-        final File imageFile = new File(getRealPathFromURI(filepath));
+        File imageFile = new File(getRealPathFromURI(filepath));
+        if (SELECT_PHOTO_CODE == code)
+            imageFile = new CompressHelper.Builder(this)
+                .setMaxWidth(180)
+                .setMaxHeight(144)
+                .setQuality(80)
+                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                .build()
+                .compressToFile(imageFile);
         uploadHttpHelper.upload(uploadHttpHelper.buildRequest(imageFile, Contants.API.UploadType.IMAGE), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -396,7 +413,7 @@ public class EditorActivity extends Activity {
     }
 
     @OnClick(R.id.text_edit_confirm_btn)
-    public void submissionPublish(View view) {
+    public void submissionPublish(View view) throws InterruptedException {
         if (cover_uri.equals("")) {
             ToastUtils.show(this, "未选择封面");
             return;
@@ -444,6 +461,10 @@ public class EditorActivity extends Activity {
             }
         });
 
+        while (html_uri.equals("")) {
+            Thread.sleep(50);
+        }
+
         Map<String, String> map = new HashMap<>(5);
         map.put("title", title_edit_text.getText().toString());
         map.put("introduction", introduction_edit_text.getText().toString());
@@ -486,7 +507,7 @@ public class EditorActivity extends Activity {
                 dismissDialog();
                 try {
                     JSONObject jsonObject = new JSONObject(s);
-                    JSONArray items = jsonObject.getJSONArray("list");
+                    JSONArray items = jsonObject.getJSONArray("plates");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
                         plates.add(new Plate(
@@ -496,6 +517,20 @@ public class EditorActivity extends Activity {
                                 item.getString("cover")
                         ));
                         plateTitles.add(item.getString("title"));
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(EditorActivity.this, R.layout.support_simple_spinner_dropdown_item, plateTitles);
+                        plate_spinner.setAdapter(adapter);
+
+                        plate_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                platePosition = position;
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                                platePosition = 1;
+                            }
+                        });
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

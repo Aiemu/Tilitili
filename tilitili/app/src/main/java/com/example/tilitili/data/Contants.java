@@ -22,7 +22,7 @@ public class Contants {
         public static final String GET_USER_HISTORY = BASE_URL + "/submission/history";
         public static final String GET_USER_FRIEND = BASE_URL + "/user/friend";
         public static final String GET_USER_ACTIVITY = BASE_URL + "/user/activity";
-        public static final String GET_USER_UPLOAD = BASE_URL + "/submission/upload_history/";
+        public static final String GET_USER_UPLOAD = BASE_URL + "/submission/upload_history";
         public static final String SUBMISSION_LIKE = BASE_URL + "/submission/like/";
         public static final String REGISTER_URL = BASE_URL + "/signup";
         public static final String UPLOAD_URL = BASE_URL + "/upload";

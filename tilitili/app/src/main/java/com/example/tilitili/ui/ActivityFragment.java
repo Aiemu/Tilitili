@@ -29,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,6 +138,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
             public void onItemClick(View view, int position) {
                 Submission submission = activityAdapter.getItem(position);
                 Intent intent = new Intent(getContext(), TextDetailActivity.class);
+                intent.putExtra("submission", (Serializable) submission);
                 startActivity(intent);
             }
         });

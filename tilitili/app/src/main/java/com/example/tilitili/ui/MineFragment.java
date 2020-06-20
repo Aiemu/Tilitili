@@ -83,8 +83,8 @@ public class MineFragment extends BaseFragment {
                     departmentTextView.setText(user.getDepartment());
                     usernameTextView.setText(user.getUsername());
 
-                    if (!user.getAvatar().equals(Config.getFullUrl("")))
-                        avatarImageView.setImageURI(Uri.parse(user.getAvatar()));
+                    if (!user.getAvatar().equals(""))
+                        avatarImageView.setImageURI(Uri.parse(Config.getFullUrl(user.getAvatar())));
                     else
                         avatarImageView.setImageURI(Uri.parse("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3927644377,808105775&fm=26&gp=0.jpg"));
 
@@ -132,11 +132,7 @@ public class MineFragment extends BaseFragment {
     void getUserAllSubmission(View view) {
         Intent intent = new Intent(this.getContext(), GetUserSubmissionActivity.class);
 
-        User user = UserLocalData.getUser(this.getContext());
-
         intent.putExtra("title", nicknameTextView.getText().toString());
-        assert user != null;
-        intent.putExtra("uid", Integer.toString(user.getUserId()));
         startActivity(intent);
     }
 }
