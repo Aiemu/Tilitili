@@ -1,6 +1,7 @@
 package com.example.tilitili;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cjj.MaterialRefreshLayout;
+import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.FollowingAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Following;
@@ -109,14 +111,16 @@ public class FollowListActivity extends Activity implements Pager.OnPageListener
     @Override
     public void load(List<Following> datas, int totalPage, int totalCount) {
         followingAdapter = new FollowingAdapter(this, datas);
-//        followingAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Following following = followingAdapter.getItem(position);
-//                Intent intent = new Intent(FollowListActivity.this, TextDetailActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        followingAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Following following = followingAdapter.getItem(position);
+                Intent intent = new Intent(FollowListActivity.this, UserInfoActivity.class);
+                intent.putExtra("uid", following.getUserId());
+                intent.putExtra("isFollowing", 1);
+                startActivity(intent);
+            }
+        });
 
         recyclerView.setAdapter(followingAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

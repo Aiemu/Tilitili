@@ -32,6 +32,8 @@ public class Contants {
         public static final String ADD_WATCH_TIME_URL = BASE_URL + "/submission/watch/";
         public static final String SUBMISSION_SEARCH_URL = BASE_URL + "/submission/search";
         public static final String USER_SEARCH_URL = BASE_URL + "/user/search";
+        public static final String FOLLOW_USER_URL = BASE_URL + "/user/follow";
+        public static final String UNFOLLOW_USER_URL = BASE_URL + "/user/unfollow";
 
         public static String getUrlWithID(String url, String ID) {
             return url + ID;

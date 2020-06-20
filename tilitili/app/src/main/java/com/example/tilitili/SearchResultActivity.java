@@ -178,11 +178,11 @@ public class SearchResultActivity extends Activity {
                     searchUserAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-//                            Following following = searchUserAdapter.getItem(position);
-//                            Intent intent = new Intent(SearchResultActivity.this, TextDetailActivity.class);
-//                            intent.putExtra("submission", (Serializable) following);
-//                            startActivity(intent);
-                            //todo
+                            Following following = searchUserAdapter.getItem(position);
+                            Intent intent = new Intent(SearchResultActivity.this, UserInfoActivity.class);
+                            intent.putExtra("uid", following.getUserId());
+                            intent.putExtra("isFollowing", following.getIsFollowing());
+                            startActivity(intent);
                         }
                     });
                     recyclerView.setAdapter(searchUserAdapter);
