@@ -1,6 +1,7 @@
 package com.example.tilitili.data;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.example.tilitili.Config;
 
@@ -51,8 +52,9 @@ public class User {
     }
 
     public String getJoinAt() {
+        Log.d("joinAr", String.valueOf(this.joinAt));
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        return sdf.format(new Date(this.joinAt * 1000L));
+        return sdf.format(new Date(this.joinAt));
     }
 
     public void setJoinAt(long joinAt) {

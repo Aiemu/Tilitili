@@ -74,7 +74,7 @@ public class Submission implements Serializable {
     }
 
     public String getSubmissionTime() {
-        return sdf.format(new Date(this.submissionTime * 1000L));
+        return sdf.format(new Date(this.submissionTime));
     }
 
     public long getWatchTimes() {
