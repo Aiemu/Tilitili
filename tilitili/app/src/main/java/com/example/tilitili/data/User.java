@@ -84,6 +84,10 @@ public class User {
     }
 
     public String getAvatar() {
+        return avatar;
+    }
+
+    public String getFullAvatar() {
         return Config.getFullUrl(avatar);
     }
 
