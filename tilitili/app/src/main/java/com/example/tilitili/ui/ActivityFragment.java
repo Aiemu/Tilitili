@@ -18,7 +18,6 @@ import com.example.tilitili.adapter.ActivityAdapter;
 import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Page;
-import com.example.tilitili.data.Plate;
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;
@@ -77,22 +76,21 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                     JSONArray items = jsonObject.getJSONArray("list");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
-                        JSONObject plateString = item.getJSONObject("plate");
-                        Plate plate = new Plate(plateString.getInt("id"),
-                                plateString.getString("title"),
-                                plateString.getInt("owner"),
-                                plateString.getLong("startTime"),
-                                plateString.getString("description"));
-                        submissions.add(new Submission(item.getInt("id"),
-                                plate,
+                        submissions.add(new Submission(item.getInt("sid"),
                                 item.getInt("type"),
-                                item.getString("resource"),
+                                item.getString("plateTitle"),
                                 item.getString("title"),
+                                item.getString("cover"),
                                 item.getString("introduction"),
+                                item.getString("resource"),
                                 item.getInt("submissionTime"),
                                 item.getInt("watchTimes"),
-                                item.getInt("likes"),
-                                item.getInt("post_time")));
+                                item.getInt("likesCount"),
+                                item.getInt("isLike"),
+                                item.getInt("commentsCount"),
+                                item.getInt("uid"),
+                                item.getString("userNickname"),
+                                item.getInt("following")));
                     }
                     submissionPage = new Page<>(jsonObject.getInt("currentPage"),
                             jsonObject.getInt("pageSize"),

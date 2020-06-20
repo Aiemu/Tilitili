@@ -18,9 +18,15 @@ public class User {
     private String organization;
     private String email;
 
-    public User(int id, String username, String nickname) {
+    public User(int id) {
         this.userId = id;
+    }
+
+    public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
@@ -78,6 +84,10 @@ public class User {
     }
 
     public String getAvatar() {
+        return avatar;
+    }
+
+    public String getFullAvatar() {
         return Config.getFullUrl(avatar);
     }
 

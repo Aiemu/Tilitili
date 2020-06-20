@@ -1,15 +1,18 @@
 package com.example.tilitili.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.tilitili.Config;
 import com.example.tilitili.EditorActivity;
+import com.example.tilitili.FollowListActivity;
 import com.example.tilitili.GetUserSubmissionActivity;
+import com.example.tilitili.HistoryActivity;
 import com.example.tilitili.R;
 import com.example.tilitili.UserProfileUpdateActivity;
 import com.example.tilitili.data.Contants;
@@ -18,8 +21,8 @@ import com.example.tilitili.data.UserLocalData;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
-import com.example.tilitili.utils.DownloadImageTask;
 import com.example.tilitili.utils.ToastUtils;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -34,7 +37,7 @@ public class MineFragment extends BaseFragment {
     HttpHelper httpHelper;
 
     @ViewInject(R.id.user_profile_avatar)
-    private ImageView avatarImageView;
+    private SimpleDraweeView avatarImageView;
     @ViewInject(R.id.user_profile_bio_textview)
     private TextView bioTextView;
     @ViewInject(R.id.user_profile_nickname_textview)
@@ -43,8 +46,8 @@ public class MineFragment extends BaseFragment {
     private TextView joinAtTextView;
     @ViewInject(R.id.user_profile_department_textview)
     private TextView departmentTextView;
-    @ViewInject(R.id.user_profile_organization_textview)
-    private TextView organizationTextView;
+    @ViewInject(R.id.user_profile_username_textview)
+    private TextView usernameTextView;
 
 
     @Override
@@ -66,20 +69,24 @@ public class MineFragment extends BaseFragment {
                     JSONObject jsonObject = new JSONObject(userString);
                     User user = UserLocalData.getUser(this.getContext());
                     assert user != null;
-                    user.setBio(jsonObject.getString("bio"));
+                    user.setUsername(jsonObject.getString("username"));
                     user.setEmail(jsonObject.getString("email"));
-                    user.setJoinAt(jsonObject.getLong("joinAt"));
+                    user.setNickname(jsonObject.getString("nickname"));
                     user.setDepartment(jsonObject.getString("department"));
+                    user.setJoinAt(jsonObject.getLong("joinAt"));
+                    user.setBio(jsonObject.getString("bio"));
                     user.setAvatar(jsonObject.getString("avatar"));
 
                     bioTextView.setText(user.getBio());
                     nicknameTextView.setText(user.getNickname());
                     joinAtTextView.setText(user.getJoinAt());
                     departmentTextView.setText(user.getDepartment());
-                    organizationTextView.setText(user.getOrganization());
+                    usernameTextView.setText(user.getUsername());
 
-//                    new DownloadImageTask(avatarImageView).execute(user.getAvatar());
-                    new DownloadImageTask(avatarImageView).execute("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3927644377,808105775&fm=26&gp=0.jpg");
+                    if (!user.getAvatar().equals(Config.getFullUrl("")))
+                        avatarImageView.setImageURI(Uri.parse(user.getAvatar()));
+                    else
+                        avatarImageView.setImageURI(Uri.parse("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3927644377,808105775&fm=26&gp=0.jpg"));
 
                     // 更新本地user
                     UserLocalData.updateUser(this.getContext(), user);
@@ -95,6 +102,18 @@ public class MineFragment extends BaseFragment {
                 dismissDialog();
             }
         });
+    }
+
+    @OnClick(R.id.user_profile_follow)
+    void goToFollow(View view) {
+        Intent intent = new Intent(this.getContext(), FollowListActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.user_profile_history)
+    void goToHistory(View view) {
+        Intent intent = new Intent(this.getContext(), HistoryActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.user_profile_submit)
@@ -113,7 +132,7 @@ public class MineFragment extends BaseFragment {
     void getUserAllSubmission(View view) {
         Intent intent = new Intent(this.getContext(), GetUserSubmissionActivity.class);
 
-        intent.putExtra("title",  nicknameTextView.getText().toString());
+        intent.putExtra("title", nicknameTextView.getText().toString());
         startActivity(intent);
     }
 }

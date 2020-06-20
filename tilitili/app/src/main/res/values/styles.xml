@@ -104,7 +104,7 @@
     </style>
 
 
-    <style name="deail_title_text_style" parent="@style/title_text_style">
+    <style name="detail_title_text_style" parent="@style/title_text_style">
         <item name="android:textColor">@color/detail_title_text_color</item>
     </style>
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -34,36 +33,21 @@ import java.util.List;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class PlateDetailsActivity extends Activity implements Pager.OnPageListener<Submission> {
-    @ViewInject(R.id.plate_details_title_bar_title)
-    private TextView title_text;
-
-    @ViewInject(R.id.text_plate_details_intro)
-    private TextView intro_text;
-
-    private int pid;
+public class HistoryActivity extends Activity implements Pager.OnPageListener<Submission> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.plate_details);
+        setContentView(R.layout.user_history);
         ViewUtils.inject(this);
 
-        Intent getIntent = getIntent();
-        String titleStr = getIntent.getStringExtra("title");
-        String introStr = getIntent.getStringExtra("intro");
-        int pidInt = getIntent.getIntExtra("pid", -1);
-
-        title_text.setText(titleStr);
-        intro_text.setText(introStr);
-        pid = pidInt;
         init();
     }
 
     private HotSubmissionAdapter hotSubmissionAdapter;
-    @ViewInject(R.id.recyclerview_plate_details)
+    @ViewInject(R.id.recyclerview_user_history)
     private RecyclerView recyclerView;
-    @ViewInject(R.id.refresh_plate_details_view)
+    @ViewInject(R.id.refresh_user_history_view)
     private MaterialRefreshLayout materialRefreshLayout;
 
     Pager pager;
@@ -135,7 +119,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_PLATE + pid);
+        pager.setUrl(Contants.API.GET_HOT); // todo
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);
@@ -150,7 +134,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
             @Override
             public void onItemClick(View view, int position) {
                 Submission submission = hotSubmissionAdapter.getItem(position);
-                Intent intent = new Intent(PlateDetailsActivity.this, TextDetailActivity.class);
+                Intent intent = new Intent(HistoryActivity.this, TextDetailActivity.class);
                 startActivity(intent);
             }
         });

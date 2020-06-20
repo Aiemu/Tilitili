@@ -29,24 +29,30 @@ var account_2 = {
 }
 
 var plate1 = {
-    "id": "1",
-    "title": "软件学院",
-    "startTime": 3030303030,
-    "owner": 1,
+    "id": 1,
+    "title": "院系/专业",
+    "cover": "http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
     "description": "清华大学软件学院简介"
 }
 
 var submission_1 = {
-    "id": 1,
-    "plate": plate1,
-    "type": 1,
+    "sid": 1,
+    "plateTitle": "板块1",
+    "type": 0,
+    "cover": "http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
     "resource": "123",
     "title": "庆祝清华大学109年校庆",
     "introduction": "庆祝清华大学校庆",
     "submissionTime": 1590600906,
-    "watchTimes": 20,
-    "likes": 1,
-    "post_time": 59
+    "watchTimes": 220,
+    "isLike": 1,
+    "likesCount": 1,
+    "commentsCount": 123,
+    "post_time": 59,
+    "uid": 1,
+    "userNickname": "清华大学软件学院",
+    "following": 1,
+
 }
 
 var submission_2 = {
@@ -79,7 +85,7 @@ var submission_3 = {
 var accounts = [account_1, account_2]
 var loginAccount = undefined
 
-var submission_list = [submission_1, submission_1, submission_1, submission_1, submission_1, submission_2, submission_2, submission_2, submission_2, submission_2, submission_3, submission_3, submission_3, submission_3, submission_3]
+var submission_list = [submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1, submission_1]
 
 var plate_list = [plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1, plate1]
 
@@ -88,10 +94,7 @@ router.post("/login", async(ctx, next) => {
     loginAccount = accounts.find(x => (x.username == ctx.request.body['username'] && (x.password == ctx.request.body['password'])))
     if (loginAccount) {
         ctx.body = {
-            "id": loginAccount.ID,
-            "username": loginAccount.username,
-            "nickname": loginAccount.nickname,
-            "privilege": loginAccount.privilege
+            "uid": loginAccount.ID
         }
         ctx.response.status = 200
         ctx.cookies.set("JSESSIONID", "123")
@@ -192,6 +195,12 @@ router.get('/user/profile/info/1', async function(ctx, next) {
         "avatar": "123"
     }
     ctx.response.status = 200
+    next()
+})
+
+
+router.get('/checklogin', async function(ctx, next) {
+    ctx.response.status = 401
     next()
 })
 

@@ -5,8 +5,8 @@
     android:layout_height="match_parent">
 
     <include
-        android:id="@+id/user_submission_title_bar"
-        layout="@layout/user_submission_title_bar" />
+        android:id="@+id/user_history_title_bar"
+        layout="@layout/user_history_title_bar" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat"
@@ -16,29 +16,10 @@
         android:paddingLeft="20dp"
         android:paddingTop="0dp"
         android:paddingRight="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/user_submission_title_bar">
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/text_plate_details_intro"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:gravity="center"-->
-        <!--            android:textSize="18sp"-->
-        <!--            android:text="测试板块"-->
-        <!--            android:textColor="@color/black" />-->
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/text_plate_details_owner"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginTop="20dp"-->
-        <!--            android:layout_marginBottom="20dp"-->
-        <!--            android:gravity="center"-->
-        <!--            android:textSize="16sp"-->
-        <!--            android:text="测试板块" />-->
+        app:layout_constraintTop_toBottomOf="@+id/user_history_title_bar">
 
         <com.cjj.MaterialRefreshLayout
-            android:id="@+id/refresh_user_submission_view"
+            android:id="@+id/refresh_user_history_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:overlay="true"
@@ -48,7 +29,7 @@
             app:wave_height_type="higher">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_user_submission"
+                android:id="@+id/recyclerview_user_history"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </com.cjj.MaterialRefreshLayout>

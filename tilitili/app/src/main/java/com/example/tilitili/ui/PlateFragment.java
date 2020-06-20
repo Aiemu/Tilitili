@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cjj.MaterialRefreshLayout;
 import com.example.tilitili.PlateDetailsActivity;
 import com.example.tilitili.R;
-import com.example.tilitili.TextDetailActivity;
 import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.PlateAdapter;
 import com.example.tilitili.data.Contants;
@@ -77,11 +76,10 @@ public class PlateFragment extends BaseFragment implements Pager.OnPageListener<
                     JSONArray items = jsonObject.getJSONArray("list");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
-                        plates.add(new Plate(item.getInt("id"),
+                        plates.add(new Plate(item.getInt("pid"),
                                 item.getString("title"),
-                                item.getInt("owner"),
-                                item.getLong("startTime"),
-                                item.getString("description")));
+                                item.getString("description"),
+                                item.getString("cover")));
                     }
                     platePage = new Page<>(jsonObject.getInt("currentPage"),
                             jsonObject.getInt("pageSize"),
@@ -131,6 +129,7 @@ public class PlateFragment extends BaseFragment implements Pager.OnPageListener<
 
                 intent.putExtra("title", plate.getTitle());
                 intent.putExtra("intro", plate.getDescription());
+                intent.putExtra("pid", plate.getPid());
 
                 startActivity(intent);
             }

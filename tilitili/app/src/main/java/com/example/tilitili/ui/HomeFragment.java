@@ -1,10 +1,13 @@
 package com.example.tilitili.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -18,7 +21,6 @@ import com.example.tilitili.adapter.BaseAdapter;
 import com.example.tilitili.adapter.HotSubmissionAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Page;
-import com.example.tilitili.data.Plate;
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.SpotsCallBack;
@@ -26,11 +28,13 @@ import com.example.tilitili.utils.Pager;
 import com.example.tilitili.utils.ToastUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +43,10 @@ import okhttp3.Response;
 
 public class HomeFragment extends BaseFragment implements Pager.OnPageListener<Submission> {
     private HotSubmissionAdapter hotSubmissionAdapter;
+    @ViewInject(R.id.text_home_hot_order)
+    private TextView hotText;
+    @ViewInject(R.id.text_home_new_order)
+    private TextView newText;
     @ViewInject(R.id.home_recyclerview)
     private RecyclerView recyclerView;
     @ViewInject(R.id.home_refresh_view)
@@ -78,22 +86,21 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                     JSONArray items = jsonObject.getJSONArray("list");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
-                        JSONObject plateString = item.getJSONObject("plate");
-                        Plate plate = new Plate(plateString.getInt("id"),
-                                plateString.getString("title"),
-                                plateString.getInt("owner"),
-                                plateString.getLong("startTime"),
-                                plateString.getString("description"));
-                        submissions.add(new Submission(item.getInt("id"),
-                                plate,
+                        submissions.add(new Submission(item.getInt("sid"),
                                 item.getInt("type"),
-                                item.getString("resource"),
+                                item.getString("plateTitle"),
                                 item.getString("title"),
+                                item.getString("cover"),
                                 item.getString("introduction"),
+                                item.getString("resource"),
                                 item.getInt("submissionTime"),
                                 item.getInt("watchTimes"),
-                                item.getInt("likes"),
-                                item.getInt("post_time")));
+                                item.getInt("likesCount"),
+                                item.getInt("isLike"),
+                                item.getInt("commentsCount"),
+                                item.getInt("uid"),
+                                item.getString("userNickname"),
+                                item.getInt("following")));
                     }
                     submissionPage = new Page<>(jsonObject.getInt("currentPage"),
                             jsonObject.getInt("pageSize"),
@@ -138,6 +145,7 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
             public void onItemClick(View view, int position) {
                 Submission submission = hotSubmissionAdapter.getItem(position);
                 Intent intent = new Intent(getContext(), TextDetailActivity.class);
+                intent.putExtra("submission", (Serializable) submission);
                 startActivity(intent);
             }
         });
@@ -157,5 +165,25 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
     public void loadMore(List<Submission> datas, int totalPage, int totalCount) {
         hotSubmissionAdapter.loadMoreData(datas);
         recyclerView.scrollToPosition(hotSubmissionAdapter.getDatas().size());
+    }
+
+    @OnClick(R.id.linearLayoutCompatOrderHot)
+    public void setHotOrder(View view) {
+        this.hotText.setTextColor(Color.parseColor("#82318E"));
+        this.hotText.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+
+
+        this.newText.setTextColor(Color.parseColor("#888888"));
+        this.newText.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+    }
+
+    @OnClick(R.id.linearLayoutCompatOrderNew)
+    public void setNewOrder(View view) {
+        this.newText.setTextColor(Color.parseColor("#82318E"));
+        this.newText.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+
+
+        this.hotText.setTextColor(Color.parseColor("#888888"));
+        this.hotText.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
     }
 }

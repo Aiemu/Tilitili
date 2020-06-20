@@ -3,7 +3,6 @@ package com.example.tilitili.http;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ProgressBar;
@@ -13,6 +12,8 @@ import com.example.tilitili.data.Contants;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 import okhttp3.Callback;
 import okhttp3.Interceptor;
@@ -24,7 +25,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class UploadHttpHelper {
-    private UploadHttpHelper instance;
     private OkHttpClient httpClient;
     private Handler handler;
     private UserManagerApplication userManagerApplication;
@@ -87,7 +87,6 @@ public class UploadHttpHelper {
         String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase());
         final String fileName = file.getName();
 
-        Log.e("filepath", file.getName() + " " + mime + " " + file);
         assert mime != null;
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -107,5 +106,11 @@ public class UploadHttpHelper {
 
     public void upload(Request request, Callback callback) {
         httpClient.newCall(request).enqueue(callback);
+    }
+
+    public String generateString(int length) {
+        byte[] array = new byte[length];
+        new Random().nextBytes(array);
+        return new String(array, StandardCharsets.UTF_8);
     }
 }

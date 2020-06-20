@@ -1,37 +1,31 @@
 package com.example.tilitili.data;
 
 public class Plate {
-    private int id;
+    private int pid;
     private String title;
-    private int owner;
-    private long startTime;
     private String description;
+    private String cover;
 
-    public Plate(int id, String title, int owner, long startTime, String description) {
-        this.id = id;
+    public Plate(int pid, String title, String description, String cover) {
+        this.pid = pid;
         this.title = title;
-        this.owner = owner;
-        this.startTime = startTime;
         this.description = description;
+        this.cover = cover;
     }
 
-    public int getId() {
-        return id;
+    public int getPid() {
+        return pid;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public int getOwner() {
-        return owner;
-    }
-
-    public long getStartTime() {
-        return startTime;
-    }
-
     public String getDescription() {
         return description;
+    }
+
+    public String getCover() {
+        return cover;
     }
 }
