@@ -29,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,6 +144,7 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
             public void onItemClick(View view, int position) {
                 Submission submission = hotSubmissionAdapter.getItem(position);
                 Intent intent = new Intent(GetUserSubmissionActivity.this, TextDetailActivity.class);
+                intent.putExtra("submission", (Serializable) submission);
                 startActivity(intent);
             }
         });
