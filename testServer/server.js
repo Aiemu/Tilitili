@@ -88,10 +88,7 @@ router.post("/login", async(ctx, next) => {
     loginAccount = accounts.find(x => (x.username == ctx.request.body['username'] && (x.password == ctx.request.body['password'])))
     if (loginAccount) {
         ctx.body = {
-            "id": loginAccount.ID,
-            "username": loginAccount.username,
-            "nickname": loginAccount.nickname,
-            "privilege": loginAccount.privilege
+            "uid": loginAccount.ID
         }
         ctx.response.status = 200
         ctx.cookies.set("JSESSIONID", "123")
