@@ -64,6 +64,10 @@ public class LoginActivity extends Activity {
 
     @OnClick(R.id.btn_login)
     public void login(View view) {
+        // to test video player
+//        Intent register_intent = new Intent(LoginActivity.this, VideoPlayActivity.class);
+//        startActivity(register_intent);
+
         final String username = edit_username.getText().toString();
         final String password = edit_password.getText().toString();
 
