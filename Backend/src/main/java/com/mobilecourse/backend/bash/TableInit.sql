@@ -68,6 +68,8 @@ values ('Matsuri', 'MatsuriChan', 'shinoa_sama@outlook.com', '12345678', 'Softwa
 
 insert into Plate(title, description)
 values ('Hololive', 'Idol Project');
+insert into Plate(type, title, description)
+values (1, 'Nijisanji', 'VTB supporter');
 
 insert into PlateAuth(pid, uid)
 values (1, 1);
