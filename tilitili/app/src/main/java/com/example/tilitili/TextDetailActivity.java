@@ -22,6 +22,9 @@ import android.widget.TextView;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Submission;
 import com.example.tilitili.http.DownloadHttpHelper;
+import com.example.tilitili.http.ErrorMessage;
+import com.example.tilitili.http.HttpHelper;
+import com.example.tilitili.http.SpotsCallBack;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -33,6 +36,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -50,6 +54,7 @@ public class TextDetailActivity extends Activity {
     WebView webView;
     private Submission submission;
     private DownloadHttpHelper downloadHttpHelper;
+    private HttpHelper httpHelper;
     private File outputDir;
     private String data = "";
 
@@ -60,6 +65,7 @@ public class TextDetailActivity extends Activity {
         ViewUtils.inject(this);
         submission = (Submission) getIntent().getSerializableExtra("submission");
         downloadHttpHelper = DownloadHttpHelper.getInstance();
+        httpHelper = HttpHelper.getInstance();
         outputDir = this.getCacheDir();
         initView();
         try {
@@ -85,6 +91,7 @@ public class TextDetailActivity extends Activity {
             while (!data.endsWith("</body>"))
                 Thread.sleep(50);
             webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
+            addWatchTime();
         }
     }
 
@@ -135,6 +142,22 @@ public class TextDetailActivity extends Activity {
                 }
                 fis.close();
                 data = data + sb.toString() + "</body>";
+            }
+        });
+    }
+
+    public void addWatchTime() {
+        httpHelper.post(Contants.API.ADD_WATCH_TIME_URL + submission.getSid(), new HashMap<String, String>(0), new SpotsCallBack<String>(TextDetailActivity.this) {
+            @Override
+            public void onSuccess(Response response, String s) {
+                Log.d("观看次数","加一");
+                dismissDialog();
+            }
+
+            @Override
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
+                e.printStackTrace();
+                dismissDialog();
             }
         });
     }
