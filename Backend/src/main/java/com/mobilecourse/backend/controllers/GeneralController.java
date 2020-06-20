@@ -196,22 +196,24 @@ public class GeneralController extends CommonController {
         String newName = uuid + extName;
 
         File toSaveFile;
+        File savePath;
         String resourceURI;
 
         if (type == 0) {
             //图片
-            toSaveFile = new File(ClassUtils.getDefaultClassLoader().getResource("static/image").getPath(), newName);
-            resourceURI = "/static/image/" + newName;
+            savePath = new File(ClassUtils.getDefaultClassLoader().getResource("static/image").getPath());
+            resourceURI = "/image/" + newName;
         } else if (type == 1) {
             //html
-            toSaveFile = new File(ClassUtils.getDefaultClassLoader().getResource("static/html").getPath(), newName);
-            resourceURI = "/static/html/" + newName;
+            savePath = new File(ClassUtils.getDefaultClassLoader().getResource("static/html").getPath());
+            resourceURI = "/html/" + newName;
         } else {
             //视频类型.
-            toSaveFile = new File(ClassUtils.getDefaultClassLoader().getResource("static/video").getPath(), newName);
-            resourceURI = "/static/video/" + newName;
+            savePath = new File(ClassUtils.getDefaultClassLoader().getResource("static/video").getPath());
+            resourceURI = "/video/" + newName;
         }
         try {
+            toSaveFile = new File(savePath, newName);
             // 保存文件并返回相应的uri.
             file.transferTo(toSaveFile);
             LOG.info(String.format("File (%s) is uploaded successfully and renamed to (%s)",

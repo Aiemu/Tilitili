@@ -42,7 +42,7 @@
         <set>
             <if test="nickname != null">nickname = #{nickname}, </if>
             <if test="bio != null">bio = #{bio}, </if>
-            <if test="department != null">department = #{department}</if>
+            <if test="department != null">department = #{department}, </if>
             <if test="avatar != null">avatar = #{avatar}</if>
         </set>
         WHERE uid = #{uid};
