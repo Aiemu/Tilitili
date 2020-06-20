@@ -4,11 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,21 +34,21 @@ import java.util.List;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class HistoryActivity extends Activity implements Pager.OnPageListener<Submission> {
+public class SearchResultActivity  extends Activity implements Pager.OnPageListener<Submission> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_history);
+        setContentView(R.layout.search_result);
         ViewUtils.inject(this);
 
         init();
     }
 
     private HotSubmissionAdapter hotSubmissionAdapter;
-    @ViewInject(R.id.recyclerview_user_history)
+    @ViewInject(R.id.recyclerview_search_result)
     private RecyclerView recyclerView;
-    @ViewInject(R.id.refresh_user_history_view)
+    @ViewInject(R.id.refresh_search_result_view)
     private MaterialRefreshLayout materialRefreshLayout;
 
     Pager pager;
@@ -139,7 +136,7 @@ public class HistoryActivity extends Activity implements Pager.OnPageListener<Su
             @Override
             public void onItemClick(View view, int position) {
                 Submission submission = hotSubmissionAdapter.getItem(position);
-                Intent intent = new Intent(HistoryActivity.this, TextDetailActivity.class);
+                Intent intent = new Intent(SearchResultActivity.this, TextDetailActivity.class);
                 startActivity(intent);
             }
         });

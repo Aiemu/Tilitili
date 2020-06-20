@@ -11,8 +11,8 @@
         android:onClick="doBack" />
 
     <TextView
-        android:id="@+id/user_follow_list_title_bar_title"
-        android:text="@string/user_profile_follow_list"
+        android:id="@+id/user_profile_update_title_bar_title"
+        android:text="@string/home_search_result"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="#82318E"
