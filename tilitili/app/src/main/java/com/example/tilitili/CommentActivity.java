@@ -166,6 +166,7 @@ public class CommentActivity extends Activity implements Pager.OnPageListener<Co
     public void postComment(View view) {
         Map<String, String> map = new HashMap<>(1);
         map.put("content", commentEditText.getText().toString());
+        commentEditText.setText("");
         httpHelper.post(Contants.API.POST_COMMENT_URL + sid, map, new SpotsCallBack<String>(CommentActivity.this) {
             @Override
             public void onSuccess(Response response, String s) {

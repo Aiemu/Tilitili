@@ -9,18 +9,6 @@
         android:id="@+id/comment_title_bar"
         layout="@layout/comment_title_bar" />
 
-    <FrameLayout
-        android:id="@+id/comment_input_bar_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <include
-            android:id="@+id/comment_input_bar"
-            layout="@layout/comment_input_bar" />
-    </FrameLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat"
@@ -50,5 +38,18 @@
         </com.cjj.MaterialRefreshLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <FrameLayout
+        android:id="@+id/comment_input_bar_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <include
+            android:id="@+id/comment_input_bar"
+            layout="@layout/comment_input_bar" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
