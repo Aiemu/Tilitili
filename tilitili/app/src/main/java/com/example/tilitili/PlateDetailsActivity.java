@@ -29,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,8 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
     @ViewInject(R.id.text_plate_details_intro)
     private TextView intro_text;
 
+    int pid = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +54,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
         Intent getIntent = getIntent();
         String titleStr = getIntent.getStringExtra("title");
         String introStr = getIntent.getStringExtra("intro");
+        pid = getIntent.getIntExtra("pid", -1);
 
         title_text.setText(titleStr);
         intro_text.setText(introStr);
@@ -86,7 +90,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
                 List<Submission> submissions = new ArrayList<>();
                 try {
                     JSONObject jsonObject = new JSONObject(page);
-                    JSONArray items = jsonObject.getJSONArray("plates");
+                    JSONArray items = jsonObject.getJSONArray("list");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
                         submissions.add(new Submission(item.getInt("sid"),
@@ -132,7 +136,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_ONE_PLATE_SUBMISSION + UserManagerApplication.getInstance().getUser().getUserId());
+        pager.setUrl(Contants.API.GET_ONE_PLATE_SUBMISSION + pid);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);
@@ -148,6 +152,7 @@ public class PlateDetailsActivity extends Activity implements Pager.OnPageListen
             public void onItemClick(View view, int position) {
                 Submission submission = hotSubmissionAdapter.getItem(position);
                 Intent intent = new Intent(PlateDetailsActivity.this, TextDetailActivity.class);
+                intent.putExtra("submission", (Serializable) submission);
                 startActivity(intent);
             }
         });

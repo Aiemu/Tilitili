@@ -159,7 +159,7 @@ public class Pager {
     }
 
     public void setPageIndex(int pageIndex) {
-        this.pageIndex = pageIndex;
+        this.pageIndex = pageIndex + 1;
     }
 
     public void setPageCount(int pageCount) {
