@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -376,6 +377,7 @@ public class EditorActivity extends Activity {
                                 mEditor.insertImage(Config.getFullUrl((String) jsonObject.get("uri")), "dachshund");
                             else if (code == SELECT_COVER_CODE) {
                                 cover_uri = (String) jsonObject.get("uri");
+                                Log.e("url", cover_uri);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

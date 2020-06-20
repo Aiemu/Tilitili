@@ -11,7 +11,9 @@
         android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingTop="0dp"
-        android:paddingRight="20dp">
+        android:paddingRight="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/linearLayoutCompatOrder"
@@ -29,15 +31,15 @@
 
                 <TextView
                     android:id="@+id/text_home_hot_order"
-                    android:text="@string/home_hot_order"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#82318E"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:clickable="true"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="@string/home_hot_order"
+                    android:textColor="#82318E"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -51,13 +53,13 @@
 
                 <TextView
                     android:id="@+id/text_home_new_order"
-                    android:text="@string/home_new_order"
-                    android:textSize="20sp"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:clickable="true"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="@string/home_new_order"
+                    android:textSize="20sp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -83,10 +85,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:overlay="true"
-            app:wave_show="true"
-            app:wave_color="#90ffffff"
             app:progress_colors="@array/material_colors"
-            app:wave_height_type="higher">
+            app:wave_color="#90ffffff"
+            app:wave_height_type="higher"
+            app:wave_show="true">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/home_recyclerview"

@@ -96,7 +96,7 @@ public class TextDetailActivity extends Activity {
     }
 
     public void setContent() {
-        downloadHttpHelper.download(submission.getResource(), Contants.API.UploadType.HTML, new Callback() {
+        downloadHttpHelper.download(Config.getFullUrl(submission.getResource()), Contants.API.UploadType.HTML, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
 
