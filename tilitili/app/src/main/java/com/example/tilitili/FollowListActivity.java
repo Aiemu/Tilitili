@@ -34,6 +34,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class FollowListActivity extends Activity implements Pager.OnPageListener<Following> {
+
+    private static final int USER_DETAIL = 123;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +81,7 @@ public class FollowListActivity extends Activity implements Pager.OnPageListener
                                 item.getString("nickname"),
                                 item.getString("avatar")));
                     }
-                    pager.setPageIndex(1);
+                    pager.setPageIndex(0);
                     pager.setTotalPage(1);
                     pager.showData(followings, 1, followings.size());
                 } catch (JSONException e) {
@@ -108,6 +111,18 @@ public class FollowListActivity extends Activity implements Pager.OnPageListener
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case USER_DETAIL:
+                if (resultCode == RESULT_OK) {
+                    followingAdapter.clear();
+                    pager.request();
+                    followingAdapter.notifyDataSetChanged();
+                }
+        }
+    }
+
+    @Override
     public void load(List<Following> datas, int totalPage, int totalCount) {
         followingAdapter = new FollowingAdapter(this, datas);
         followingAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
@@ -117,7 +132,7 @@ public class FollowListActivity extends Activity implements Pager.OnPageListener
                 Intent intent = new Intent(FollowListActivity.this, UserInfoActivity.class);
                 intent.putExtra("uid", following.getUserId());
                 intent.putExtra("isFollowing", 1);
-                startActivity(intent);
+                startActivityForResult(intent, USER_DETAIL);
             }
         });
 

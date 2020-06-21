@@ -49,6 +49,8 @@ public class SearchResultActivity extends Activity {
     @ViewInject(R.id.search_submission_text_view)
     private TextView submission_text_view;
 
+    private final static int SEARCH_USER_CODE = 223;
+
     private String searchContent;
     private HttpHelper httpHelper;
 
@@ -73,6 +75,18 @@ public class SearchResultActivity extends Activity {
         searchUserAdapter = new SearchUserAdapter(this, followings);
         hotSubmissionAdapter = new HotSubmissionAdapter(this, submissions);
         init();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case SEARCH_USER_CODE:
+                if (resultCode == RESULT_OK) {
+                    followings.clear();
+                    searchUserAdapter.notifyDataSetChanged();
+                    searchUser();
+                }
+        }
     }
 
     public void init() {
@@ -182,7 +196,7 @@ public class SearchResultActivity extends Activity {
                             Intent intent = new Intent(SearchResultActivity.this, UserInfoActivity.class);
                             intent.putExtra("uid", following.getUserId());
                             intent.putExtra("isFollowing", following.getIsFollowing());
-                            startActivity(intent);
+                            startActivityForResult(intent, SEARCH_USER_CODE);
                         }
                     });
                     recyclerView.setAdapter(searchUserAdapter);

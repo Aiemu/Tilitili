@@ -144,4 +144,10 @@ public class UserInfoActivity extends Activity {
             });
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
+    }
 }
