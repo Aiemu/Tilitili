@@ -584,6 +584,11 @@ public class EditorActivity extends Activity {
         }
     }
 
+    @OnClick(R.id.text_edit_exit_btn)
+    public void back(View view) {
+        finish();
+    }
+
     private void setPlateSpinner() {
         httpHelper.get(Contants.API.GET_PRIVILEGE_PLATES, new SpotsCallBack<String>(this) {
 

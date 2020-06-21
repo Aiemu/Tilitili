@@ -51,18 +51,6 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onSuccess(Response response, String s) {
-                User user = null;
-                UserManagerApplication application = UserManagerApplication.getInstance();
-                try {
-                    JSONObject jsonObject = new JSONObject(s);
-                    user = new User(jsonObject.getInt("uid"));
-                    application.putUser(user);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    dismissDialog();
-                    ToastUtils.show(LoginActivity.this, "登录失败");
-                    return;
-                }
                 Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(register_intent);
             }

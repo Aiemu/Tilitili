@@ -82,7 +82,6 @@ public class Pager {
      */
     public <T> void showData(List<T> datas, int totalPage, int totalCount) {
         if (datas == null || datas.size() <= 0) {
-            Toast.makeText(this.mContext, "加载不到数据", Toast.LENGTH_LONG).show();
             return;
         }
         if (STATE_NORMAL == state) {

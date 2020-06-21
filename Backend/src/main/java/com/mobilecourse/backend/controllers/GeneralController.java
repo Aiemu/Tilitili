@@ -190,10 +190,8 @@ public class GeneralController extends CommonController {
     @LoginAuth
     @RequestMapping(value = "/checklogin", method = { RequestMethod.GET })
     public ResponseEntity<JSONObject> checkLogin(HttpSession session) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("uid", session.getAttribute("uid"));
         session.setMaxInactiveInterval(3600);
-        return wrapperResponse(HttpStatus.OK, jsonObject);
+        return wrapperResponse(HttpStatus.OK, "OK");
     }
 
     @RequestMapping(value = "/upload", method = { RequestMethod.POST })
