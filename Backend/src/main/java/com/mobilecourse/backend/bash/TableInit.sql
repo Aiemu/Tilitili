@@ -62,9 +62,10 @@ create table History
  primary key (uid, sid));
 
 insert into User(username, nickname, email, password, department, bio)
-values ('Shion', 'ShionChan', 'shinoa_zwx@outlook.com', '12345678', 'Software', 'ShionChan Saikyo!');
-insert into User(username, nickname, email, password, department, bio)
 values ('Matsuri', 'MatsuriChan', 'shinoa_sama@outlook.com', '12345678', 'Software', 'Washoi!');
+insert into User(username, nickname, email, password, department, bio)
+values ('Shion', 'ShionChan', 'shinoa_zwx@outlook.com', '12345678', 'Software', 'ShionChan Saikyo!');
+
 
 insert into Plate(title, description)
 values ('Hololive', 'Idol Project');
@@ -73,3 +74,6 @@ values (1, 'Nijisanji', 'VTB supporter');
 
 insert into PlateAuth(pid, uid)
 values (1, 1);
+
+INSERT INTO Submission(uid, type, pid, title, cover, introduction, resource)
+values (1, 1, 1, 'Matsuri 2nd anniversary', '', '夏色祭出道2周年live节选', '/video/demo.mp4');
