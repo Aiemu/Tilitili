@@ -66,10 +66,12 @@ create table History
  watchTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  primary key (uid, sid));
 
+
+# 密码都为12345678
 insert into User(uid, username, nickname, email, password, department, bio)
 values (1, 'Matsuri', 'MatsuriChan', 'shinoa_sama@outlook.com', 'cdtt1sj/6IMMba0K881Jmg==', 'Software', 'Washoi!');
-insert into User(uid, username, nickname, email, password, department, bio)
-values (2, 'Tsinghua', 'THU Official', 'tsinghua@tsinghua.edu.cn', 'cdtt1sj/6IMMba0K881Jmg==', 'Campus', '世界一流大学');
+insert into User(uid, username, nickname, email, password, department, bio, avatar)
+values (2, 'Tsinghua', 'THU Official', 'tsinghua@tsinghua.edu.cn', 'cdtt1sj/6IMMba0K881Jmg==', 'Campus', '世界一流大学', '/image/campus.png');
 
 
 insert into Plate(pid, title, description, cover)
