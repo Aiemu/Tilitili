@@ -151,6 +151,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                 Intent intent = new Intent(getContext(), TextDetailActivity.class);
                 intent.putExtra("submission", submission);
                 startActivity(intent);
+                view.getTag(1);
             }
         });
 
@@ -173,7 +174,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
 
     // todo: check correctness
     @OnClick(R.id.comment_icon)
-    public void loadComment() {
+    public void loadComment(View view) {
         activityAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -187,7 +188,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
 
     // todo: check correctness
     @OnClick(R.id.star_icon)
-    public void changeLike() {
+    public void changeLike(View view) {
         Log.d("点赞", "成功");
         activityAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override

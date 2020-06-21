@@ -35,6 +35,7 @@ public class ActivityAdapter extends SimpleAdapter<Submission> {
         viewHolder.getTextView((R.id.text_activity_item_post_time)).setText("已关注");
 
         viewHolder.getTextView(R.id.text_activity_item_title).setText(item.getTitle());
+        viewHolder.getTextView(R.id.text_activity_item_plate).setText(item.getPlateTitle());
         viewHolder.getTextView(R.id.activity_item_star_num).setText(String.valueOf(item.getLikesCount()));
         viewHolder.getTextView(R.id.activity_item_comment_num).setText(String.valueOf(item.getCommentsCount()));
 

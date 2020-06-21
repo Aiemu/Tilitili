@@ -35,9 +35,9 @@
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/avatar_activity_item_view"
-                android:layout_alignParentStart="true"
                 android:layout_width="@dimen/activity_avatar_width"
                 android:layout_height="@dimen/activity_avatar_height"
+                android:layout_alignParentStart="true"
                 android:background="@null"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -56,43 +56,42 @@
                     android:id="@+id/text_activity_item_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:text="清华大学官方"
-                    android:textSize="16dp"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:layout_marginStart="10dp" />
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/text_activity_item_post_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="30dp"
                     android:text="1小时前"
-                    android:textSize="14dp"
-                    android:layout_marginStart="10dp" />
+                    android:textSize="14dp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <TextView
-            android:id="@+id/text_activity_item_topic"
+            android:id="@+id/text_activity_item_plate"
             style="@style/submission_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textColor="@color/material_blue"
-            android:text="#测试话题"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/cover_activity_item_view"
-            android:layout_alignParentStart="true"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@null"
-            android:layout_marginTop="10dp"
+            android:layout_alignParentStart="true"
             android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@null"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:viewAspectRatio="1" />
@@ -105,70 +104,94 @@
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:text="清芬园上新"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="5dp" />
+
+        <View
+            android:id="@+id/view"
+            style="@style/line_vertical"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/text_watch_times"
+            app:layout_constraintStart_toEndOf="@+id/drawee_view" />
+
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/linearLayoutCompat5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" />
+
             <ImageView
                 android:id="@+id/share_icon"
-                android:layout_width="@dimen/activity_icon_height"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:tint="#9C27B0"
                 android:gravity="right"
-                app:srcCompat="@android:drawable/ic_menu_share" />
+                android:tint="@color/purple"
+                app:srcCompat="@android:drawable/ic_menu_share"
+                android:tag="1" />
 
             <TextView
                 android:id="@+id/activity_item_share_num"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="12"
-                android:text=""
                 android:gravity="center_vertical"
+                android:text="0"
                 android:textColor="#9C27B0"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@+id/imageView17"
                 app:layout_constraintTop_toBottomOf="@+id/textView31" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/comment_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:tint="#9C27B0"
+                android:tint="@color/purple"
                 app:srcCompat="@android:drawable/sym_action_chat" />
 
             <TextView
                 android:id="@+id/activity_item_comment_num"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="10"
-                android:text="0"
                 android:gravity="center_vertical"
+                android:text="0"
                 android:textColor="#9C27B0"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/imageView17"
                 app:layout_constraintTop_toBottomOf="@+id/textView31" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
             <ImageView
                 android:id="@+id/star_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:tint="@color/gray"
-                android:layout_gravity="right"
+                android:tint="@color/purple"
                 app:layout_constraintStart_toEndOf="@+id/textView34"
                 app:layout_constraintTop_toBottomOf="@+id/textView31"
                 app:srcCompat="@android:drawable/btn_star" />
@@ -177,15 +200,18 @@
                 android:id="@+id/activity_item_star_num"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:text="0"
                 android:gravity="center_vertical"
+                android:text="0"
                 android:textColor="#9C27B0"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/imageView17"
                 app:layout_constraintTop_toBottomOf="@+id/textView31" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
