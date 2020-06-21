@@ -34,7 +34,7 @@
         SELECT *
         FROM User
         WHERE nickname like "%"#{subUsername}"%"
-        ORDER BY LENGTH(username) ASC, uid DESC
+        ORDER BY LENGTH(nickname) ASC, uid DESC
         LIMIT #{maxNumber}
     </select>
     <update id="updateUser" parameterType="com.mobilecourse.backend.model.User">

@@ -27,6 +27,12 @@
                 android:id="@+id/action_favor"
                 style="@style/toolbar_action"
                 android:src="@drawable/ic_action_favor" />
+
+            <TextView
+                android:id="@+id/action_like_count"
+                style="@style/toolbar_action_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </FrameLayout>
 
         <!--        <FrameLayout-->
@@ -52,7 +58,9 @@
 
             <TextView
                 android:id="@+id/action_comment_count"
-                style="@style/toolbar_action_comment" />
+                style="@style/toolbar_action_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </FrameLayout>
 
         <FrameLayout

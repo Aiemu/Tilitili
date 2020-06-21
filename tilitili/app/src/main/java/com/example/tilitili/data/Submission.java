@@ -107,6 +107,14 @@ public class Submission implements Serializable {
         return isLike;
     }
 
+    public void setIsLike(int like) {
+        isLike = like;
+    }
+
+    public void setLikesCount(int count) {
+        likesCount = count;
+    }
+
     public int getCommentsCount() {
         return commentsCount;
     }

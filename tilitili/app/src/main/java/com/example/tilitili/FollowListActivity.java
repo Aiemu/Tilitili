@@ -79,7 +79,6 @@ public class FollowListActivity extends Activity implements Pager.OnPageListener
                                 item.getString("avatar")));
                     }
                     pager.setPageIndex(1);
-                    pager.setPageCount(followings.size());
                     pager.setTotalPage(1);
                     pager.showData(followings, 1, followings.size());
                 } catch (JSONException e) {

@@ -89,9 +89,11 @@ public abstract class BaseAdapter<T, H extends BaseViewHolder> extends RecyclerV
 
     public void addData(int position, List<T> list) {
         if (list != null && list.size() > 0) {
-            for (T t : list) {
-                datas.add(position, t);
-                notifyItemInserted(position);
+            clear();
+            int size = list.size();
+            for (int i = 0; i < size; i++) {
+                datas.add(i, list.get(i));
+                notifyItemInserted(i);
             }
         }
     }

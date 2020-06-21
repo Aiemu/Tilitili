@@ -25,6 +25,7 @@ import com.example.tilitili.http.DownloadHttpHelper;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
+import com.example.tilitili.utils.ToastUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -50,8 +51,11 @@ public class TextDetailActivity extends Activity {
     private ProgressBar progressBar;
     @ViewInject(R.id.action_comment_count)
     private TextView action_comment_count;
+    @ViewInject(R.id.action_like_count)
+    private TextView action_likt_count;
     @ViewInject(R.id.wb_details)
     WebView webView;
+
     private Submission submission;
     private DownloadHttpHelper downloadHttpHelper;
     private HttpHelper httpHelper;
@@ -101,6 +105,7 @@ public class TextDetailActivity extends Activity {
         title.setVisibility(View.VISIBLE);
         title.setText(submission.getResource());
         action_comment_count.setText(String.valueOf(submission.getCommentsCount()));
+        action_likt_count.setText(String.valueOf(submission.getLikesCount()));
     }
 
     @Override
@@ -251,5 +256,38 @@ public class TextDetailActivity extends Activity {
         Intent intent = new Intent(this, CommentActivity.class);
         intent.putExtra("sid", submission.getSid());
         startActivity(intent);
+    }
+
+    @OnClick(R.id.action_favor)
+    public void like(View view) {
+        httpHelper.post(Contants.API.SUBMISSION_LIKE + submission.getSid(), new HashMap<String, String>() {
+            {
+                put("like", String.valueOf(submission.getIsLike() == 0 ? 1 : 0));
+            }
+        }, new SpotsCallBack<String>(TextDetailActivity.this) {
+            @Override
+            public void onSuccess(Response response, String s) {
+                dismissDialog();
+                if (submission.getIsLike() == 0) {
+                    ToastUtils.show(TextDetailActivity.this, "点赞成功");
+                    submission.setIsLike(1);
+                    submission.setLikesCount(submission.getLikesCount() + 1);
+                    action_likt_count.setText(String.valueOf(submission.getLikesCount()));
+                } else {
+                    ToastUtils.show(TextDetailActivity.this, "取消点赞成功");
+                    submission.setIsLike(0);
+                    submission.setLikesCount(submission.getLikesCount() - 1);
+                    action_likt_count.setText(String.valueOf(submission.getLikesCount()));
+                }
+            }
+
+            @Override
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
+                dismissDialog();
+                ToastUtils.show(TextDetailActivity.this, errorMessage.getErrorMessage());
+                e.printStackTrace();
+            }
+        });
+
     }
 }

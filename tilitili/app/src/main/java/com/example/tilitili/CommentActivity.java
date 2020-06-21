@@ -99,7 +99,6 @@ public class CommentActivity extends Activity implements Pager.OnPageListener<Co
                             jsonObject.getInt("totalCount"),
                             comments);
                     pager.setPageIndex(commentPage.getCurrentPage());
-                    pager.setPageCount(commentPage.getPageSize());
                     pager.setTotalPage(commentPage.getTotalPage());
                     pager.showData(commentPage.getList(), commentPage.getTotalPage(), commentPage.getTotalCount());
                 } catch (JSONException e) {

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 
+import com.example.tilitili.Config;
 import com.example.tilitili.R;
-import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Submission;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -24,11 +24,11 @@ public class ActivityAdapter extends SimpleAdapter<Submission> {
     protected void convert(BaseViewHolder viewHolder, final Submission item) {
         // 头像
         SimpleDraweeView avatarView = (SimpleDraweeView) viewHolder.getView(R.id.avatar_activity_item_view);
-        avatarView.setImageURI(Uri.parse(Contants.API.BASE_URL + item.getUserAvatar()));
+        avatarView.setImageURI(Uri.parse(Config.getFullUrl(item.getUserAvatar())));
 
         // 封面
         SimpleDraweeView coverView = (SimpleDraweeView) viewHolder.getView(R.id.cover_activity_item_view);
-        coverView.setImageURI(Uri.parse(Contants.API.BASE_URL + item.getCover()));
+        coverView.setImageURI(Uri.parse(Config.getFullUrl(item.getCover())));
 
         // 其他数据
         viewHolder.getTextView(R.id.text_activity_item_username).setText(item.getUserNickname());

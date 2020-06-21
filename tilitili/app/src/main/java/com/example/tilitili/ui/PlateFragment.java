@@ -80,7 +80,6 @@ public class PlateFragment extends BaseFragment implements Pager.OnPageListener<
                                 item.getString("cover")));
                     }
                     pager.setPageIndex(1);
-                    pager.setPageCount(plates.size());
                     pager.setTotalPage(1);
                     pager.showData(plates, 1, plates.size());
                 } catch (JSONException e) {

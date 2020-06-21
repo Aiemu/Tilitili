@@ -6,6 +6,7 @@ import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.exception.BusinessException;
 import com.mobilecourse.backend.model.User;
 import com.mobilecourse.backend.util.LoginConfig;
+import com.mobilecourse.backend.util.StreamHandler;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.slf4j.Logger;
@@ -18,18 +19,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
 @EnableAutoConfiguration
-//@RequestMapping("")
 @Validated
 public class GeneralController extends CommonController {
 
@@ -55,6 +60,10 @@ public class GeneralController extends CommonController {
     @Value("${spring.mail.username}")
     private String mailFromAddr;
     private String urlFormat = "http://129.211.37.216:8888/verify/%s";
+
+    //视频流部分
+    @Autowired
+    private StreamHandler streamHandler;
 
     /**
      * 用户注册, 会发送验证邮件
@@ -224,6 +233,24 @@ public class GeneralController extends CommonController {
         } catch (Exception e) {
             throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR, 1,
                     String.format("File (%s) failed to be uploaded", file.getOriginalFilename()));
+        }
+    }
+
+    @RequestMapping(value = "/stream", method = { RequestMethod.GET })
+    public void streamPush(@RequestParam(value = "uri") String uri,
+                           HttpServletRequest request,
+                           HttpServletResponse response) throws Exception {
+        String path = ClassUtils.getDefaultClassLoader().getResource("static").getPath() + uri;
+        Path filePath = Paths.get(path);
+        if (Files.exists(filePath)) {
+            String mimeType = Files.probeContentType(filePath);
+            if (!StringUtils.isEmpty(mimeType)) {
+                response.setContentType(mimeType);
+            }
+            request.setAttribute(StreamHandler.ATTR_FILE, filePath);
+            streamHandler.handleRequest(request, response);
+        } else {
+            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The specified video could not be found.");
         }
     }
 }
