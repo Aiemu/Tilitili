@@ -145,9 +145,14 @@ public class CommonController {
     public JSONObject wrapPageFormat(List<JSONObject> list,
                                      Integer currentPage, Integer size, Integer totalCount) {
         JSONObject jsonObject = new JSONObject();
+        Integer totalPage = totalCount / size;
+        Integer mod = totalCount % size;
+        if (!mod.equals(0)) {
+            totalPage++;
+        }
         jsonObject.put("currentPage", currentPage);
         jsonObject.put("pageSize", list.size());
-        jsonObject.put("totalPage", new Double(Math.ceil(totalCount / size)).intValue());
+        jsonObject.put("totalPage", totalPage);
         jsonObject.put("totalCount", totalCount);
         jsonObject.put("list", list);
         return jsonObject;
