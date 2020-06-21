@@ -2,6 +2,11 @@ drop database Tilitili;
 create database Tilitili;
 use Tilitili;
 
+set character_set_database=utf8;
+set character_set_server=utf8;
+set character_set_client=utf8;
+set character_set_connection=utf8;
+
 create table User
 (uid int primary key AUTO_INCREMENT,
 username varchar(20) not null unique,
