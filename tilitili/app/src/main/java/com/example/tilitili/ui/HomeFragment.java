@@ -219,7 +219,9 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 Log.d("actionId", String.valueOf(actionId));
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT || actionId == EditorInfo.IME_ACTION_DONE
+                        || actionId == EditorInfo.IME_ACTION_GO || actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_SEND) {
                     Log.d("搜索", "开始搜索");
                     Intent intent = new Intent(HomeFragment.this.getContext(), SearchResultActivity.class);
                     intent.putExtra("search_content", home_search_edit_text.getText().toString());
