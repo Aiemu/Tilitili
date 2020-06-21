@@ -4,13 +4,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.core.view.MotionEventCompat;
 
 public class CardViewGroup extends CardView {
 
@@ -33,7 +30,7 @@ public class CardViewGroup extends CardView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.d("asd","asd");
+        Log.d("asd", "asd");
         return false;
     }
 

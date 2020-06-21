@@ -13,12 +13,17 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextSwitcher;
+import android.widget.TextView;
 
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Plate;
@@ -71,9 +76,18 @@ public class EditorActivity extends Activity {
     private EditText introduction_edit_text;
     @ViewInject(R.id.edit_choose_plate_spinner)
     private Spinner plate_spinner;
+    @ViewInject(R.id.submission_type_choose)
+    private TextSwitcher submission_choose_text_switcher;
+    @ViewInject(R.id.text_editor_layout)
+    private LinearLayout text_editor_layout;
+    @ViewInject(R.id.video_editor_layout)
+    private LinearLayout video_editor_layout;
+    @ViewInject(R.id.edit_choose_video_text_view)
+    private TextView video_name_text_view;
 
     private static final int SELECT_PHOTO_CODE = 879;
     private static final int SELECT_COVER_CODE = 880;
+    private static final int SELECT_VIDEO_CODE = 881;
 
     private HttpHelper httpHelper;
     private UploadHttpHelper uploadHttpHelper;
@@ -82,7 +96,10 @@ public class EditorActivity extends Activity {
     private String html_text = "";
     private String cover_uri = "";
     private String html_uri = "";
+    private String video_uri = "";
+    private Uri video_upload_uri;
     private int platePosition = 0;
+    private int choose_count = 0;
     private List<Plate> plates = new ArrayList<>();
     private List<String> plateTitles = new ArrayList<>();
     DisplayMetrics metrics = new DisplayMetrics();
@@ -126,6 +143,18 @@ public class EditorActivity extends Activity {
                     public void onPermissionRationaleShouldBeShown(com.karumi.dexter.listener.PermissionRequest permission, PermissionToken token) {
                     }
                 }).check();
+
+        submission_choose_text_switcher.setText("上传投稿");
+        Animation textAnimationIn = AnimationUtils.
+                loadAnimation(this, android.R.anim.fade_in);
+        textAnimationIn.setDuration(200);
+
+        Animation textAnimationOut = AnimationUtils.
+                loadAnimation(this, android.R.anim.fade_out);
+        textAnimationOut.setDuration(200);
+
+        submission_choose_text_switcher.setInAnimation(textAnimationIn);
+        submission_choose_text_switcher.setOutAnimation(textAnimationOut);
 
         mEditor.setEditorHeight(200);
         mEditor.setEditorFontSize(22);
@@ -364,6 +393,12 @@ public class EditorActivity extends Activity {
                     c.close();
                     uploadImage(uri, SELECT_COVER_CODE);
                 }
+                break;
+            case SELECT_VIDEO_CODE:
+                if (resultCode == RESULT_OK) {
+                    video_upload_uri = data.getData();
+                    video_name_text_view.setText(getRealPathFromURI(video_upload_uri).substring(getRealPathFromURI(video_upload_uri).lastIndexOf('/') + 1));
+                }
         }
     }
 
@@ -419,7 +454,7 @@ public class EditorActivity extends Activity {
         if (cover_uri.equals("")) {
             ToastUtils.show(this, "未选择封面");
             return;
-        } else if (html_text.equals("")) {
+        } else if ((html_text.equals("") && choose_count % 2 == 0) || (video_uri == null && choose_count % 2 == 1)) {
             ToastUtils.show(this, "未填写内容");
             return;
         } else if (title_edit_text.getText().toString().equals("")) {
@@ -430,58 +465,85 @@ public class EditorActivity extends Activity {
             return;
         }
 
-        File outputFile = null;
-        try {
-            outputFile = File.createTempFile(uploadHttpHelper.generateString(12), ".html", this.getCacheDir());
-            FileWriter fileWriter = new FileWriter(outputFile);
-            PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.print(html_text);
-            printWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        assert outputFile != null;
-
-        uploadHttpHelper.upload(uploadHttpHelper.buildRequest(outputFile, Contants.API.UploadType.HTML), new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+        if (choose_count % 2 == 0) {
+            // 网页上传
+            File outputFile = null;
+            try {
+                outputFile = File.createTempFile(uploadHttpHelper.generateString(12), ".html", this.getCacheDir());
+                FileWriter fileWriter = new FileWriter(outputFile);
+                PrintWriter printWriter = new PrintWriter(fileWriter);
+                printWriter.print(html_text);
+                printWriter.close();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                final String mMessage = response.body().string();
+            assert outputFile != null;
 
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(mMessage);
-                    html_uri = (String) jsonObject.get("uri");
-                } catch (JSONException e) {
+            uploadHttpHelper.upload(uploadHttpHelper.buildRequest(outputFile, Contants.API.UploadType.HTML), new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     e.printStackTrace();
                 }
-            }
-        });
 
-        while (html_uri.equals("")) {
-            Thread.sleep(50);
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    final String mMessage = response.body().string();
+
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(mMessage);
+                        html_uri = (String) jsonObject.get("uri");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            while (html_uri.equals("")) {
+                Thread.sleep(50);
+            }
+        } else {
+            //视频上传
+            File imageFile = new File(getRealPathFromURI(video_upload_uri));
+            uploadHttpHelper.upload(uploadHttpHelper.buildRequest(imageFile, Contants.API.UploadType.VIDEO), new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String mMessage = response.body().string();
+
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(mMessage);
+                        video_uri = (String) jsonObject.get("uri");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            while (video_uri.equals("")) {
+                Thread.sleep(50);
+            }
         }
 
         Map<String, String> map = new HashMap<>(5);
         map.put("title", title_edit_text.getText().toString());
         map.put("introduction", introduction_edit_text.getText().toString());
-        map.put("resource", html_uri);
+        map.put("resource", choose_count % 2 == 0 ? html_uri : video_uri);
         map.put("cover", cover_uri);
-        map.put("type", String.valueOf(0));
+        map.put("type", choose_count % 2 == 0 ? String.valueOf(Contants.API.SubmissionType.TEXT) : String.valueOf(Contants.API.SubmissionType.VIDEO));
         map.put("pid", String.valueOf(plates.get(platePosition).getPid()));
 
-        SpotsCallBack<User> stringSpotsCallBack = new SpotsCallBack<User>(this) {
+        SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(this) {
             @Override
-            public void onSuccess(Response response, User user) {
-                UserManagerApplication application = UserManagerApplication.getInstance();
-                application.putUser(user);
-                Intent register_intent = new Intent(EditorActivity.this, MainActivity.class);
-                startActivity(register_intent);
+            public void onSuccess(Response response, String user) {
+                finish();
+                dismissDialog();
             }
 
             @Override
@@ -499,6 +561,27 @@ public class EditorActivity extends Activity {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
         startActivityForResult(intent, SELECT_COVER_CODE);
+    }
+
+    @OnClick(R.id.edit_choose_video_text_view)
+    public void uploadVideo(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "video/*");
+        startActivityForResult(intent, SELECT_VIDEO_CODE);
+    }
+
+    @OnClick(R.id.submission_type_choose)
+    public void chooseType(View view) {
+        choose_count += 1;
+        if (choose_count % 2 == 0) {
+            submission_choose_text_switcher.setText("上传投稿");
+            text_editor_layout.setVisibility(View.VISIBLE);
+            video_editor_layout.setVisibility(View.GONE);
+        } else {
+            submission_choose_text_switcher.setText("上传视频");
+            text_editor_layout.setVisibility(View.GONE);
+            video_editor_layout.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setPlateSpinner() {

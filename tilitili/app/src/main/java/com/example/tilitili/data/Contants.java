@@ -45,5 +45,10 @@ public class Contants {
             public static final int HTML = 1;
             public static final int VIDEO = 2;
         }
+
+        public static class SubmissionType {
+            public static final int TEXT = 0;
+            public static final int VIDEO = 1;
+        }
     }
 }
