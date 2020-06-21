@@ -195,7 +195,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                 if (submission.getIsLike() == 1) {
                     // 取消点赞
                     Map<String, String> map = new HashMap<>(1);
-                    map.put("username", "0");
+                    map.put("like", "0");
 
                     SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(ActivityFragment.this.getActivity()) { // todo
                         @Override
@@ -218,7 +218,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                 } else if (submission.getIsLike() == 0) {
                     // 点赞
                     Map<String, String> map = new HashMap<>(1);
-                    map.put("username", "1");
+                    map.put("like", "1");
 
                     SpotsCallBack<String> stringSpotsCallBack = new SpotsCallBack<String>(ActivityFragment.this.getActivity()) { // todo
                         @Override

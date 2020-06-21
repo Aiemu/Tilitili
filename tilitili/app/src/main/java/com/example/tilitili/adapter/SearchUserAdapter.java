@@ -34,10 +34,10 @@ public class SearchUserAdapter extends SimpleAdapter<Following> {
         // 已关注
         if (item.getIsFollowing() == 0 && item.getUserId() != UserManagerApplication.getInstance().getUser().getUserId()) {
             viewHolder.getTextView(R.id.follow_item_text_follow).setText("未关注");
-            viewHolder.getTextView(R.id.follow_item_text_follow).setTextColor(Color.RED);
+            viewHolder.getTextView(R.id.follow_item_text_follow).setTextColor(Color.parseColor("#888888"));
         } else if (item.getIsFollowing() == 1) {
             viewHolder.getTextView(R.id.follow_item_text_follow).setText("已关注");
-            viewHolder.getTextView(R.id.follow_item_text_follow).setTextColor(Color.YELLOW);
+            viewHolder.getTextView(R.id.follow_item_text_follow).setTextColor(Color.parseColor("#82318E"));
         }
     }
 

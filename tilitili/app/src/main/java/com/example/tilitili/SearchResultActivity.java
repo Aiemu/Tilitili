@@ -66,7 +66,7 @@ public class SearchResultActivity extends Activity {
         searchContent = getIntent().getStringExtra("search_content");
         httpHelper = HttpHelper.getInstance();
         materialRefreshLayout.setLoadMore(false);
-        submission_text_view.setTextColor(Color.RED);
+        submission_text_view.setTextColor(Color.parseColor("#82318E"));
         user_text_view.setTextColor(Color.BLACK);
         submissions = new ArrayList<>();
         followings = new ArrayList<>();
@@ -209,7 +209,7 @@ public class SearchResultActivity extends Activity {
         followings.clear();
         searchUserAdapter.notifyDataSetChanged();
         searchSubmission();
-        submission_text_view.setTextColor(Color.RED);
+        submission_text_view.setTextColor(Color.parseColor("#82318E"));
         user_text_view.setTextColor(Color.BLACK);
     }
 
@@ -221,7 +221,7 @@ public class SearchResultActivity extends Activity {
         searchUserAdapter.notifyDataSetChanged();
         searchUser();
         submission_text_view.setTextColor(Color.BLACK);
-        user_text_view.setTextColor(Color.RED);
+        user_text_view.setTextColor(Color.parseColor("#82318E"));
 
     }
 

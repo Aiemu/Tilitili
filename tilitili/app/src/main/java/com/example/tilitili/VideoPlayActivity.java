@@ -1,5 +1,6 @@
 package com.example.tilitili;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,11 +15,17 @@ public class VideoPlayActivity extends AppCompatActivity {
      * android.widget.VideoView：视频播放器控件
      */
     private VideoView videoView;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_play);
+
+        Intent getIntent = getIntent();
+        String urlStr = getIntent.getStringExtra("url");
+        url = urlStr;
+
         bindViews();
     }
 
@@ -30,7 +37,7 @@ public class VideoPlayActivity extends AppCompatActivity {
          * com.example.administrator.helloworld：为当前类的所在的包路径，可以使用 String packageName = getPackageName(); 动态获取
          * R.raw.la_isla：最后接 res/raw 目录中的文件名
          * */
-        videoView.setVideoURI(Uri.parse("http://alcdn.hls.xiaoka.tv/2017427/14b/7b3/Jzq08Sl8BbyELNTo/index.m3u8"));
+        videoView.setVideoURI(Uri.parse(url));
 
         /**
          * 为 VideoView 视图设置媒体控制器，设置了之后就会自动由进度条、前进、后退等操作
