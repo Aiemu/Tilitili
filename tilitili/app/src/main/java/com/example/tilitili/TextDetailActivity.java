@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,8 +18,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Submission;
@@ -54,7 +58,9 @@ public class TextDetailActivity extends Activity {
     @ViewInject(R.id.action_like_count)
     private TextView action_likt_count;
     @ViewInject(R.id.wb_details)
-    WebView webView;
+    private WebView webView;
+    @ViewInject(R.id.videoView)
+    private VideoView videoView;
 
     private Submission submission;
     private DownloadHttpHelper downloadHttpHelper;
@@ -71,16 +77,73 @@ public class TextDetailActivity extends Activity {
         downloadHttpHelper = DownloadHttpHelper.getInstance();
         httpHelper = HttpHelper.getInstance();
         outputDir = this.getCacheDir();
+        addWatchTime();
         initView();
-        try {
-            initWebView();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(submission.getType() == Contants.API.SubmissionType.TEXT){
+            try {
+                initWebView();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            initVideoView();
         }
+    }
+
+    private void initVideoView() {
+        videoView.setVisibility(View.VISIBLE);
+        /**播放 res/raw 目录下的文件
+         * android.resource:// ：前缀固定
+         * com.example.administrator.helloworld：为当前类的所在的包路径，可以使用 String packageName = getPackageName(); 动态获取
+         * R.raw.la_isla：最后接 res/raw 目录中的文件名
+         * */
+        Log.d("sad", Config.getFullUrl(submission.getResource()));
+        videoView.setVideoURI(Uri.parse(Config.getFullUrl(submission.getResource())));
+
+        /**
+         * 为 VideoView 视图设置媒体控制器，设置了之后就会自动由进度条、前进、后退等操作
+         */
+        videoView.setMediaController(new MediaController(this));
+
+        /**视频准备完成时回调
+         * */
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                Log.i("tag", "--------------视频准备完毕,可以进行播放.......");
+            }
+        });
+        /**
+         * 视频播放完成时回调
+         */
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                Log.i("tag", "------------------视频播放完毕..........");
+                /**播放完成时，再次循环播放*/
+                videoView.start();
+            }
+        });
+
+        /**
+         * 视频播放发送错误时回调
+         */
+        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                Log.i("tag", "---------------------视频播放失败...........");
+                return false;
+            }
+        });
+
+        /**开始播放视频
+         * */
+        videoView.start();
     }
 
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     private void initWebView() throws InterruptedException {
+        progressBar.setVisibility(View.VISIBLE);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         if (!TextUtils.isEmpty(submission.getResource())) {
             WebSettings settings = webView.getSettings();
@@ -95,12 +158,10 @@ public class TextDetailActivity extends Activity {
             while (!data.endsWith("</body>"))
                 Thread.sleep(50);
             webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
-            addWatchTime();
         }
     }
 
     private void initView() {
-        progressBar.setVisibility(View.VISIBLE);
         title.setTextSize(13);
         title.setVisibility(View.VISIBLE);
         title.setText(submission.getResource());
