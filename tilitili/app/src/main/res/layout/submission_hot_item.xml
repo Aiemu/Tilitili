@@ -39,6 +39,15 @@
             style="@style/line_vertical"
             android:layout_width="wrap_content"
             android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/text_username"
+            app:layout_constraintStart_toEndOf="@+id/drawee_view" />
+
+        <TextView
+            android:id="@+id/text_username"
+            style="@style/submission_watch_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toTopOf="@+id/text_watch_times"
             app:layout_constraintStart_toEndOf="@+id/drawee_view" />
 
@@ -47,16 +56,8 @@
             style="@style/submission_watch_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_username" />
-
-        <TextView
-            android:id="@+id/text_username"
-            style="@style/submission_watch_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/drawee_view" />
 
@@ -71,6 +72,6 @@
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view" />
+            app:layout_constraintTop_toBottomOf="@+id/text_username" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
