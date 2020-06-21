@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -162,11 +163,15 @@ public class EditorActivity extends Activity {
         mEditor.setEditorFontColor(Color.BLACK);
         mEditor.setPadding(10, 10, 10, 10);
         mEditor.setPlaceholder("Insert text here...");
+        mEditor.loadCSS("image{" +
+                "max-width:30px;" +
+                "}");
 
         mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String text) {
                 html_text = text;
+                Log.d("html", html_text);
             }
         });
 
@@ -351,12 +356,6 @@ public class EditorActivity extends Activity {
             }
         });
 
-        findViewById(R.id.action_insert_link).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.insertLink("https://github.com/wasabeef", "wasabeef");
-            }
-        });
         findViewById(R.id.action_insert_checkbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -377,7 +376,6 @@ public class EditorActivity extends Activity {
             case SELECT_PHOTO_CODE:
                 if (resultCode == RESULT_OK) {
                     Uri uri = data.getData();
-                    progressBar.setVisibility(View.VISIBLE);
                     uploadImage(uri, SELECT_PHOTO_CODE);
                 }
                 break;
@@ -412,16 +410,6 @@ public class EditorActivity extends Activity {
 
     public void uploadImage(Uri filepath, final int code) {
         File imageFile = new File(getRealPathFromURI(filepath));
-        if (SELECT_PHOTO_CODE == code)
-            getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        imageFile = new CompressHelper.Builder(this)
-                .setMaxWidth(300)
-                .setMaxHeight(240)
-                .setQuality(80)
-                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
-                .build()
-                .compressToFile(imageFile);
         uploadHttpHelper.upload(uploadHttpHelper.buildRequest(imageFile, Contants.API.UploadType.IMAGE), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -436,8 +424,9 @@ public class EditorActivity extends Activity {
                     public void run() {
                         try {
                             JSONObject jsonObject = new JSONObject(mMessage);
-                            if (code == SELECT_PHOTO_CODE)
-                                mEditor.insertImage(Config.getFullUrl((String) jsonObject.get("uri")), "dachshund");
+                            if (code == SELECT_PHOTO_CODE) {
+                                mEditor.insertImage(Config.getFullUrl((String) jsonObject.get("uri")), "alt\" width=\"300");
+                            }
                             else if (code == SELECT_COVER_CODE) {
                                 cover_uri = (String) jsonObject.get("uri");
                             }
