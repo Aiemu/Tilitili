@@ -94,12 +94,13 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
             public void onSuccess(Response response, String page) {
                 dismissDialog();
                 Page<Submission> submissionPage = null;
+                List<Submission> submissions = new ArrayList<>();
                 try {
                     JSONObject jsonObject = new JSONObject(page);
                     JSONArray items = jsonObject.getJSONArray("list");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
-                        hotSubmissions.add(new Submission(item.getInt("sid"),
+                        submissions.add(new Submission(item.getInt("sid"),
                                 item.getInt("type"),
                                 item.getString("plateTitle"),
                                 item.getString("title"),
@@ -119,12 +120,10 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                             jsonObject.getInt("pageSize"),
                             jsonObject.getInt("totalPage"),
                             jsonObject.getInt("totalCount"),
-                            hotSubmissions);
+                            submissions);
                     pager.setPageIndex(submissionPage.getCurrentPage());
-                    pager.setPageCount(submissionPage.getPageSize());
                     pager.setTotalPage(submissionPage.getTotalPage());
                     pager.showData(submissionPage.getList(), submissionPage.getTotalPage(), submissionPage.getTotalCount());
-                    hotSubmissionAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -158,13 +157,14 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
             @Override
             public void onSuccess(Response response, String page) {
                 dismissDialog();
-                Page<Submission> submissionPage = null;
+                Page<Submission> submissionPage;
+                List<Submission> submissions = new ArrayList<>();
                 try {
                     JSONObject jsonObject = new JSONObject(page);
                     JSONArray items = jsonObject.getJSONArray("list");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
-                        newSubmissions.add(new Submission(item.getInt("sid"),
+                        submissions.add(new Submission(item.getInt("sid"),
                                 item.getInt("type"),
                                 item.getString("plateTitle"),
                                 item.getString("title"),
@@ -184,12 +184,10 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
                             jsonObject.getInt("pageSize"),
                             jsonObject.getInt("totalPage"),
                             jsonObject.getInt("totalCount"),
-                            newSubmissions);
+                            submissions);
                     pager.setPageIndex(submissionPage.getCurrentPage());
-                    pager.setPageCount(submissionPage.getPageSize());
                     pager.setTotalPage(submissionPage.getTotalPage());
-                    pager.showData(submissionPage.getList(), submissionPage.getTotalPage(), submissionPage.getTotalCount());
-                    newSubmissionAdapter.notifyDataSetChanged();
+                    pager.showData(submissions, submissionPage.getTotalPage(), submissionPage.getTotalCount());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -199,7 +197,6 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
             public void onError(Response response, ErrorMessage errorMessage, Exception e) {
                 Toast.makeText(this.getContext(), "加载数据失败", Toast.LENGTH_LONG).show();
                 dismissDialog();
-
                 if (Pager.STATE_REFREH == pager.getState()) {
                     pager.getmRefreshLayout().finishRefresh();
                 } else if (Pager.STATE_MORE == pager.getState()) {
@@ -254,6 +251,7 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
 
     @Override
     public void load(List<Submission> datas, int totalPage, int totalCount) {
+        submissionAdapter.addData(datas);
         recyclerView.setAdapter(submissionAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -283,6 +281,7 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
         newSubmissionAdapter.notifyDataSetChanged();
         hotSubmissions.clear();
         hotSubmissionAdapter.notifyDataSetChanged();
+        pager.setState(Pager.STATE_NORMAL);
         pager.request();
 
         this.newText.setTextColor(Color.parseColor("#888888"));
@@ -301,6 +300,7 @@ public class HomeFragment extends BaseFragment implements Pager.OnPageListener<S
         newSubmissionAdapter.notifyDataSetChanged();
         hotSubmissions.clear();
         hotSubmissionAdapter.notifyDataSetChanged();
+        pager.setState(Pager.STATE_NORMAL);
         pager.request();
 
         this.hotText.setTextColor(Color.parseColor("#888888"));

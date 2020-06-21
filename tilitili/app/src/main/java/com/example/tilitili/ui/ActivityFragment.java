@@ -110,7 +110,6 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                             jsonObject.getInt("totalCount"),
                             submissions);
                     pager.setPageIndex(submissionPage.getCurrentPage());
-                    pager.setPageCount(submissionPage.getPageSize());
                     pager.setTotalPage(submissionPage.getTotalPage());
                     pager.showData(submissionPage.getList(), submissionPage.getTotalPage(), submissionPage.getTotalCount());
                 } catch (JSONException e) {

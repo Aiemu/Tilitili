@@ -201,6 +201,10 @@ public class Pager {
         void loadMore(List<T> datas, int totalPage, int totalCount);
     }
 
+    public void setState(int state) {
+        this.state = state;
+    }
+
     public int getState() {
         return state;
     }
