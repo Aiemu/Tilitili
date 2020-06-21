@@ -112,7 +112,7 @@ public class EditorActivity extends Activity {
         ViewUtils.inject(this);
 
         httpHelper = HttpHelper.getInstance();
-        uploadHttpHelper = new UploadHttpHelper((ProgressBar) findViewById(R.id.progressBar));
+        uploadHttpHelper = new UploadHttpHelper(progressBar);
         user = UserLocalData.getUser(this);
         setPlateSpinner();
 

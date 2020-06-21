@@ -51,6 +51,7 @@ public class UploadHttpHelper {
                                 @Override
                                 public void run() {
                                     progressBar.setVisibility(View.VISIBLE);
+                                    progressBar.bringToFront();
                                     progressBar.setProgress(progress);
                                 }
                             });

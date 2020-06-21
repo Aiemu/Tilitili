@@ -22,11 +22,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title_bar"
         android:layout_above="@id/tool_bar_layout">
+
         <VideoView
             android:id="@+id/videoView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </LinearLayout>
 
     <FrameLayout

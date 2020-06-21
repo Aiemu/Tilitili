@@ -79,7 +79,7 @@ public class TextDetailActivity extends Activity {
         outputDir = this.getCacheDir();
         addWatchTime();
         initView();
-        if(submission.getType() == Contants.API.SubmissionType.TEXT){
+        if (submission.getType() == Contants.API.SubmissionType.TEXT) {
             try {
                 initWebView();
             } catch (InterruptedException e) {
@@ -164,7 +164,7 @@ public class TextDetailActivity extends Activity {
     private void initView() {
         title.setTextSize(13);
         title.setVisibility(View.VISIBLE);
-        title.setText(submission.getResource());
+        title.setText(Config.getFullUrl(submission.getResource()));
         action_comment_count.setText(String.valueOf(submission.getCommentsCount()));
         action_likt_count.setText(String.valueOf(submission.getLikesCount()));
     }
@@ -350,5 +350,16 @@ public class TextDetailActivity extends Activity {
             }
         });
 
+    }
+
+    @OnClick(R.id.action_share)
+    public void share(View view) {
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+        share.setType("text/plain");
+
+        share.putExtra(Intent.EXTRA_SUBJECT, "新闻网址");
+        share.putExtra(Intent.EXTRA_TEXT, Config.getFullUrl(submission.getResource()));
+
+        startActivity(Intent.createChooser(share, "分享该链接"));
     }
 }

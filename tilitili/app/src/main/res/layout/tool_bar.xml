@@ -35,17 +35,6 @@
                 android:layout_height="wrap_content" />
         </FrameLayout>
 
-        <!--        <FrameLayout-->
-        <!--            android:layout_width="0.0dip"-->
-        <!--            android:layout_height="fill_parent"-->
-        <!--            android:layout_weight="1.0">-->
-
-        <!--            <ImageView-->
-        <!--                android:id="@+id/action_write_comment"-->
-        <!--                style="@style/toolbar_action"-->
-        <!--                android:src="@drawable/ic_action_write" />-->
-        <!--        </FrameLayout>-->
-
         <FrameLayout
             android:layout_width="0.0dip"
             android:layout_height="fill_parent"
@@ -69,65 +58,11 @@
             android:layout_weight="1.0">
 
             <ImageView
-                android:id="@+id/action_repost"
+                android:id="@+id/action_share"
                 style="@style/toolbar_action"
                 android:src="@drawable/ic_action_repost" />
         </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="0.0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.0">
-
-            <ImageView
-                android:id="@+id/action_previous"
-                style="@style/toolbar_action"
-                android:src="@drawable/ic_action_previous" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="0.0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.0">
-
-            <ImageView
-                android:id="@+id/action_next"
-                style="@style/toolbar_action"
-                android:src="@drawable/ic_action_next" />
-        </FrameLayout>
-
-        <!--        <FrameLayout-->
-        <!--            android:layout_width="0.0dip"-->
-        <!--            android:layout_height="fill_parent"-->
-        <!--            android:layout_weight="1.0">-->
-
-        <!--            <ImageView-->
-        <!--                android:id="@+id/action_report"-->
-        <!--                style="@style/toolbar_action"-->
-        <!--                android:src="@drawable/ic_action_report" />-->
-        <!--        </FrameLayout>-->
-
-        <FrameLayout
-            android:layout_width="0.0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.0">
-
-            <ImageView
-                android:id="@+id/action_more"
-                style="@style/toolbar_action"
-                android:src="@drawable/ic_action_more" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="0.0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.0">
-
-            <ImageView
-                android:id="@+id/action_share"
-                style="@style/toolbar_action"
-                android:src="@drawable/ic_action_share" />
-        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>
