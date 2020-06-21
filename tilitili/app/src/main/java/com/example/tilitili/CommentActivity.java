@@ -52,6 +52,7 @@ public class CommentActivity extends Activity implements Pager.OnPageListener<Co
     private HttpHelper httpHelper;
 
     private int sid;
+    private int comment = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,14 +131,6 @@ public class CommentActivity extends Activity implements Pager.OnPageListener<Co
     @Override
     public void load(List<Comment> datas, int totalPage, int totalCount) {
         commentAdapter = new CommentAdapter(this, datas);
-//        commentAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Comment comment = commentAdapter.getItem(position);
-//                Intent intent = new Intent(PlateDetailActivity.this, TextDetailActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
         recyclerView.setAdapter(commentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -158,6 +151,9 @@ public class CommentActivity extends Activity implements Pager.OnPageListener<Co
 
     @OnClick(R.id.comment_title_bar_back)
     public void back(View view) {
+        Intent result = new Intent();
+        result.putExtra("comments", comment);
+        setResult(RESULT_OK, result);
         finish();
     }
 
@@ -170,6 +166,7 @@ public class CommentActivity extends Activity implements Pager.OnPageListener<Co
             @Override
             public void onSuccess(Response response, String s) {
                 ToastUtils.show(this.getContext(), "发送成功");
+                comment += 1;
                 dismissDialog();
                 init();
             }
@@ -180,5 +177,13 @@ public class CommentActivity extends Activity implements Pager.OnPageListener<Co
                 dismissDialog();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent result = new Intent();
+        result.putExtra("comments", comment);
+        setResult(RESULT_OK, result);
+        this.finish();
     }
 }

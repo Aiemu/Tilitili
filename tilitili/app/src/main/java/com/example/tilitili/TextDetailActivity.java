@@ -62,6 +62,8 @@ public class TextDetailActivity extends Activity {
     @ViewInject(R.id.videoView)
     private VideoView videoView;
 
+    public final static int COMMENT_CODE = 193;
+
     private Submission submission;
     private DownloadHttpHelper downloadHttpHelper;
     private HttpHelper httpHelper;
@@ -92,42 +94,22 @@ public class TextDetailActivity extends Activity {
 
     private void initVideoView() {
         videoView.setVisibility(View.VISIBLE);
-        /**播放 res/raw 目录下的文件
-         * android.resource:// ：前缀固定
-         * com.example.administrator.helloworld：为当前类的所在的包路径，可以使用 String packageName = getPackageName(); 动态获取
-         * R.raw.la_isla：最后接 res/raw 目录中的文件名
-         * */
-        Log.d("sad", Config.getFullUrl(submission.getResource()));
         videoView.setVideoURI(Uri.parse(Config.getFullUrl(submission.getResource())));
 
-        /**
-         * 为 VideoView 视图设置媒体控制器，设置了之后就会自动由进度条、前进、后退等操作
-         */
         videoView.setMediaController(new MediaController(this));
-
-        /**视频准备完成时回调
-         * */
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 Log.i("tag", "--------------视频准备完毕,可以进行播放.......");
             }
         });
-        /**
-         * 视频播放完成时回调
-         */
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 Log.i("tag", "------------------视频播放完毕..........");
-                /**播放完成时，再次循环播放*/
                 videoView.start();
             }
         });
-
-        /**
-         * 视频播放发送错误时回调
-         */
         videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
@@ -135,9 +117,6 @@ public class TextDetailActivity extends Activity {
                 return false;
             }
         });
-
-        /**开始播放视频
-         * */
         videoView.start();
     }
 
@@ -173,6 +152,17 @@ public class TextDetailActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case COMMENT_CODE:
+                if (resultCode == RESULT_OK) {
+                    int comment = data.getIntExtra("comments", 0);
+                    action_comment_count.setText(String.valueOf(Integer.parseInt(action_comment_count.getText().toString()) + comment));
+                }
+        }
     }
 
     public void setContent() {
@@ -316,7 +306,7 @@ public class TextDetailActivity extends Activity {
     public void viewComments(View view) {
         Intent intent = new Intent(this, CommentActivity.class);
         intent.putExtra("sid", submission.getSid());
-        startActivity(intent);
+        startActivityForResult(intent, COMMENT_CODE);
     }
 
     @OnClick(R.id.action_favor)
