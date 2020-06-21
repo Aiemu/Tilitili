@@ -1,5 +1,6 @@
 package com.example.tilitili.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.example.tilitili.Config;
 import com.example.tilitili.EditorActivity;
@@ -36,8 +39,6 @@ import okhttp3.Response;
 
 public class MineFragment extends BaseFragment {
 
-    HttpHelper httpHelper;
-
     @ViewInject(R.id.user_profile_avatar)
     private SimpleDraweeView avatarImageView;
     @ViewInject(R.id.user_profile_bio_textview)
@@ -51,17 +52,21 @@ public class MineFragment extends BaseFragment {
     @ViewInject(R.id.user_profile_username_textview)
     private TextView usernameTextView;
 
+    private static final int UPDATE_USER_PROFILE = 547;
+
+    HttpHelper httpHelper;
+
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
         ViewUtils.inject(this, view);
+        httpHelper = HttpHelper.getInstance();
         return view;
     }
 
     @Override
     public void init() {
-        httpHelper = HttpHelper.getInstance();
         User user = UserLocalData.getUser(this.getContext());
         String url = Contants.API.getUrlWithID(Contants.API.GET_USER_PROFILE_URL, String.valueOf(user.getUserId()));
         httpHelper.get(url, new SpotsCallBack<String>(this.getContext()) {
@@ -106,6 +111,16 @@ public class MineFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode) {
+            case UPDATE_USER_PROFILE:
+                if(resultCode == Activity.RESULT_OK) {
+                    init();
+                }
+        }
+    }
+
     @OnClick(R.id.user_profile_follow)
     void goToFollow(View view) {
         Intent intent = new Intent(this.getContext(), FollowListActivity.class);
@@ -127,7 +142,7 @@ public class MineFragment extends BaseFragment {
     @OnClick(R.id.user_profile_change)
     void updateUserProfile(View view) {
         Intent intent = new Intent(this.getContext(), UserProfileUpdateActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, UPDATE_USER_PROFILE);
     }
 
     @OnClick(R.id.user_profile_all_submission)
