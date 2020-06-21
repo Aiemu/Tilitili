@@ -126,6 +126,7 @@ public class CommonController {
         jsonObject.put("commentsCount", commentDao.getCommentCounts(submission.getSid()));
         jsonObject.put("uid", submissionUser.getUid());
         jsonObject.put("userNickname", submissionUser.getNickname());
+        jsonObject.put("userAvatar", submissionUser.getAvatar());
 
         return jsonObject;
     }

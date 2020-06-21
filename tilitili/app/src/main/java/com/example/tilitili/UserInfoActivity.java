@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.User;
-import com.example.tilitili.data.UserLocalData;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SpotsCallBack;
@@ -83,7 +82,7 @@ public class UserInfoActivity extends Activity {
                     else
                         avatarImageView.setImageURI(Uri.parse("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3927644377,808105775&fm=26&gp=0.jpg"));
 
-                    if(isFollowing == 1) {
+                    if (isFollowing == 1) {
                         button.setText("已关注");
                     } else {
                         button.setText("未关注");
@@ -103,7 +102,7 @@ public class UserInfoActivity extends Activity {
 
     @OnClick(R.id.user_info_is_following)
     void follow(View v) {
-        if(isFollowing == 1){
+        if (isFollowing == 1) {
             httpHelper.post(Contants.API.UNFOLLOW_USER_URL, new HashMap<String, String>() {
                 {
                     put("uid", String.valueOf(uid));

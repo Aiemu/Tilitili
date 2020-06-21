@@ -3,6 +3,7 @@ package com.example.tilitili.ui;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,13 +46,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class ActivityFragment extends BaseFragment implements Pager.OnPageListener<Submission> {
-    private HttpHelper httpHelper = HttpHelper.getInstance();
 
-    private ActivityAdapter activityAdapter;
     @ViewInject(R.id.activity_recyclerview)
     private RecyclerView recyclerView;
     @ViewInject(R.id.activity_refresh_view)
     private MaterialRefreshLayout materialRefreshLayout;
+
+    private HttpHelper httpHelper = HttpHelper.getInstance();
+
+    private ActivityAdapter activityAdapter;
 
     Pager pager;
     SpotsCallBack<String> callBack;
@@ -147,7 +149,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
             public void onItemClick(View view, int position) {
                 Submission submission = activityAdapter.getItem(position);
                 Intent intent = new Intent(getContext(), TextDetailActivity.class);
-                intent.putExtra("submission", (Serializable) submission);
+                intent.putExtra("submission", submission);
                 startActivity(intent);
             }
         });
@@ -186,6 +188,7 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
     // todo: check correctness
     @OnClick(R.id.star_icon)
     public void changeLike() {
+        Log.d("点赞", "成功");
         activityAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

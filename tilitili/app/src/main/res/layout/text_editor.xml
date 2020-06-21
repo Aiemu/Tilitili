@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:text="点击选择视频文件上传"
                     android:textSize="20sp"
-                    android:textColor="@color/purple"/>
+                    android:textColor="@color/purple" />
 
             </LinearLayout>
 
