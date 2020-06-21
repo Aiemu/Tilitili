@@ -61,6 +61,7 @@ import java.util.Map;
 import jp.wasabeef.richeditor.RichEditor;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Request;
 import okhttp3.Response;
 
 public class EditorActivity extends Activity {
@@ -414,8 +415,8 @@ public class EditorActivity extends Activity {
         if (SELECT_PHOTO_CODE == code)
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
         imageFile = new CompressHelper.Builder(this)
-                .setMaxWidth(260)
-                .setMaxHeight(150)
+                .setMaxWidth(300)
+                .setMaxHeight(240)
                 .setQuality(80)
                 .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
                         Environment.DIRECTORY_PICTURES).getAbsolutePath())
@@ -480,7 +481,12 @@ public class EditorActivity extends Activity {
 
             assert outputFile != null;
 
-            uploadHttpHelper.upload(uploadHttpHelper.buildRequest(outputFile, Contants.API.UploadType.HTML), new Callback() {
+            Request request = uploadHttpHelper.buildRequest(outputFile, Contants.API.UploadType.HTML);
+            if (request == null) {
+                ToastUtils.show(this, "上传失败，请重新尝试");
+                return;
+            }
+            uploadHttpHelper.upload(request, new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     e.printStackTrace();
@@ -506,7 +512,14 @@ public class EditorActivity extends Activity {
         } else {
             //视频上传
             File imageFile = new File(getRealPathFromURI(video_upload_uri));
-            uploadHttpHelper.upload(uploadHttpHelper.buildRequest(imageFile, Contants.API.UploadType.VIDEO), new Callback() {
+            Request request = uploadHttpHelper.buildRequest(imageFile, Contants.API.UploadType.VIDEO);
+
+            if (request == null) {
+                ToastUtils.show(this, "上传失败，请重新尝试");
+                return;
+            }
+
+            uploadHttpHelper.upload(request, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();

@@ -12,6 +12,7 @@ import com.example.tilitili.data.Contants;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
@@ -87,21 +88,26 @@ public class UploadHttpHelper {
         String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uris.toString());
         String mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.toLowerCase());
         final String fileName = file.getName();
-
-        assert mime != null;
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("type", String.valueOf(type))
-                .addFormDataPart("file", fileName,
-                        RequestBody.create(file, MediaType.parse(mime)))
-                .build();
-        Request request = new Request.Builder()
-                .url(Contants.API.UPLOAD_URL)
-                .header("Accept", "application/json")
-                .header("Content-Type", "application/json")
-                .header("cookie", userManagerApplication.getSessionId())
-                .post(requestBody)
-                .build();
+        RequestBody requestBody;
+        Request request = null;
+        try {
+            assert mime != null;
+            requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("type", String.valueOf(type))
+                    .addFormDataPart("file", fileName,
+                            RequestBody.create(file, MediaType.parse(mime)))
+                    .build();
+            request = new Request.Builder()
+                    .url(Contants.API.UPLOAD_URL)
+                    .header("Accept", "application/json")
+                    .header("Content-Type", "application/json")
+                    .header("cookie", userManagerApplication.getSessionId())
+                    .post(requestBody)
+                    .build();
+        } catch (UndeclaredThrowableException e) {
+            e.printStackTrace();
+        }
         return request;
     }
 
