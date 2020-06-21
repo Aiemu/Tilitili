@@ -12,8 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +47,26 @@ public class CommonController {
     // session半个小时无交互就会过期
     private static int MAXTIME = 1800;
     private final Logger LOG = LoggerFactory.getLogger(CommonController.class);
+    private static final byte[] DES_KEY = { 21, 1, -110, 82, -32, -85, -128, -65 };
+
+    public String encryptBasedDes(String data) {
+        String encryptedData = null;
+        try {
+            SecureRandom sr = new SecureRandom();
+            DESKeySpec deskey = new DESKeySpec(DES_KEY);
+            // 创建一个密匙工厂，然后用它把DESKeySpec转换成一个SecretKey对象
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+            SecretKey key = keyFactory.generateSecret(deskey);
+            // 加密对象
+            Cipher cipher = Cipher.getInstance("DES");
+            cipher.init(Cipher.ENCRYPT_MODE, key, sr);
+            // 加密，并把字节数组编码成字符串
+            encryptedData = new sun.misc.BASE64Encoder().encode(cipher.doFinal(data.getBytes()));
+        } catch (Exception e) {
+            throw new RuntimeException("Exception in encryption: ", e);
+        }
+        return encryptedData;
+    }
 
     // 添加一个code，方便客户端根据code来判断服务器处理状态并解析对应的msg
     String wrapperMsg(int code, String msg) {

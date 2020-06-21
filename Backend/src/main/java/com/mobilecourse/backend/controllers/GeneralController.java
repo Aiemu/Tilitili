@@ -81,6 +81,7 @@ public class GeneralController extends CommonController {
                                              HttpServletRequest request) {
         //检查用户名是否重复
         User existUser = userDao.getUserByUsername(username);
+        password = encryptBasedDes(password);
         if (existUser != null) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, 1,
                     String.format("The username (%s) in the register process has already existed in Database.", username));
@@ -115,8 +116,8 @@ public class GeneralController extends CommonController {
     }
 
     @RequestMapping(value = "/paramtest", method = { RequestMethod.POST })
-    public ResponseEntity<JSONObject> paramTest(@RequestParam(value = "file") MultipartFile file) {
-        return wrapperResponse(HttpStatus.OK, "success");
+    public ResponseEntity<JSONObject> paramTest(@RequestParam(value = "key") String key) {
+        return wrapperResponse(HttpStatus.OK, encryptBasedDes(key));
     }
 
     /**
@@ -148,6 +149,7 @@ public class GeneralController extends CommonController {
                                                 @RequestParam(value = "password") String password,
                                                 HttpSession session) {
         User existUser = userDao.getUserByUsername(username);
+        password = encryptBasedDes(password);
         JSONObject jsonObject = new JSONObject();
         if (existUser == null) {
             //用户不存在

@@ -156,6 +156,8 @@ public class UserController extends CommonController {
                                                      @RequestParam(value = "old") String oldPassword,
                                                      @RequestParam(value = "new") String newPassword) {
         User user = userDao.getUserByUid(uid);
+        oldPassword = encryptBasedDes(oldPassword);
+        newPassword = encryptBasedDes(newPassword);
         if (user == null) {
             throw new BusinessException(HttpStatus.NOT_FOUND, 1, "User could not be found!");
         }
@@ -170,6 +172,7 @@ public class UserController extends CommonController {
     public ResponseEntity<JSONObject> forgetPassword(@RequestParam(value = "username") String username,
                                                      @RequestParam(value = "password") String password) {
         User user = userDao.getUserByUsername(username);
+        password = encryptBasedDes(password);
         if (user == null) {
             throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The username does not exist in the Database.");
         }

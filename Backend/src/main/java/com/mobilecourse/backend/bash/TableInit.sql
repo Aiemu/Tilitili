@@ -66,19 +66,34 @@ create table History
  watchTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  primary key (uid, sid));
 
-insert into User(username, nickname, email, password, department, bio)
-values ('Matsuri', 'MatsuriChan', 'shinoa_sama@outlook.com', '12345678', 'Software', 'Washoi!');
-insert into User(username, nickname, email, password, department, bio)
-values ('Shion', 'ShionChan', 'shinoa_zwx@outlook.com', '12345678', 'Software', 'ShionChan Saikyo!');
+insert into User(uid, username, nickname, email, password, department, bio)
+values (1, 'Matsuri', 'MatsuriChan', 'shinoa_sama@outlook.com', 'cdtt1sj/6IMMba0K881Jmg==', 'Software', 'Washoi!');
+insert into User(uid, username, nickname, email, password, department, bio)
+values (2, 'Tsinghua', 'THU Official', 'tsinghua@tsinghua.edu.cn', 'cdtt1sj/6IMMba0K881Jmg==', 'Campus', '世界一流大学');
 
 
-insert into Plate(title, description)
-values ('Hololive', 'Idol Project');
-insert into Plate(type, title, description)
-values (1, 'Nijisanji', 'VTB supporter');
+insert into Plate(pid, title, description, cover)
+values (1, '学习', '学习心得交流、资料分享', '/image/study.png');
+insert into Plate(pid, title, description, cover)
+values (2, '生活', '今天三教开了吗', '/image/life.png');
+insert into Plate(pid, title, description, cover)
+values (3, '运动', '老马杯项目冠军了', '/image/sport.png');
+insert into Plate(pid, title, description, cover)
+values (4, '树洞', '嘤嘤嘤', '/image/treehole.png');
+insert into Plate(pid, title, description, cover)
+values (5, '其他', '杂谈, 委托根据地', '/image/other.png');
+insert into Plate(pid, title, description, cover)
+values (6, '娱乐', '我五杀又被人抢了', '/image/entertainment.png');
+
+insert into Plate(pid, type, title, description, cover)
+values (7, 1, '校园新闻', '官方新闻发布', '/image/campus.png');
+insert into Plate(pid, type, title, description, cover)
+values (8, 1, '院系宣传', '院系风采展示', '/image/department.png');
 
 insert into PlateAuth(pid, uid)
-values (1, 1);
+values (7, 2);
+insert into PlateAuth(pid, uid)
+values (8, 2);
 
 INSERT INTO Submission(uid, type, pid, title, cover, introduction, resource)
-values (1, 1, 1, 'Matsuri 2nd anniversary', '', '夏色祭出道2周年live节选', '/video/demo.mp4');
+values (1, 1, 5, 'Matsuri 2nd anniversary', '', '夏色祭出道2周年live节选', '/video/demo.mp4');
