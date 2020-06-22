@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -43,7 +42,6 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
-import com.nanchen.compresshelper.CompressHelper;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -426,8 +424,7 @@ public class EditorActivity extends Activity {
                             JSONObject jsonObject = new JSONObject(mMessage);
                             if (code == SELECT_PHOTO_CODE) {
                                 mEditor.insertImage(Config.getFullUrl((String) jsonObject.get("uri")), "alt\" width=\"300");
-                            }
-                            else if (code == SELECT_COVER_CODE) {
+                            } else if (code == SELECT_COVER_CODE) {
                                 cover_uri = (String) jsonObject.get("uri");
                             }
                         } catch (JSONException e) {

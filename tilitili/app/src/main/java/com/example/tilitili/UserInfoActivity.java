@@ -1,6 +1,7 @@
 package com.example.tilitili;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -41,6 +42,8 @@ public class UserInfoActivity extends Activity {
     private TextView usernameTextView;
     @ViewInject(R.id.user_info_is_following)
     private Button button;
+    @ViewInject(R.id.user_info_chat)
+    private Button buttonChat;
 
     private HttpHelper httpHelper = HttpHelper.getInstance();
     private int uid = -1;
@@ -143,6 +146,13 @@ public class UserInfoActivity extends Activity {
                 }
             });
         }
+    }
+
+    @OnClick(R.id.user_info_chat)
+    void goToChat(View view) {
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("uid", uid);
+        startActivity(intent);
     }
 
     @Override

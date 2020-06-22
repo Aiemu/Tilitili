@@ -18,6 +18,24 @@
         android:paddingLeft="6.0dip"
         android:paddingRight="6.0dip">
 
+
+        <FrameLayout
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0">
+
+            <ImageView
+                android:id="@+id/action_favorite"
+                style="@style/toolbar_action"
+                android:src="@drawable/ic_action_favor" />
+
+            <TextView
+                android:id="@+id/action_favorite_count"
+                style="@style/toolbar_action_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+
         <FrameLayout
             android:layout_width="0.0dip"
             android:layout_height="fill_parent"

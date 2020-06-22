@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -29,34 +28,27 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class GetUserSubmissionActivity extends Activity implements Pager.OnPageListener<Submission> {
-    @ViewInject(R.id.user_submission_title_bar_title)
-    private TextView title_text;
+public class FavoriteActivity extends Activity implements Pager.OnPageListener<Submission> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_submission);
+        setContentView(R.layout.user_favorite);
         ViewUtils.inject(this);
-
-        Intent getIntent = getIntent();
-        String titleStr = getIntent.getStringExtra("title");
-        title_text.setText(titleStr);
 
         init();
     }
 
-    private HotSubmissionAdapter hotSubmissionAdapter;
-    @ViewInject(R.id.recyclerview_user_submission)
+    private HotSubmissionAdapter favoriteSubmissionAdapter;
+    @ViewInject(R.id.recyclerview_user_favorite)
     private RecyclerView recyclerView;
-    @ViewInject(R.id.refresh_user_submission_view)
+    @ViewInject(R.id.refresh_user_favorite_view)
     private MaterialRefreshLayout materialRefreshLayout;
 
     Pager pager;
@@ -129,7 +121,7 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
             }
         };
         pager = new Pager(this, callBack, materialRefreshLayout);
-        pager.setUrl(Contants.API.GET_HISTORY_UPLOAD_SUBMISSION);
+        pager.setUrl(Contants.API.GET_FAVORITE_SUBMISSION);
         pager.setLoadMore(true);
         pager.setOnPageListener(this);
         pager.setPageSize(5);
@@ -139,35 +131,35 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
 
     @Override
     public void load(List<Submission> datas, int totalPage, int totalCount) {
-        hotSubmissionAdapter = new HotSubmissionAdapter(this, datas);
-        hotSubmissionAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+        favoriteSubmissionAdapter = new HotSubmissionAdapter(this, datas);
+        favoriteSubmissionAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Submission submission = hotSubmissionAdapter.getItem(position);
-                Intent intent = new Intent(GetUserSubmissionActivity.this, TextDetailActivity.class);
-                intent.putExtra("submission", (Serializable) submission);
+                Submission submission = favoriteSubmissionAdapter.getItem(position);
+                Intent intent = new Intent(FavoriteActivity.this, TextDetailActivity.class);
+                intent.putExtra("submission", submission);
                 startActivity(intent);
             }
         });
 
-        recyclerView.setAdapter(hotSubmissionAdapter);
+        recyclerView.setAdapter(favoriteSubmissionAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override
     public void refresh(List<Submission> datas, int totalPage, int totalCount) {
-        hotSubmissionAdapter.refreshData(datas);
+        favoriteSubmissionAdapter.refreshData(datas);
         recyclerView.scrollToPosition(0);
     }
 
     @Override
     public void loadMore(List<Submission> datas, int totalPage, int totalCount) {
-        hotSubmissionAdapter.loadMoreData(datas);
-        recyclerView.scrollToPosition(hotSubmissionAdapter.getDatas().size());
+        favoriteSubmissionAdapter.loadMoreData(datas);
+        recyclerView.scrollToPosition(favoriteSubmissionAdapter.getDatas().size());
     }
 
-    @OnClick(R.id.user_submission_title_bar_back)
+    @OnClick(R.id.user_favorite_title_bar_back)
     public void back(View v) {
         finish();
     }
