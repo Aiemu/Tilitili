@@ -29,4 +29,7 @@ public interface MessageDao {
     @Delete
     void deleteAll(Message... messages);
 
+    @Query("SELECT COUNT(*) FROM MESSAGE")
+    int getSum();
+
 }

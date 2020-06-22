@@ -38,6 +38,8 @@ public class Contants {
         public static final String USER_SEARCH_URL = BASE_URL + "/user/search";
         public static final String FOLLOW_USER_URL = BASE_URL + "/user/follow";
         public static final String UNFOLLOW_USER_URL = BASE_URL + "/user/unfollow";
+        public static final String GET_USER_MESSAGES = BASE_URL + "/user/message";
+        public static final String SEND_USER_MESSAGE = BASE_URL + "/user/send_message";
 
         public static String getUrlWithID(String url, String ID) {
             return url + ID;
