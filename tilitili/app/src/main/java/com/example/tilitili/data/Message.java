@@ -27,7 +27,7 @@ public class Message {
     @ColumnInfo(name = "isRead")
     public int isRead;
 
-    public Message(int id, int uid, String content, int type, String nickname, String avatar, long messageTime, int isRead) {
+    public Message(int id, int uid, String content, String nickname, String avatar, long messageTime, int isRead) {
         this.id = id;
         this.uid = uid;
         this.content = content;

@@ -15,13 +15,16 @@ public interface MessageDao {
     void insert(Message message);
 
     @Insert
-    void insertAll(Message... messages);
+    void insertAll(List<Message> messages);
 
     @Query("SELECT * FROM Message")
     List<Message> getAllMessage();
 
-    @Query("SELECT DISTINCT uid, nickname, avatar, id, content ,type from Message")
+    @Query("SELECT DISTINCT uid, nickname, avatar, id, content, messageTime, isRead from Message GROUP BY uid")
     List<Message> getAllDistinctUsers();
+
+    @Query("SELECT * from Message where uid = :id")
+    List<Message> getOneUserMessage(int id);
 
     @Delete
     void delete(Message message);

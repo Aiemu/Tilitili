@@ -281,6 +281,7 @@ public class UserController extends CommonController {
         for (Message m: messages) {
             JSONObject messageObject = new JSONObject();
             User srcUser = userDao.getUserByUid(m.getSrcUid());
+            messageObject.put("mid", m.getMid());
             messageObject.put("uid", m.getSrcUid());
             messageObject.put("avatar", srcUser.getAvatar());
             messageObject.put("nickname", srcUser.getNickname());
