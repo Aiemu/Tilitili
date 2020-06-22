@@ -6,10 +6,7 @@ import com.mobilecourse.backend.annotation.LoginAuth;
 import com.mobilecourse.backend.dao.FollowDao;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.exception.BusinessException;
-import com.mobilecourse.backend.model.Follow;
-import com.mobilecourse.backend.model.Likes;
-import com.mobilecourse.backend.model.Submission;
-import com.mobilecourse.backend.model.User;
+import com.mobilecourse.backend.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -233,6 +230,27 @@ public class UserController extends CommonController {
     }
 
     @LoginAuth
+    @RequestMapping(value = "/favorite", method = {RequestMethod.GET})
+    public ResponseEntity<JSONObject> getFavorite(@RequestParam(value = "page", defaultValue = "0") @Min(0) Integer page,
+                                                  @RequestParam(value = "count", defaultValue = "10") @Min(1) Integer count,
+                                                  HttpSession session) {
+        Integer uid = (Integer) session.getAttribute("uid");
+        List<Integer> favoriteSids = favoriteDao.getUserAllFavorite(page * count, count, uid);
+        Integer submissionCounts = favoriteDao.getUserAllFavoriteCount(uid);
+        List<Submission> submissions = new ArrayList<>();
+        for (Integer sid: favoriteSids) {
+            submissions.add(submissionDao.getSubmission(sid));
+        }
+        //装载投稿
+        ArrayList<JSONObject> list = new ArrayList<>();
+        for (Submission s : submissions) {
+            list.add(wrapSubmission(s, uid));
+        }
+        JSONObject jsonObject = wrapPageFormat(list, page, count, submissionCounts);
+        return wrapperResponse(HttpStatus.OK, jsonObject);
+    }
+
+    @LoginAuth
     @RequestMapping(value = "/friend", method = {RequestMethod.GET})
     public ResponseEntity<JSONObject> getAllFriends(HttpSession session) {
         Integer uid = (Integer) session.getAttribute("uid");
@@ -249,5 +267,44 @@ public class UserController extends CommonController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("users", followedUsers);
         return wrapperResponse(HttpStatus.OK, jsonObject);
+    }
+
+    @LoginAuth
+    @RequestMapping(value = "/message", method = { RequestMethod.GET })
+    public ResponseEntity<JSONObject> getOfflineMessages(HttpSession session) {
+        Integer uid = (Integer) session.getAttribute("uid");
+        // 获取所有的离线信息
+        List<Message> messages = messageDao.getOfflineMessages(uid);
+        messageDao.clearOfflineMessages(uid);
+        ArrayList<JSONObject> messageList = new ArrayList<>();
+        JSONObject jsonObject = new JSONObject();
+        for (Message m: messages) {
+            JSONObject messageObject = new JSONObject();
+            User srcUser = userDao.getUserByUid(m.getSrcUid());
+            messageObject.put("uid", m.getSrcUid());
+            messageObject.put("avatar", srcUser.getAvatar());
+            messageObject.put("nickname", srcUser.getNickname());
+            messageObject.put("content", m.getContent());
+            messageObject.put("messageTime", m.getMessageTime().getTime());
+            messageList.add(messageObject);
+        }
+        jsonObject.put("messages", messageList);
+        return wrapperResponse(HttpStatus.OK, jsonObject);
+    }
+
+    @LoginAuth
+    @RequestMapping(value = "/send_message", method = { RequestMethod.POST })
+    public ResponseEntity<JSONObject> sendMessage(@RequestParam(value = "uid") Integer destUid,
+                                                  @RequestParam(value = "content") String content,
+                                                  HttpSession session) {
+        Integer srcUid = (Integer) session.getAttribute("uid");
+        Message message = new Message();
+        message.setSrcUid(srcUid);
+        message.setDestUid(destUid);
+        message.setType(0);
+        message.setContent(content);
+        messageDao.putMessage(message);
+
+        return wrapperResponse(HttpStatus.OK, "OK.");
     }
 }

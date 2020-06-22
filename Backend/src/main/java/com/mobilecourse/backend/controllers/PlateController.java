@@ -28,8 +28,13 @@ public class PlateController extends CommonController {
 
     private final Logger LOG = LoggerFactory.getLogger(PlateController.class);
 
+    /**
+     * 获取数据库中所有的板块信息
+     * @return
+     */
     @RequestMapping(value = "/getall", method = { RequestMethod.GET })
     public ResponseEntity<JSONObject> getAllPlates() {
+        //直接通过DAO获取所有板块的信息
         List<Plate> plates = plateDao.getAllPlates();
         JSONObject jsonObject = new JSONObject();
         ArrayList<JSONObject> plateList = new ArrayList<>();
@@ -40,6 +45,11 @@ public class PlateController extends CommonController {
         return wrapperResponse(HttpStatus.OK, jsonObject);
     }
 
+    /**
+     * 获取用户可以投稿的板块
+     * @param session
+     * @return
+     */
     @LoginAuth
     @RequestMapping(value = "/getprivilege", method = { RequestMethod.GET })
     public ResponseEntity<JSONObject> getPrivilege(HttpSession session) {
@@ -54,6 +64,14 @@ public class PlateController extends CommonController {
         return wrapperResponse(HttpStatus.OK, jsonObject);
     }
 
+    /**
+     *
+     * @param pid
+     * @param page
+     * @param count
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/list/{pid}", method = { RequestMethod.GET })
     public ResponseEntity<JSONObject> listSubmissions(@PathVariable Integer pid,
                                                       @RequestParam(value = "page", defaultValue = "0") @Min(0) Integer page,

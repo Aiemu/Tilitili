@@ -47,6 +47,12 @@ create table Likes
  uid int not null,
  primary key (sid, uid));
 
+create table Favorite
+(sid int not null,
+ uid int not null,
+ favoriteTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ primary key (sid, uid));
+
 create table Comment
 (cid int primary key AUTO_INCREMENT,
  sid int not null,
@@ -66,12 +72,20 @@ create table History
  watchTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  primary key (uid, sid));
 
+create table Message
+(mid int primary key AUTO_INCREMENT,
+ srcUid int not null,
+ destUid int not null,
+ type int default 0,
+ content varchar(200) default '',
+ messageTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+
 
 # 密码都为12345678
 insert into User(uid, username, nickname, email, password, department, bio)
 values (1, 'Matsuri', 'MatsuriChan', 'shinoa_sama@outlook.com', 'cdtt1sj/6IMMba0K881Jmg==', 'Software', 'Washoi!');
 insert into User(uid, username, nickname, email, password, department, bio, avatar)
-values (2, 'Tsinghua', 'THU Official', 'tsinghua@tsinghua.edu.cn', 'cdtt1sj/6IMMba0K881Jmg==', 'Campus', '世界一流大学', '/image/campus.png');
+values (2, 'Tsinghua', 'THU Official', 'tsinghua@tsinghua.edu.cn', 'cdtt1sj/6IMMba0K881Jmg==', 'Campus', 'No.1 University', '/image/campus.png');
 
 
 insert into Plate(pid, title, description, cover)

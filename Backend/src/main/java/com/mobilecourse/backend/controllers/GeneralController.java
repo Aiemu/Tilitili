@@ -1,12 +1,11 @@
 package com.mobilecourse.backend.controllers;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mobilecourse.backend.WebSocketServer;
 import com.mobilecourse.backend.annotation.LoginAuth;
-import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.exception.BusinessException;
 import com.mobilecourse.backend.model.User;
 import com.mobilecourse.backend.util.LoginConfig;
-import com.mobilecourse.backend.util.StreamHandler;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.slf4j.Logger;
@@ -19,18 +18,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
@@ -61,9 +55,9 @@ public class GeneralController extends CommonController {
     private String mailFromAddr;
     private String urlFormat = "http://129.211.37.216:8888/verify/%s";
 
-    //视频流部分
-    @Autowired
-    private StreamHandler streamHandler;
+//    //视频流部分
+//    @Autowired
+//    private StreamHandler streamHandler;
 
     /**
      * 用户注册, 会发送验证邮件
@@ -144,6 +138,13 @@ public class GeneralController extends CommonController {
         }
     }
 
+    /**
+     * 用户登录
+     * @param username
+     * @param password
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/login", method = { RequestMethod.POST })
     public ResponseEntity<JSONObject> loginUser(@RequestParam(value = "username") String username,
                                                 @RequestParam(value = "password") String password,
@@ -165,17 +166,32 @@ public class GeneralController extends CommonController {
         session.setAttribute("username", existUser.getUsername());
         session.setMaxInactiveInterval(3600);
 
+        //在websocket存储登录信息
+        String token = UUID.randomUUID().toString();
+        WebSocketServer.getVerifyMap().remove(existUser.getUid());
+//        WebSocketServer.getVerifyMap().put(existUser.getUid(), token);
+        WebSocketServer.getVerifyMap().put(existUser.getUid(), "start");
+
         // 返回userShort
         jsonObject.put("uid", existUser.getUid());
+        jsonObject.put("token", token);
         LOG.info(String.format("The user (%s) login.", existUser.getUsername()));
         return wrapperResponse(HttpStatus.OK, jsonObject);
     }
 
+    /**
+     * 用户登出
+     * @param session
+     * @return
+     */
     @LoginAuth
     @RequestMapping(value = "/logout", method = { RequestMethod.POST })
     public ResponseEntity<JSONObject> logoutUser(HttpSession session) {
-        LOG.info(String.format("The user (%s) logouts.", session.getAttribute("username")));
+        Integer uid = (Integer) session.getAttribute("uid");
+        LOG.info(String.format("The user (%d) logouts.", uid));
+        //登出后将session里面的信息无效化.
         session.invalidate();
+        WebSocketServer.getVerifyMap().remove(uid);
         return wrapperResponse(HttpStatus.OK, "logout successfully.");
     }
 
@@ -196,6 +212,12 @@ public class GeneralController extends CommonController {
         return wrapperResponse(HttpStatus.OK, "OK");
     }
 
+    /**
+     * 上传静态文件接口, 用于html文件中图片的获取, 投稿中html和视频的获取等.
+     * @param file
+     * @param type
+     * @return
+     */
     @RequestMapping(value = "/upload", method = { RequestMethod.POST })
     public ResponseEntity<JSONObject> uploadFile(@RequestParam(value = "file") MultipartFile file,
                                                  @RequestParam(value = "type") @Range(min = 0, max = 2) Integer type) {
@@ -238,21 +260,21 @@ public class GeneralController extends CommonController {
         }
     }
 
-    @RequestMapping(value = "/stream", method = { RequestMethod.GET })
-    public void streamPush(@RequestParam(value = "uri") String uri,
-                           HttpServletRequest request,
-                           HttpServletResponse response) throws Exception {
-        String path = ClassUtils.getDefaultClassLoader().getResource("static").getPath() + uri;
-        Path filePath = Paths.get(path);
-        if (Files.exists(filePath)) {
-            String mimeType = Files.probeContentType(filePath);
-            if (!StringUtils.isEmpty(mimeType)) {
-                response.setContentType(mimeType);
-            }
-            request.setAttribute(StreamHandler.ATTR_FILE, filePath);
-            streamHandler.handleRequest(request, response);
-        } else {
-            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The specified video could not be found.");
-        }
-    }
+//    @RequestMapping(value = "/stream", method = { RequestMethod.GET })
+//    public void streamPush(@RequestParam(value = "uri") String uri,
+//                           HttpServletRequest request,
+//                           HttpServletResponse response) throws Exception {
+//        String path = ClassUtils.getDefaultClassLoader().getResource("static").getPath() + uri;
+//        Path filePath = Paths.get(path);
+//        if (Files.exists(filePath)) {
+//            String mimeType = Files.probeContentType(filePath);
+//            if (!StringUtils.isEmpty(mimeType)) {
+//                response.setContentType(mimeType);
+//            }
+//            request.setAttribute(StreamHandler.ATTR_FILE, filePath);
+//            streamHandler.handleRequest(request, response);
+//        } else {
+//            throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The specified video could not be found.");
+//        }
+//    }
 }
