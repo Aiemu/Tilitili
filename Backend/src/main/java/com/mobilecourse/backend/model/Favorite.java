@@ -3,8 +3,11 @@ package com.mobilecourse.backend.model;
 import java.sql.Timestamp;
 
 public class Favorite {
+    //收藏者
     private Integer uid;
+    //投稿
     private Integer sid;
+    //收藏时间
     private Timestamp favoriteTime;
 
     public Integer getUid() {

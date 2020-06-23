@@ -7,7 +7,9 @@ import java.util.List;
 
 @Mapper
 public interface SubmissionDao {
+    //根据投稿的sid获取具体投稿
     Submission getSubmission(Integer sid);
+    //添加投稿
     void putSubmission(Submission submission);
     void setSubmission(Submission submission);
 
@@ -24,7 +26,8 @@ public interface SubmissionDao {
 
     // 获取多名用户的投稿历史
     List<Submission> getSubmissionHistory(Integer offset, Integer size, List<Integer> uids);
-    // 根据页数查看投稿, offset为null时默认为0, size为null时默认选择全部(不管offset为多少), pid为null时默认选择所有板块.
+    // 根据页数查看最新和最热(观看次数多)投稿.
+    // offset为null时默认为0, size为null时默认选择全部(不管offset为多少), pid为null时默认选择所有板块.
     List<Submission> getSubmissionNewPage(Integer offset, Integer size, Integer pid);
     List<Submission> getSubmissionHotPage(Integer offset, Integer size, Integer pid);
 

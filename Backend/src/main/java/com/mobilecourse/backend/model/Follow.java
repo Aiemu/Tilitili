@@ -1,7 +1,9 @@
 package com.mobilecourse.backend.model;
 
 public class Follow {
+    //关注者Uid
     private int followerUid;
+    //被关注者Uid
     private int followedUid;
 
     public int getFollowerUid() {

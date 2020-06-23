@@ -4,14 +4,23 @@ import java.sql.Timestamp;
 
 public class User {
 
+    //用户唯一id
     private int uid;
+    //用户名(用于登录)
     private String username;
+    //昵称
     private String nickname;
+    //邮件
     private String email;
+    //密码
     private String password;
+    //院系
     private String department;
+    //注册时间
     private Timestamp joinAt;
+    //头像
     private String avatar;
+    //个性签名
     private String bio;
 
     public int getUid() {
