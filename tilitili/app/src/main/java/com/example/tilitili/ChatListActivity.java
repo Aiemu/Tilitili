@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -70,8 +71,6 @@ public class ChatListActivity extends Activity {
                 httpHelper.get(Contants.API.GET_USER_MESSAGES, new SimpleCallback<String>(ChatListActivity.this) {
                     @Override
                     public void onSuccess(Response response, String string) {
-                        ToastUtils.show(ChatListActivity.this, "errorMessage.getErrorMessage()");
-
                         List<Message> messages2 = new ArrayList<>();
                         try {
                             JSONObject jsonObject = new JSONObject(string);
@@ -98,7 +97,7 @@ public class ChatListActivity extends Activity {
 
                     @Override
                     public void onError(Response response, ErrorMessage errorMessage, Exception e) {
-                        ToastUtils.show(ChatListActivity.this, errorMessage.getErrorMessage());
+                        Log.d("ChatListActivity", errorMessage.getErrorMessage());
                     }
                 });
             }

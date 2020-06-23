@@ -3,8 +3,10 @@ package com.example.tilitili;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,6 +42,8 @@ public class ChatActivity extends Activity {
     private RecyclerView recyclerView;
     @ViewInject(R.id.edit_message)
     private EditText editText;
+    @ViewInject(R.id.chat_user_title_bar_title)
+    private TextView title;
 
     private int uid;
     private HttpHelper httpHelper;
@@ -96,7 +100,7 @@ public class ChatActivity extends Activity {
 
                     @Override
                     public void onError(Response response, ErrorMessage errorMessage, Exception e) {
-                        ToastUtils.show(ChatActivity.this, errorMessage.getErrorMessage());
+                        Log.d("ChatListActivity", errorMessage.getErrorMessage());
                     }
                 });
             }
@@ -108,7 +112,6 @@ public class ChatActivity extends Activity {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-
                         List<Message> messageList = new ArrayList<>();
                         new ChatActivity.AgentAsyncTask(messageList).execute();
                     }
@@ -128,8 +131,8 @@ public class ChatActivity extends Activity {
 
         @Override
         protected List<Message> doInBackground(Void... params) {
-            MessageDatabase messageDatabase = MessageDatabase.getInstance(ChatActivity.this);
             messageDatabase.messageDao().insertAll(a_messages);
+            messageDatabase.messageDao().setRead(uid);
             return messageDatabase.messageDao().getOneUserMessage(uid, UserManagerApplication.getInstance().getUser().getUserId());
         }
 
@@ -139,6 +142,8 @@ public class ChatActivity extends Activity {
             messages.addAll(messagess);
             messageAdapter.notifyDataSetChanged();
             recyclerView.scrollToPosition(messagess.size() - 1);
+            if(messagess.size() > 0)
+                title.setText(messagess.get(0).getNickname());
         }
     }
 
@@ -184,14 +189,6 @@ public class ChatActivity extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-//                Message message1 = new Message(new Random().nextInt(60000) + 324342,
-//                        UserManagerApplication.getInstance().getUser().getUserId(),
-//                        uid,
-//                        message2,
-//                        UserManagerApplication.getInstance().getUser().getNickname(),
-//                        UserManagerApplication.getInstance().getUser().getAvatar(),
-//                        123,
-//                        1);
                 if (message1 != null) {
                     List<Message> temp = new ArrayList<>();
                     temp.add(message1);
@@ -202,7 +199,6 @@ public class ChatActivity extends Activity {
             @Override
             public void onError(Response response, ErrorMessage errorMessage, Exception e) {
                 dismissDialog();
-                ToastUtils.show(ChatActivity.this, errorMessage.getErrorMessage());
             }
         });
     }

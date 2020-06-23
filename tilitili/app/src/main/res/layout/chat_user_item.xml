@@ -3,37 +3,58 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <LinearLayout
         android:id="@+id/ll_left"
-        android:layout_width="115dp"
-        android:layout_height="60dp"
-        android:background="@drawable/chat_item_back">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/chat_left_avatar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@null" />
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/tv_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:textColor="#FFF" />
+            android:background="@drawable/chat_item_test"
+            android:maxWidth="220dp"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_right"
-        android:layout_width="115dp"
-        android:layout_height="60dp"
-        android:layout_gravity="right"
-        android:background="@drawable/chat_item_back">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end">
 
         <TextView
             android:id="@+id/tv_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp" />
+            android:background="@drawable/chat_item_test"
+            android:maxWidth="220dp"
+            android:textColor="@color/black" />
 
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/chat_right_avatar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:background="@null" />
     </LinearLayout>
 </LinearLayout>
