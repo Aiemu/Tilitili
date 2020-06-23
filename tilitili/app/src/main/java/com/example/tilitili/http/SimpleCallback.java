@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.example.tilitili.LoginActivity;
 import com.example.tilitili.R;
 import com.example.tilitili.UserManagerApplication;
+import com.example.tilitili.data.MessageDatabase;
 import com.example.tilitili.utils.ToastUtils;
 
 import okhttp3.Request;
@@ -36,7 +37,15 @@ public abstract class SimpleCallback<T> extends BaseHttpCallback<T> {
         UserManagerApplication.getInstance().cleanSessionId();
         Intent intent = new Intent();
         intent.setClass(context, LoginActivity.class);
-        context.startActivity(intent);
         UserManagerApplication.getInstance().clearUser();
+        final MessageDatabase messageDatabase = MessageDatabase.getInstance(context);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                messageDatabase.messageDao().deleteAllMessage();
+            }
+        }).start();
+        context.startActivity(intent);
+
     }
 }

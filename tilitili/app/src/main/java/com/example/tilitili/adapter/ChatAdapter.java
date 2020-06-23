@@ -26,7 +26,7 @@ public class ChatAdapter extends SimpleAdapter<Message> {
         coverView.setImageURI(Uri.parse(Config.getFullUrl(item.getAvatar())));
 
         // 用户名
-        viewHolder.getTextView(R.id.chat_user_list_item_nickname).setText(item.getNickname());
+        viewHolder.getTextView(R.id.chat_user_list_item_nickname).setText(String.valueOf(item.getNickname()));
 
         final MessageDatabase messageDatabase = MessageDatabase.getInstance(this.context);
         // 已关注

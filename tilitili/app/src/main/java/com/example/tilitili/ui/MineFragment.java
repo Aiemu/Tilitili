@@ -23,6 +23,7 @@ import com.example.tilitili.R;
 import com.example.tilitili.UserManagerApplication;
 import com.example.tilitili.UserProfileUpdateActivity;
 import com.example.tilitili.data.Contants;
+import com.example.tilitili.data.MessageDatabase;
 import com.example.tilitili.data.User;
 import com.example.tilitili.data.UserLocalData;
 import com.example.tilitili.http.ErrorMessage;
@@ -98,7 +99,7 @@ public class MineFragment extends BaseFragment {
                         avatarImageView.setImageURI(Uri.parse("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3927644377,808105775&fm=26&gp=0.jpg"));
 
                     // 更新本地user
-                    UserLocalData.updateUser(this.getContext(), user);
+                    UserManagerApplication.getInstance().updateUser(user);
                     dismissDialog();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -172,6 +173,13 @@ public class MineFragment extends BaseFragment {
         UserManagerApplication.getInstance().clearUser();
         UserManagerApplication.getInstance().cleanSessionId();
         Intent intent = new Intent(this.getContext(), LoginActivity.class);
+        final MessageDatabase messageDatabase = MessageDatabase.getInstance(this.getContext());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                messageDatabase.messageDao().deleteAllMessage();
+            }
+        }).start();
         startActivity(intent);
     }
 }

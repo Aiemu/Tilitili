@@ -101,6 +101,8 @@ public class LoginActivity extends Activity {
                     e.printStackTrace();
                     ToastUtils.show(LoginActivity.this, "登录失败");
                 }
+                if (user != null)
+                    getUserInfo(user.getUserId());
                 dismissDialog();
             }
 
@@ -130,4 +132,33 @@ public class LoginActivity extends Activity {
         Intent reset_intent = new Intent(this, ResetPWActivity.class);
         startActivity(reset_intent);
     }
+
+    private void getUserInfo(int uid) {
+        httpHelper.get(Contants.API.GET_USER_PROFILE_URL + uid, new SpotsCallBack<String>(this) {
+            @Override
+            public void onSuccess(Response response, String s) {
+                User user = new User(UserManagerApplication.getInstance().getUser().getUserId());
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
+                    user.setUsername(jsonObject.getString("username"));
+                    user.setEmail(jsonObject.getString("email"));
+                    user.setNickname(jsonObject.getString("nickname"));
+                    user.setDepartment(jsonObject.getString("department"));
+                    user.setJoinAt(jsonObject.getLong("joinAt"));
+                    user.setBio(jsonObject.getString("bio"));
+                    user.setAvatar(jsonObject.getString("avatar"));
+                    dismissDialog();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                UserManagerApplication.getInstance().updateUser(user);
+            }
+
+            @Override
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
 }
