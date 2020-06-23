@@ -42,6 +42,7 @@ public class ChatListActivity extends Activity {
     @ViewInject(R.id.chat_user_list_recycle_view)
     RecyclerView recyclerView;
 
+    final static int CHAT_USER_BACK = 324;
     MessageDatabase messageDatabase;
     Handler handler;
     List<Message> messages;
@@ -110,25 +111,27 @@ public class ChatListActivity extends Activity {
                 Intent intent = new Intent(ChatListActivity.this, ChatActivity.class);
                 intent.putExtra("uid", message.getUid());
                 timer.cancel();
-                startActivity(intent);
+                startActivityForResult(intent, CHAT_USER_BACK);
             }
         });
         recyclerView.setAdapter(chatAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ChatListActivity.this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         timer.schedule(timerTask, 2000, 1000);
-        init();
-    }
-
-    void init() {
-        new Thread(new Runnable() {
+        recyclerView.post(new Runnable() {
             @Override
             public void run() {
-                messages.addAll(messageDatabase.messageDao().getAllDistinctUsers());
-                chatAdapter.notifyDataSetChanged();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        List<Message> messageList = new ArrayList<>();
+                        new AgentAsyncTask(messageList).execute();
+                    }
+                }, 100);
             }
-        }).start();
+        });
     }
+
 
     private class AgentAsyncTask extends AsyncTask<Void, Void, List<Message>> {
 
@@ -143,7 +146,7 @@ public class ChatListActivity extends Activity {
         protected List<Message> doInBackground(Void... params) {
             MessageDatabase messageDatabase = MessageDatabase.getInstance(ChatListActivity.this);
             messageDatabase.messageDao().insertAll(a_messages);
-            return messageDatabase.messageDao().getAllDistinctUsers();
+            return messageDatabase.messageDao().getAllDistinctUsers(UserManagerApplication.getInstance().getUser().getUserId());
         }
 
         @Override
@@ -151,6 +154,63 @@ public class ChatListActivity extends Activity {
             messages.clear();
             messages.addAll(messagess);
             chatAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case CHAT_USER_BACK:
+                if (resultCode == RESULT_OK) {
+                    timerTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            httpHelper.get(Contants.API.GET_USER_MESSAGES, new SimpleCallback<String>(ChatListActivity.this) {
+                                @Override
+                                public void onSuccess(Response response, String string) {
+                                    ToastUtils.show(ChatListActivity.this, "errorMessage.getErrorMessage()");
+
+                                    List<Message> messages2 = new ArrayList<>();
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(string);
+                                        JSONArray items = jsonObject.getJSONArray("messages");
+                                        for (int i = 0; i < items.length(); i++) {
+                                            JSONObject item = (JSONObject) items.get(i);
+                                            final Message message = new Message(item.getInt("mid"),
+                                                    item.getInt("uid"),
+                                                    UserManagerApplication.getInstance().getUser().getUserId(),
+                                                    item.getString("content"),
+                                                    item.getString("nickname"),
+                                                    item.getString("avatar"),
+                                                    item.getLong("messageTime"),
+                                                    0);
+                                            messages2.add(message);
+                                        }
+                                        if (messages2.size() > 0) {
+                                            new AgentAsyncTask(messages2).execute();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(Response response, ErrorMessage errorMessage, Exception e) {
+                                    ToastUtils.show(ChatListActivity.this, errorMessage.getErrorMessage());
+                                }
+                            });
+                        }
+                    };
+                    timer = new Timer();
+                    timer.schedule(timerTask, 2000, 1000);
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            List<Message> messageList = new ArrayList<>();
+                            new AgentAsyncTask(messageList).execute();
+                        }
+                    }, 500);
+                }
         }
     }
 

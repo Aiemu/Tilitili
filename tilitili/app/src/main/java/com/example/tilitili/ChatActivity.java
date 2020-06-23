@@ -63,14 +63,6 @@ public class ChatActivity extends Activity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(messageAdapter);
         timer = new Timer();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                messages.addAll(messageDatabase.messageDao().getOneUserMessage(uid, UserManagerApplication.getInstance().getUser().getUserId()));
-                messageDatabase.messageDao().setRead(uid);
-                messageAdapter.notifyDataSetChanged();
-            }
-        }).start();
         timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -91,7 +83,7 @@ public class ChatActivity extends Activity {
                                         item.getString("nickname"),
                                         item.getString("avatar"),
                                         item.getLong("messageTime"),
-                                        1);
+                                        item.getInt("uid") == uid ? 1 : 0);
                                 messages2.add(message);
                             }
                             if (messages2.size() > 0) {
@@ -110,6 +102,19 @@ public class ChatActivity extends Activity {
             }
         };
         timer.schedule(timerTask, 1000, 1000);
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+
+                        List<Message> messageList = new ArrayList<>();
+                        new ChatActivity.AgentAsyncTask(messageList).execute();
+                    }
+                }, 100);
+            }
+        });
     }
 
     private class AgentAsyncTask extends AsyncTask<Void, Void, List<Message>> {
@@ -140,12 +145,14 @@ public class ChatActivity extends Activity {
     @Override
     public void onBackPressed() {
         timer.cancel();
+        setResult(RESULT_OK);
         finish();
     }
 
     @OnClick(R.id.chat_user_title_bar_back)
     public void back(View v) {
         timer.cancel();
+        setResult(RESULT_OK);
         finish();
     }
 
