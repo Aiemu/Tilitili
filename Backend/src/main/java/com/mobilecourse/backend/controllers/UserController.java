@@ -21,10 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Min;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.sql.Timestamp;
+import java.util.*;
 
 @RestController
 @EnableAutoConfiguration
@@ -306,6 +304,9 @@ public class UserController extends CommonController {
         message.setContent(content);
         messageDao.putMessage(message);
 
-        return wrapperResponse(HttpStatus.OK, "OK.");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("mid", message.getMid());
+        jsonObject.put("messageTime", messageDao.getMessage(message.getMid()).getMessageTime().getTime());
+        return wrapperResponse(HttpStatus.OK, jsonObject);
     }
 }

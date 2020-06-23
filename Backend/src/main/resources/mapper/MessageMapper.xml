@@ -12,8 +12,13 @@
         DELETE FROM Message
         WHERE destUid=#{destUid}
     </delete>
-    <insert id="putMessage" parameterType="com.mobilecourse.backend.model.Message">
+    <insert id="putMessage" useGeneratedKeys="true" keyProperty="mid" parameterType="com.mobilecourse.backend.model.Message">
         INSERT INTO Message(destUid, srcUid, type, content)
         VALUES (#{destUid}, #{srcUid}, #{type}, #{content})
     </insert>
+    <select id="getMessage" resultType="com.mobilecourse.backend.model.Message">
+        SELECT *
+        FROM Message
+        WHERE mid=#{mid}
+    </select>
 </mapper>
