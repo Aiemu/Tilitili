@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.FavoriteDao">
+    <select id="getFavorite" resultType="com.mobilecourse.backend.model.Favorite">
+        SELECT *
+        FROM Favorite
+        WHERE sid=#{sid} AND uid=#{uid}
+    </select>
+    <select id="getSubmissionFavoriteCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM Favorite
+        WHERE sid=#{sid}
+    </select>
+    <select id="getUserAllFavorite" resultType="Integer">
+        SELECT sid
+        FROM Favorite
+        WHERE uid=#{uid}
+        ORDER BY favoriteTime DESC, sid DESC
+        <if test="size != null">
+            LIMIT <if test="offset != null">#{offset}, </if> #{size}
+        </if>
+    </select>
+    <select id="getUserAllFavoriteCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM Favorite
+        WHERE uid=#{uid}
+    </select>
+    <insert id="putFavorite">
+        INSERT INTO Favorite(uid, sid)
+        VALUES (#{uid}, #{sid})
+    </insert>
+    <delete id="deleteFavorite">
+        DELETE FROM Favorite
+        WHERE sid=#{sid} AND uid=#{uid}
+    </delete>
+    <update id="updateFavorite">
+        UPDATE Favorite
+        SET favoriteTime=CURRENT_TIMESTAMP
+        WHERE uid=#{uid} AND sid=#{sid}
+    </update>
+</mapper>

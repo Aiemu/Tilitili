@@ -6,6 +6,7 @@ public class Contants {
     public static final String USER_JSON = "user_json";
     public static final String SESSION_PREFERENCE = "header_json";
     public static final String TOKEN = "token";
+    public static final String SQLITE_DATABASE_NAME = "chat_info";
 
     public static class API {
         public static final String BASE_URL = Config.host + ":" + Config.port;
@@ -17,6 +18,7 @@ public class Contants {
         public static final String GET_PLATE = BASE_URL + "/plate/getall";
         public static final String GET_USER_ACTIVITY = BASE_URL + "/user/activity";
         public static final String SUBMISSION_LIKE = BASE_URL + "/submission/like/";
+        public static final String SUBMISSION_FAVORITE = BASE_URL + "/submission/favorite/";
         public static final String REGISTER_URL = BASE_URL + "/signup";
         public static final String UPLOAD_URL = BASE_URL + "/upload";
         public static final String SUBMISSION_UPLOAD_URL = BASE_URL + "/submission/upload";
@@ -25,6 +27,7 @@ public class Contants {
         public static final String CHECK_LOGIN_URL = BASE_URL + "/checklogin";
         public static final String GET_PRIVILEGE_PLATES = BASE_URL + "/plate/getprivilege";
         public static final String GET_HISTORY_SUBMISSIONS = BASE_URL + "/submission/history";
+        public static final String GET_FAVORITE_SUBMISSION = BASE_URL + "/user/favorite";
         public static final String GET_HISTORY_UPLOAD_SUBMISSION = BASE_URL + "/submission/upload_history";
         public static final String GET_USER_FOLLOWING_LIST = BASE_URL + "/user/friend";
         public static final String GET_SUBMISSION_COMMENT = BASE_URL + "/submission/comment/get/";
@@ -35,6 +38,8 @@ public class Contants {
         public static final String USER_SEARCH_URL = BASE_URL + "/user/search";
         public static final String FOLLOW_USER_URL = BASE_URL + "/user/follow";
         public static final String UNFOLLOW_USER_URL = BASE_URL + "/user/unfollow";
+        public static final String GET_USER_MESSAGES = BASE_URL + "/user/message";
+        public static final String SEND_USER_MESSAGE = BASE_URL + "/user/send_message";
 
         public static String getUrlWithID(String url, String ID) {
             return url + ID;

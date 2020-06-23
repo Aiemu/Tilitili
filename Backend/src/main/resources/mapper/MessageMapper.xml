@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定了mapper对应的dao -->
+<mapper namespace="com.mobilecourse.backend.dao.MessageDao">
+    <select id="getOfflineMessages" resultType="com.mobilecourse.backend.model.Message">
+        SELECT *
+        FROM Message
+        WHERE destUid=#{destUid}
+        ORDER BY messageTime DESC, mid DESC
+    </select>
+    <delete id="clearOfflineMessages">
+        DELETE FROM Message
+        WHERE destUid=#{destUid}
+    </delete>
+    <insert id="putMessage" useGeneratedKeys="true" keyProperty="mid" parameterType="com.mobilecourse.backend.model.Message">
+        INSERT INTO Message(destUid, srcUid, type, content)
+        VALUES (#{destUid}, #{srcUid}, #{type}, #{content})
+    </insert>
+    <select id="getMessage" resultType="com.mobilecourse.backend.model.Message">
+        SELECT *
+        FROM Message
+        WHERE mid=#{mid}
+    </select>
+</mapper>

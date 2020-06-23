@@ -86,6 +86,27 @@ public class SubmissionController extends CommonController {
     }
 
     @LoginAuth
+    @RequestMapping(value = "favorite/{sid}", method = { RequestMethod.POST })
+    public ResponseEntity<JSONObject> favoriteSubmission(@RequestParam(value = "favorite") @Range(min = 0, max = 1) Integer favorite,
+                                                     @PathVariable Integer sid,
+                                                     HttpSession session) {
+        Integer uid = (Integer) session.getAttribute("uid");
+        Favorite isFavorite = favoriteDao.getFavorite(uid, sid);
+        if (favorite == 0) {
+            //取消收藏
+            if (isFavorite != null) {
+                favoriteDao.deleteFavorite(uid, sid);
+            }
+        } else {
+            //收藏
+            if (isFavorite == null) {
+                favoriteDao.putFavorite(uid, sid);
+            }
+        }
+        return wrapperResponse(HttpStatus.OK, "OK.");
+    }
+
+    @LoginAuth
     @RequestMapping(value = "like/{sid}", method = { RequestMethod.POST })
     public ResponseEntity<JSONObject> likeSubmission(@RequestParam(value = "like") @Range(min = 0, max = 1) Integer like,
                                                      @PathVariable Integer sid,

@@ -12,8 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +27,7 @@ import java.util.Map;
 @EnableAutoConfiguration
 public class CommonController {
 
+    // DAO接口
     @Autowired
     protected SubmissionDao submissionDao;
     @Autowired
@@ -38,10 +44,32 @@ public class CommonController {
     protected UserDao userDao;
     @Autowired
     protected HistoryDao historyDao;
+    @Autowired
+    protected FavoriteDao favoriteDao;
+    @Autowired
+    protected MessageDao messageDao;
 
     // session半个小时无交互就会过期
     private static int MAXTIME = 1800;
     private final Logger LOG = LoggerFactory.getLogger(CommonController.class);
+
+    // 密码加密部分
+    private static final byte[] DES_KEY = { 21, 1, -110, 82, -32, -85, -128, -65 };
+    public String encryptBasedDes(String data) {
+        String encryptedData = null;
+        try {
+            SecureRandom sr = new SecureRandom();
+            DESKeySpec deskey = new DESKeySpec(DES_KEY);
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+            SecretKey key = keyFactory.generateSecret(deskey);
+            Cipher cipher = Cipher.getInstance("DES");
+            cipher.init(Cipher.ENCRYPT_MODE, key, sr);
+            encryptedData = new sun.misc.BASE64Encoder().encode(cipher.doFinal(data.getBytes()));
+        } catch (Exception e) {
+            throw new RuntimeException("Exception in encryption: ", e);
+        }
+        return encryptedData;
+    }
 
     // 添加一个code，方便客户端根据code来判断服务器处理状态并解析对应的msg
     String wrapperMsg(int code, String msg) {
@@ -51,6 +79,7 @@ public class CommonController {
         return wrapperMsg.toJSONString();
     }
 
+    //根据状态码和返回的JSON包装响应
     ResponseEntity<JSONObject> wrapperResponse(HttpStatus code, JSONObject body) {
         return new ResponseEntity<>(body, code);
     }
@@ -110,9 +139,11 @@ public class CommonController {
         jsonObject.put("submissionTime", submission.getSubmissionTime().getTime());
         jsonObject.put("watchTimes", submission.getWatchTimes());
         jsonObject.put("likesCount", likesDao.getSubmissionLikes(submission.getSid()));
+        jsonObject.put("favoriteCount", favoriteDao.getSubmissionFavoriteCount(submission.getSid()));
         //没有登录默认不点赞, 默认不关注
         jsonObject.put("isLike", 0);
         jsonObject.put("following", 0);
+        jsonObject.put("isFavorite", 0);
         if (loginUserUid != null) {
             Likes isLike = likesDao.getLike(loginUserUid, submission.getSid());
             if (isLike != null) {
@@ -121,6 +152,10 @@ public class CommonController {
             Follow follow = followDao.getFollow(loginUserUid, submissionUser.getUid());
             if (follow != null) {
                 jsonObject.put("following", 1);
+            }
+            Favorite isFavorite = favoriteDao.getFavorite(loginUserUid, submission.getUid());
+            if (isFavorite != null) {
+                jsonObject.put("isFavorite", 1);
             }
         }
         jsonObject.put("commentsCount", commentDao.getCommentCounts(submission.getSid()));

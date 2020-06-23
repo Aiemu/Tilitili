@@ -9,9 +9,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -42,7 +42,6 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
-import com.nanchen.compresshelper.CompressHelper;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -61,6 +60,7 @@ import java.util.Map;
 import jp.wasabeef.richeditor.RichEditor;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Request;
 import okhttp3.Response;
 
 public class EditorActivity extends Activity {
@@ -161,11 +161,15 @@ public class EditorActivity extends Activity {
         mEditor.setEditorFontColor(Color.BLACK);
         mEditor.setPadding(10, 10, 10, 10);
         mEditor.setPlaceholder("Insert text here...");
+        mEditor.loadCSS("image{" +
+                "max-width:30px;" +
+                "}");
 
         mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String text) {
                 html_text = text;
+                Log.d("html", html_text);
             }
         });
 
@@ -350,12 +354,6 @@ public class EditorActivity extends Activity {
             }
         });
 
-        findViewById(R.id.action_insert_link).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEditor.insertLink("https://github.com/wasabeef", "wasabeef");
-            }
-        });
         findViewById(R.id.action_insert_checkbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -376,7 +374,6 @@ public class EditorActivity extends Activity {
             case SELECT_PHOTO_CODE:
                 if (resultCode == RESULT_OK) {
                     Uri uri = data.getData();
-                    progressBar.setVisibility(View.VISIBLE);
                     uploadImage(uri, SELECT_PHOTO_CODE);
                 }
                 break;
@@ -411,16 +408,6 @@ public class EditorActivity extends Activity {
 
     public void uploadImage(Uri filepath, final int code) {
         File imageFile = new File(getRealPathFromURI(filepath));
-        if (SELECT_PHOTO_CODE == code)
-            getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        imageFile = new CompressHelper.Builder(this)
-                .setMaxWidth(260)
-                .setMaxHeight(150)
-                .setQuality(80)
-                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
-                .build()
-                .compressToFile(imageFile);
         uploadHttpHelper.upload(uploadHttpHelper.buildRequest(imageFile, Contants.API.UploadType.IMAGE), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -435,9 +422,9 @@ public class EditorActivity extends Activity {
                     public void run() {
                         try {
                             JSONObject jsonObject = new JSONObject(mMessage);
-                            if (code == SELECT_PHOTO_CODE)
-                                mEditor.insertImage(Config.getFullUrl((String) jsonObject.get("uri")), "dachshund");
-                            else if (code == SELECT_COVER_CODE) {
+                            if (code == SELECT_PHOTO_CODE) {
+                                mEditor.insertImage(Config.getFullUrl((String) jsonObject.get("uri")), "alt\" width=\"300");
+                            } else if (code == SELECT_COVER_CODE) {
                                 cover_uri = (String) jsonObject.get("uri");
                             }
                         } catch (JSONException e) {
@@ -480,7 +467,12 @@ public class EditorActivity extends Activity {
 
             assert outputFile != null;
 
-            uploadHttpHelper.upload(uploadHttpHelper.buildRequest(outputFile, Contants.API.UploadType.HTML), new Callback() {
+            Request request = uploadHttpHelper.buildRequest(outputFile, Contants.API.UploadType.HTML);
+            if (request == null) {
+                ToastUtils.show(this, "上传失败，请重新尝试");
+                return;
+            }
+            uploadHttpHelper.upload(request, new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     e.printStackTrace();
@@ -506,7 +498,14 @@ public class EditorActivity extends Activity {
         } else {
             //视频上传
             File imageFile = new File(getRealPathFromURI(video_upload_uri));
-            uploadHttpHelper.upload(uploadHttpHelper.buildRequest(imageFile, Contants.API.UploadType.VIDEO), new Callback() {
+            Request request = uploadHttpHelper.buildRequest(imageFile, Contants.API.UploadType.VIDEO);
+
+            if (request == null) {
+                ToastUtils.show(this, "上传失败，请重新尝试");
+                return;
+            }
+
+            uploadHttpHelper.upload(request, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     e.printStackTrace();

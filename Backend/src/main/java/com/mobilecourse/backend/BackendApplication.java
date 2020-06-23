@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
@@ -14,7 +15,8 @@ public class BackendApplication extends SpringBootServletInitializer {
 
     // 程序入口
     public static void main(String[] args) {
-        SpringApplication.run(BackendApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(BackendApplication.class, args);
+        WebSocketServer.setApplicationContext(applicationContext);
     }
 
     @Override//为了打包springboot项目

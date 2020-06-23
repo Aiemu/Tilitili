@@ -6,10 +6,7 @@ import com.mobilecourse.backend.annotation.LoginAuth;
 import com.mobilecourse.backend.dao.FollowDao;
 import com.mobilecourse.backend.dao.UserDao;
 import com.mobilecourse.backend.exception.BusinessException;
-import com.mobilecourse.backend.model.Follow;
-import com.mobilecourse.backend.model.Likes;
-import com.mobilecourse.backend.model.Submission;
-import com.mobilecourse.backend.model.User;
+import com.mobilecourse.backend.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Min;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.sql.Timestamp;
+import java.util.*;
 
 @RestController
 @EnableAutoConfiguration
@@ -156,6 +151,8 @@ public class UserController extends CommonController {
                                                      @RequestParam(value = "old") String oldPassword,
                                                      @RequestParam(value = "new") String newPassword) {
         User user = userDao.getUserByUid(uid);
+        oldPassword = encryptBasedDes(oldPassword);
+        newPassword = encryptBasedDes(newPassword);
         if (user == null) {
             throw new BusinessException(HttpStatus.NOT_FOUND, 1, "User could not be found!");
         }
@@ -170,6 +167,7 @@ public class UserController extends CommonController {
     public ResponseEntity<JSONObject> forgetPassword(@RequestParam(value = "username") String username,
                                                      @RequestParam(value = "password") String password) {
         User user = userDao.getUserByUsername(username);
+        password = encryptBasedDes(password);
         if (user == null) {
             throw new BusinessException(HttpStatus.NOT_FOUND, 1, "The username does not exist in the Database.");
         }
@@ -230,6 +228,27 @@ public class UserController extends CommonController {
     }
 
     @LoginAuth
+    @RequestMapping(value = "/favorite", method = {RequestMethod.GET})
+    public ResponseEntity<JSONObject> getFavorite(@RequestParam(value = "page", defaultValue = "0") @Min(0) Integer page,
+                                                  @RequestParam(value = "count", defaultValue = "10") @Min(1) Integer count,
+                                                  HttpSession session) {
+        Integer uid = (Integer) session.getAttribute("uid");
+        List<Integer> favoriteSids = favoriteDao.getUserAllFavorite(page * count, count, uid);
+        Integer submissionCounts = favoriteDao.getUserAllFavoriteCount(uid);
+        List<Submission> submissions = new ArrayList<>();
+        for (Integer sid: favoriteSids) {
+            submissions.add(submissionDao.getSubmission(sid));
+        }
+        //装载投稿
+        ArrayList<JSONObject> list = new ArrayList<>();
+        for (Submission s : submissions) {
+            list.add(wrapSubmission(s, uid));
+        }
+        JSONObject jsonObject = wrapPageFormat(list, page, count, submissionCounts);
+        return wrapperResponse(HttpStatus.OK, jsonObject);
+    }
+
+    @LoginAuth
     @RequestMapping(value = "/friend", method = {RequestMethod.GET})
     public ResponseEntity<JSONObject> getAllFriends(HttpSession session) {
         Integer uid = (Integer) session.getAttribute("uid");
@@ -245,6 +264,49 @@ public class UserController extends CommonController {
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("users", followedUsers);
+        return wrapperResponse(HttpStatus.OK, jsonObject);
+    }
+
+    @LoginAuth
+    @RequestMapping(value = "/message", method = { RequestMethod.GET })
+    public ResponseEntity<JSONObject> getOfflineMessages(HttpSession session) {
+        Integer uid = (Integer) session.getAttribute("uid");
+        // 获取所有的离线信息
+        List<Message> messages = messageDao.getOfflineMessages(uid);
+        messageDao.clearOfflineMessages(uid);
+        ArrayList<JSONObject> messageList = new ArrayList<>();
+        JSONObject jsonObject = new JSONObject();
+        for (Message m: messages) {
+            JSONObject messageObject = new JSONObject();
+            User srcUser = userDao.getUserByUid(m.getSrcUid());
+            messageObject.put("mid", m.getMid());
+            messageObject.put("uid", m.getSrcUid());
+            messageObject.put("avatar", srcUser.getAvatar());
+            messageObject.put("nickname", srcUser.getNickname());
+            messageObject.put("content", m.getContent());
+            messageObject.put("messageTime", m.getMessageTime().getTime());
+            messageList.add(messageObject);
+        }
+        jsonObject.put("messages", messageList);
+        return wrapperResponse(HttpStatus.OK, jsonObject);
+    }
+
+    @LoginAuth
+    @RequestMapping(value = "/send_message", method = { RequestMethod.POST })
+    public ResponseEntity<JSONObject> sendMessage(@RequestParam(value = "uid") Integer destUid,
+                                                  @RequestParam(value = "content") String content,
+                                                  HttpSession session) {
+        Integer srcUid = (Integer) session.getAttribute("uid");
+        Message message = new Message();
+        message.setSrcUid(srcUid);
+        message.setDestUid(destUid);
+        message.setType(0);
+        message.setContent(content);
+        messageDao.putMessage(message);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("mid", message.getMid());
+        jsonObject.put("messageTime", messageDao.getMessage(message.getMid()).getMessageTime().getTime());
         return wrapperResponse(HttpStatus.OK, jsonObject);
     }
 }

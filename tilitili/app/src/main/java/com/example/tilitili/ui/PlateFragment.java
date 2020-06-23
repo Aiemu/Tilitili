@@ -72,14 +72,14 @@ public class PlateFragment extends BaseFragment implements Pager.OnPageListener<
                 try {
                     JSONObject jsonObject = new JSONObject(page);
                     JSONArray items = jsonObject.getJSONArray("plates");
-                    for (int i = 0; i < jsonObject.length(); i++) {
+                    for (int i = 0; i < items.length(); i++) {
                         JSONObject item = (JSONObject) items.get(i);
                         plates.add(new Plate(item.getInt("pid"),
                                 item.getString("title"),
                                 item.getString("description"),
                                 item.getString("cover")));
                     }
-                    pager.setPageIndex(1);
+                    pager.setPageIndex(0);
                     pager.setTotalPage(1);
                     pager.showData(plates, 1, plates.size());
                 } catch (JSONException e) {

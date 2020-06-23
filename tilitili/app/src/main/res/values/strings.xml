@@ -31,6 +31,7 @@
     <string name="login_error">用户名或密码错误，请重新登录</string>
     <string name="to_follow">关注</string>
     <string name="is_following">已关注</string>
+    <string name="chat">聊天</string>
 
     <string name="my_upload">我的投稿</string>
     <string name="my_history">历史记录</string>
@@ -67,6 +68,7 @@
     <string name="user_profile_organization_hint">社团</string>
     <string name="user_profile_organization_default">未知</string>
     <string name="user_profile_history">历史记录</string>
+    <string name="user_favorite">我的收藏</string>
     <string name="user_profile_read_history">查看历史记录</string>
     <string name="user_profile_follow_list">我的关注</string>
     <string name="user_profile_submission_upload_hint">投稿</string>
@@ -88,7 +90,11 @@
     <string name="home_hot_order">最热</string>
     <string name="home_new_order">最新</string>
     <string name="comment">评论区</string>
+    <string name="user">用户</string>
+    <string name="chat_list">聊天列表</string>
     <string name="to_comment">评论</string>
+    <string name="to_message">输入消息</string>
+    <string name="send">发送</string>
     <string name="logout_hint">退出登录</string>
 
     <string-array name="departments">

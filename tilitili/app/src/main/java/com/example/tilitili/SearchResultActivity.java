@@ -136,7 +136,9 @@ public class SearchResultActivity extends Activity {
                                 item.getInt("commentsCount"),
                                 item.getInt("uid"),
                                 item.getString("userNickname"),
-                                item.getInt("following")));
+                                item.getInt("following"),
+                                item.getInt("favoriteCount"),
+                                item.getInt("isFavorite")));
                     }
                     hotSubmissionAdapter.notifyDataSetChanged();
                     hotSubmissionAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {

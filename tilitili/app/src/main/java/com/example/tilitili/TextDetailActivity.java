@@ -56,7 +56,9 @@ public class TextDetailActivity extends Activity {
     @ViewInject(R.id.action_comment_count)
     private TextView action_comment_count;
     @ViewInject(R.id.action_like_count)
-    private TextView action_likt_count;
+    private TextView action_like_count;
+    @ViewInject(R.id.action_favorite_count)
+    private TextView action_favorite_count;
     @ViewInject(R.id.wb_details)
     private WebView webView;
     @ViewInject(R.id.videoView)
@@ -145,7 +147,7 @@ public class TextDetailActivity extends Activity {
         title.setVisibility(View.VISIBLE);
         title.setText(Config.getFullUrl(submission.getResource()));
         action_comment_count.setText(String.valueOf(submission.getCommentsCount()));
-        action_likt_count.setText(String.valueOf(submission.getLikesCount()));
+        action_like_count.setText(String.valueOf(submission.getLikesCount()));
     }
 
     @Override
@@ -323,12 +325,12 @@ public class TextDetailActivity extends Activity {
                     ToastUtils.show(TextDetailActivity.this, "点赞成功");
                     submission.setIsLike(1);
                     submission.setLikesCount(submission.getLikesCount() + 1);
-                    action_likt_count.setText(String.valueOf(submission.getLikesCount()));
+                    action_like_count.setText(String.valueOf(submission.getLikesCount()));
                 } else {
                     ToastUtils.show(TextDetailActivity.this, "取消点赞成功");
                     submission.setIsLike(0);
                     submission.setLikesCount(submission.getLikesCount() - 1);
-                    action_likt_count.setText(String.valueOf(submission.getLikesCount()));
+                    action_like_count.setText(String.valueOf(submission.getLikesCount()));
                 }
             }
 
@@ -339,6 +341,38 @@ public class TextDetailActivity extends Activity {
                 e.printStackTrace();
             }
         });
+    }
+
+    @OnClick(R.id.action_favorite)
+    public void favorite(View view) {
+        httpHelper.post(Contants.API.SUBMISSION_FAVORITE + submission.getSid(), new HashMap<String, String>() {
+            {
+                put("favorite", String.valueOf(submission.getIsFavorite() == 0 ? 1 : 0));
+            }
+        }, new SpotsCallBack<String>(TextDetailActivity.this) {
+            @Override
+            public void onSuccess(Response response, String s) {
+                dismissDialog();
+                if (submission.getIsFavorite() == 0) {
+                    ToastUtils.show(TextDetailActivity.this, "收藏成功");
+                    submission.setIsFavorite(1);
+                    submission.setFavoriteCount(submission.getFavoriteCount() + 1);
+                } else {
+                    ToastUtils.show(TextDetailActivity.this, "取消收藏成功");
+                    submission.setIsFavorite(0);
+                    submission.setFavoriteCount(submission.getLikesCount() - 1);
+                }
+                action_favorite_count.setText(String.valueOf(submission.getFavoriteCount()));
+            }
+
+            @Override
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
+                dismissDialog();
+                ToastUtils.show(TextDetailActivity.this, errorMessage.getErrorMessage());
+                e.printStackTrace();
+            }
+        });
+
 
     }
 

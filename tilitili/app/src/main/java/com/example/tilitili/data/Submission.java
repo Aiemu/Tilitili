@@ -23,8 +23,10 @@ public class Submission implements Serializable {
     private int uid;
     private String userNickname;
     private int following;
+    private int favoriteCount;
+    private int isFavorite;
 
-    public Submission(int sid, int type, String plateTitle, String title, String cover, String introduction, String resource, long submissionTime, long watchTimes, int likesCount, int isLike, int commentsCount, int uid, String userNickname, int following) {
+    public Submission(int sid, int type, String plateTitle, String title, String cover, String introduction, String resource, long submissionTime, long watchTimes, int likesCount, int isLike, int commentsCount, int uid, String userNickname, int following, int favoriteCount, int isFavorite) {
         this.sid = sid;
         this.type = type;
         this.plateTitle = plateTitle;
@@ -40,10 +42,12 @@ public class Submission implements Serializable {
         this.uid = uid;
         this.userNickname = userNickname;
         this.following = following;
+        this.favoriteCount = favoriteCount;
+        this.isFavorite = isFavorite;
         this.userAvatar = "";
     }
 
-    public Submission(int sid, int type, String plateTitle, String title, String cover, String introduction, String resource, long submissionTime, long watchTimes, int likesCount, int isLike, int commentsCount, int uid, String userNickname, int following, String userAvatar) {
+    public Submission(int sid, int type, String plateTitle, String title, String cover, String introduction, String resource, long submissionTime, long watchTimes, int likesCount, int isLike, int commentsCount, int uid, String userNickname, int following, String userAvatar, int favoriteCount, int isFavorite) {
         this.sid = sid;
         this.type = type;
         this.plateTitle = plateTitle;
@@ -60,6 +64,8 @@ public class Submission implements Serializable {
         this.userNickname = userNickname;
         this.following = following;
         this.userAvatar = userAvatar;
+        this.favoriteCount = favoriteCount;
+        this.isFavorite = isFavorite;
     }
 
     public int getSid() {
@@ -133,5 +139,21 @@ public class Submission implements Serializable {
 
     public String getUserAvatar() {
         return userAvatar;
+    }
+
+    public int getFavoriteCount() {
+        return favoriteCount;
+    }
+
+    public void setFavoriteCount(int favoriteCount) {
+        this.favoriteCount = favoriteCount;
+    }
+
+    public int getIsFavorite() {
+        return isFavorite;
+    }
+
+    public void setIsFavorite(int isFavorite) {
+        this.isFavorite = isFavorite;
     }
 }

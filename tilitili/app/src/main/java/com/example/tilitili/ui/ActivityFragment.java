@@ -104,7 +104,9 @@ public class ActivityFragment extends BaseFragment implements Pager.OnPageListen
                                 item.getInt("uid"),
                                 item.getString("userNickname"),
                                 item.getInt("following"),
-                                item.getString("userAvatar")));
+                                item.getString("userAvatar"),
+                                item.getInt("favoriteCount"),
+                                item.getInt("isFavorite")));
                     }
                     submissionPage = new Page<>(jsonObject.getInt("currentPage"),
                             jsonObject.getInt("pageSize"),

@@ -2,6 +2,7 @@ package com.example.tilitili.http;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.os.NetworkOnMainThreadException;
 
 import com.example.tilitili.UserManagerApplication;
 import com.google.gson.Gson;
@@ -136,9 +137,10 @@ public class HttpHelper {
                     String error = Objects.requireNonNull(response.body()).string();
                     JSONObject jsonObject = new JSONObject(error);
                     errorMessage = new ErrorMessage(jsonObject.getString("errorMessage"), jsonObject.getInt("errorCode"), jsonObject.getString("uri"), jsonObject.getString("timestamp"));
-                } catch (JSONException | IOException e) {
+                } catch (JSONException | IOException | NetworkOnMainThreadException e) {
                     e.printStackTrace();
                 }
+                errorMessage = new ErrorMessage("请重新尝试", 1, "/sad", "2312");
                 callback.onError(response, errorMessage, e);
             }
         });

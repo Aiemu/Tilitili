@@ -99,7 +99,9 @@ public class GetUserSubmissionActivity extends Activity implements Pager.OnPageL
                                 item.getInt("commentsCount"),
                                 item.getInt("uid"),
                                 item.getString("userNickname"),
-                                item.getInt("following")));
+                                item.getInt("following"),
+                                item.getInt("favoriteCount"),
+                                item.getInt("isFavorite")));
                     }
                     submissionPage = new Page<>(jsonObject.getInt("currentPage"),
                             jsonObject.getInt("pageSize"),
