@@ -40,7 +40,7 @@
             style="@style/line_vertical"
             android:layout_width="wrap_content"
             android:layout_marginBottom="2dp"
-            app:layout_constraintBottom_toTopOf="@+id/text_watch_times"
+            app:layout_constraintBottom_toTopOf="@+id/user_submission_text_watch_times"
             app:layout_constraintStart_toEndOf="@+id/user_submission_drawee_view" />
 
         <TextView
