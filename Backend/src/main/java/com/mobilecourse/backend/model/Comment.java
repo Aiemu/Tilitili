@@ -3,11 +3,17 @@ package com.mobilecourse.backend.model;
 import java.sql.Timestamp;
 
 public class Comment {
+    //评论id
     private int cid;
+    //评论所在的投稿sid
     private int sid;
+    //评论者uid
     private int uid;
+    //评论内容
     private String content;
+    //点赞数
     private int like;
+    //评论时间
     private Timestamp commentTime;
 
     public int getCid() {

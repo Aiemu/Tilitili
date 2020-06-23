@@ -29,9 +29,4 @@
         DELETE FROM Comment
         WHERE cid=#{cid}
     </delete>
-    <select id="getCommentUser" resultType="com.mobilecourse.backend.model.User">
-        SELECT *
-        FROM User
-        where uid=#{uid}
-    </select>
 </mapper>

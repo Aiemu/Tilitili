@@ -3,15 +3,25 @@ package com.mobilecourse.backend.model;
 import java.sql.Timestamp;
 
 public class Submission {
+    //投稿唯一id
     private int sid;
+    //投稿者uid
     private int uid;
+    //投稿类型, 0为文章, 1为视频
     private int type;
+    //投稿板块pid
     private int pid;
+    //投稿标题
     private String title;
+    //投稿封面
     private String cover;
+    //投稿简介
     private String introduction;
+    //资源(html, 视频)
     private String resource;
+    //投稿时间
     private Timestamp submissionTime;
+    //观看次数
     private int watchTimes;
 
     public int getSid() {

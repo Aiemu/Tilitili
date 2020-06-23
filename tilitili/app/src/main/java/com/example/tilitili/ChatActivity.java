@@ -1,6 +1,7 @@
 package com.example.tilitili;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.example.tilitili.adapter.MessageAdapter;
 import com.example.tilitili.data.Contants;
 import com.example.tilitili.data.Message;
 import com.example.tilitili.data.MessageDatabase;
+import com.example.tilitili.data.User;
 import com.example.tilitili.http.ErrorMessage;
 import com.example.tilitili.http.HttpHelper;
 import com.example.tilitili.http.SimpleCallback;
@@ -46,6 +48,7 @@ public class ChatActivity extends Activity {
     private TextView title;
 
     private int uid;
+    private User opponent;
     private HttpHelper httpHelper;
     private MessageDatabase messageDatabase;
     private MessageAdapter messageAdapter;
@@ -59,7 +62,9 @@ public class ChatActivity extends Activity {
         setContentView(R.layout.chat_user);
         ViewUtils.inject(this);
         uid = getIntent().getIntExtra("uid", 0);
+        opponent = new User(uid);
         httpHelper = HttpHelper.getInstance();
+        getUserInfo();
         messageDatabase = MessageDatabase.getInstance(this);
         messages = new ArrayList<>();
         messageAdapter = new MessageAdapter(messages);
@@ -72,7 +77,6 @@ public class ChatActivity extends Activity {
             public void run() {
                 httpHelper.get(Contants.API.GET_USER_MESSAGES, new SimpleCallback<String>(ChatActivity.this) {
                     @Override
-
                     public void onSuccess(Response response, String string) {
                         List<Message> messages2 = new ArrayList<>();
                         try {
@@ -90,9 +94,7 @@ public class ChatActivity extends Activity {
                                         item.getInt("uid") == uid ? 1 : 0);
                                 messages2.add(message);
                             }
-                            if (messages2.size() > 0) {
-                                new ChatActivity.AgentAsyncTask(messages2).execute();
-                            }
+                            new ChatActivity.AgentAsyncTask(messages2).execute();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -131,8 +133,15 @@ public class ChatActivity extends Activity {
 
         @Override
         protected List<Message> doInBackground(Void... params) {
-            messageDatabase.messageDao().insertAll(a_messages);
+            try {
+                if (a_messages.size() > 0) {
+                    messageDatabase.messageDao().insertAll(a_messages);
+                }
+            } catch (SQLiteConstraintException e) {
+                Log.d("asd", "asd");
+            }
             messageDatabase.messageDao().setRead(uid);
+            messageDatabase.messageDao().updateUserInfo(uid, opponent.getNickname(), opponent.getAvatar());
             return messageDatabase.messageDao().getOneUserMessage(uid, UserManagerApplication.getInstance().getUser().getUserId());
         }
 
@@ -142,7 +151,7 @@ public class ChatActivity extends Activity {
             messages.addAll(messagess);
             messageAdapter.notifyDataSetChanged();
             recyclerView.scrollToPosition(messagess.size() - 1);
-            if(messagess.size() > 0)
+            if (messagess.size() > 0)
                 title.setText(messagess.get(0).getNickname());
         }
     }
@@ -150,6 +159,7 @@ public class ChatActivity extends Activity {
     @Override
     public void onBackPressed() {
         timer.cancel();
+        timer = null;
         setResult(RESULT_OK);
         finish();
     }
@@ -157,6 +167,7 @@ public class ChatActivity extends Activity {
     @OnClick(R.id.chat_user_title_bar_back)
     public void back(View v) {
         timer.cancel();
+        timer = null;
         setResult(RESULT_OK);
         finish();
     }
@@ -164,6 +175,10 @@ public class ChatActivity extends Activity {
     @OnClick(R.id.btn_post_message)
     public void post(View view) {
         final String message2 = editText.getText().toString();
+        if (uid == UserManagerApplication.getInstance().getUser().getUserId()) {
+            Log.d("cannot ", "insert to youself");
+            return;
+        }
         httpHelper.post(Contants.API.SEND_USER_MESSAGE, new HashMap<String, String>() {
             {
                 put("uid", String.valueOf(uid));
@@ -178,12 +193,13 @@ public class ChatActivity extends Activity {
                 Message message1 = null;
                 try {
                     JSONObject jsonObject = new JSONObject(string);
+                    Log.d("mid", String.valueOf(jsonObject.getInt("mid")));
                     message1 = new Message(jsonObject.getInt("mid"),
                             UserManagerApplication.getInstance().getUser().getUserId(),
                             uid,
                             message2,
-                            UserManagerApplication.getInstance().getUser().getNickname(),
-                            UserManagerApplication.getInstance().getUser().getAvatar(),
+                            opponent.getNickname(),
+                            opponent.getAvatar(),
                             jsonObject.getLong("messageTime"),
                             1);
                 } catch (JSONException e) {
@@ -199,6 +215,32 @@ public class ChatActivity extends Activity {
             @Override
             public void onError(Response response, ErrorMessage errorMessage, Exception e) {
                 dismissDialog();
+            }
+        });
+    }
+
+    private void getUserInfo() {
+        httpHelper.get(Contants.API.GET_USER_PROFILE_URL + uid, new SpotsCallBack<String>(this) {
+            @Override
+            public void onSuccess(Response response, String s) {
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
+                    opponent.setUsername(jsonObject.getString("username"));
+                    opponent.setEmail(jsonObject.getString("email"));
+                    opponent.setNickname(jsonObject.getString("nickname"));
+                    opponent.setDepartment(jsonObject.getString("department"));
+                    opponent.setJoinAt(jsonObject.getLong("joinAt"));
+                    opponent.setBio(jsonObject.getString("bio"));
+                    opponent.setAvatar(jsonObject.getString("avatar"));
+                    dismissDialog();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Response response, ErrorMessage errorMessage, Exception e) {
+                e.printStackTrace();
             }
         });
     }

@@ -3,11 +3,17 @@ package com.mobilecourse.backend.model;
 import java.sql.Timestamp;
 
 public class Message {
+    //消息唯一id
     private Integer mid;
+    //消息来源uid
     private Integer srcUid;
+    //消息目标uid
     private Integer destUid;
+    //消息种类
     private Integer type;
+    //消息内容
     private String content;
+    //发消息的时间
     private Timestamp messageTime;
 
     public Integer getMid() {

@@ -108,8 +108,9 @@ public class ChatListActivity extends Activity {
             public void onItemClick(View view, int position) {
                 Message message = chatAdapter.getItem(position);
                 Intent intent = new Intent(ChatListActivity.this, ChatActivity.class);
-                intent.putExtra("uid", message.getUid());
+                intent.putExtra("uid", message.getUid() == UserManagerApplication.getInstance().getUser().getUserId() ? message.getReceiver() : message.getUid());
                 timer.cancel();
+                timer = null;
                 startActivityForResult(intent, CHAT_USER_BACK);
             }
         });
@@ -124,7 +125,7 @@ public class ChatListActivity extends Activity {
                     @Override
                     public void run() {
                         List<Message> messageList = new ArrayList<>();
-                        new AgentAsyncTask(messageList).execute();
+                        new ChatListActivity.AgentAsyncTask(messageList).execute();
                     }
                 }, 100);
             }
@@ -145,7 +146,24 @@ public class ChatListActivity extends Activity {
         protected List<Message> doInBackground(Void... params) {
             MessageDatabase messageDatabase = MessageDatabase.getInstance(ChatListActivity.this);
             messageDatabase.messageDao().insertAll(a_messages);
-            return messageDatabase.messageDao().getAllDistinctUsers(UserManagerApplication.getInstance().getUser().getUserId());
+            List<Message> result = new ArrayList<>();
+            List<Message> allMessages = new ArrayList<>();
+            allMessages.addAll(messageDatabase.messageDao().getAllDistinctUsers(UserManagerApplication.getInstance().getUser().getUserId()));
+            result.addAll(messageDatabase.messageDao().getAllDistinctUsers(UserManagerApplication.getInstance().getUser().getUserId()));
+            List<Message> temp = messageDatabase.messageDao().getAllDistinctUsers2(UserManagerApplication.getInstance().getUser().getUserId());
+            for (Message item : temp) {
+                int flag = 0;
+                for (Message i : allMessages) {
+                    if (i.getUid() == item.getReceiver()) {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if (flag == 0) {
+                    result.add(item);
+                }
+            }
+            return result;
         }
 
         @Override
@@ -167,8 +185,6 @@ public class ChatListActivity extends Activity {
                             httpHelper.get(Contants.API.GET_USER_MESSAGES, new SimpleCallback<String>(ChatListActivity.this) {
                                 @Override
                                 public void onSuccess(Response response, String string) {
-                                    ToastUtils.show(ChatListActivity.this, "errorMessage.getErrorMessage()");
-
                                     List<Message> messages2 = new ArrayList<>();
                                     try {
                                         JSONObject jsonObject = new JSONObject(string);
@@ -185,9 +201,7 @@ public class ChatListActivity extends Activity {
                                                     0);
                                             messages2.add(message);
                                         }
-                                        if (messages2.size() > 0) {
-                                            new AgentAsyncTask(messages2).execute();
-                                        }
+                                        new AgentAsyncTask(messages2).execute();
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -216,12 +230,15 @@ public class ChatListActivity extends Activity {
     @Override
     public void onBackPressed() {
         timer.cancel();
+        timer = null;
         finish();
     }
 
     @OnClick(R.id.chat_list_title_bar_back)
     public void back(View view) {
         timer.cancel();
+
+        timer = null;
         finish();
     }
 }

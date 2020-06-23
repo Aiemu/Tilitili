@@ -52,4 +52,9 @@ public class UserManagerApplication extends Application {
     public void cleanSessionId() {
         UserLocalData.cleanSession(this);
     }
+
+    public void updateUser(User user) {
+        this.user = user;
+        UserLocalData.updateUser(this, this.user);
+    }
 }

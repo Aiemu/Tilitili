@@ -3,8 +3,11 @@ package com.mobilecourse.backend.model;
 import java.sql.Timestamp;
 
 public class History {
+    //观看者uid
     private int uid;
+    //观看的投稿sid
     private int sid;
+    //观看时间
     private Timestamp watchTime;
 
     public int getUid() {

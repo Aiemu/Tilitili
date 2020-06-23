@@ -32,7 +32,7 @@ public class BusinessExceptionHandler {
     private final Logger LOG = LoggerFactory.getLogger(BusinessExceptionHandler.class);
 
     /**
-     * Tilitili后端错误处理
+     * 业务错误信息统一
      * @param request
      * @param e
      * @return
