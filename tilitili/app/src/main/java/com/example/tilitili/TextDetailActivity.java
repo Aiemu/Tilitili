@@ -148,6 +148,7 @@ public class TextDetailActivity extends Activity {
         title.setText(Config.getFullUrl(submission.getResource()));
         action_comment_count.setText(String.valueOf(submission.getCommentsCount()));
         action_like_count.setText(String.valueOf(submission.getLikesCount()));
+        action_favorite_count.setText(String.valueOf(submission.getFavoriteCount()));
     }
 
     @Override
@@ -360,7 +361,7 @@ public class TextDetailActivity extends Activity {
                 } else {
                     ToastUtils.show(TextDetailActivity.this, "取消收藏成功");
                     submission.setIsFavorite(0);
-                    submission.setFavoriteCount(submission.getLikesCount() - 1);
+                    submission.setFavoriteCount(submission.getFavoriteCount() - 1);
                 }
                 action_favorite_count.setText(String.valueOf(submission.getFavoriteCount()));
             }

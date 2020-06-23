@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.example.tilitili.ChatListActivity;
 import com.example.tilitili.Config;
 import com.example.tilitili.EditorActivity;
+import com.example.tilitili.FavoriteActivity;
 import com.example.tilitili.FollowListActivity;
 import com.example.tilitili.GetUserSubmissionActivity;
 import com.example.tilitili.HistoryActivity;
@@ -124,6 +126,18 @@ public class MineFragment extends BaseFragment {
     @OnClick(R.id.user_profile_follow)
     void goToFollow(View view) {
         Intent intent = new Intent(this.getContext(), FollowListActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.user_profile_favorite)
+    void goToFavorite(View view) {
+        Intent intent = new Intent(this.getContext(), FavoriteActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.user_profile_chat)
+    void goToChat(View view) {
+        Intent intent = new Intent(this.getContext(), ChatListActivity.class);
         startActivity(intent);
     }
 

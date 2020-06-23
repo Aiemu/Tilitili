@@ -44,7 +44,7 @@
             <ImageView
                 android:id="@+id/action_favor"
                 style="@style/toolbar_action"
-                android:src="@drawable/ic_action_favor" />
+                android:src="@drawable/ic_action_like" />
 
             <TextView
                 android:id="@+id/action_like_count"

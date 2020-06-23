@@ -12,6 +12,9 @@ public class Message {
     @ColumnInfo(name = "uid")
     public int uid;
 
+    @ColumnInfo(name = "receiver")
+    public int receiver;
+
     @ColumnInfo(name = "content")
     public String content;
 
@@ -27,9 +30,10 @@ public class Message {
     @ColumnInfo(name = "isRead")
     public int isRead;
 
-    public Message(int id, int uid, String content, String nickname, String avatar, long messageTime, int isRead) {
+    public Message(int id, int uid, int receiver, String content, String nickname, String avatar, long messageTime, int isRead) {
         this.id = id;
         this.uid = uid;
+        this.receiver = receiver;
         this.content = content;
         this.nickname = nickname;
         this.avatar = avatar;
@@ -43,6 +47,10 @@ public class Message {
 
     public int getUid() {
         return uid;
+    }
+
+    public int getReceiver() {
+        return receiver;
     }
 
     public String getContent() {

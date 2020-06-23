@@ -20,11 +20,11 @@ public interface MessageDao {
     @Query("SELECT * FROM Message")
     List<Message> getAllMessage();
 
-    @Query("SELECT DISTINCT uid, nickname, avatar, id, content, messageTime, isRead from Message GROUP BY uid")
+    @Query("SELECT DISTINCT uid, receiver, nickname, avatar, id, content, messageTime, isRead from Message GROUP BY uid")
     List<Message> getAllDistinctUsers();
 
-    @Query("SELECT * from Message where uid = :id")
-    List<Message> getOneUserMessage(int id);
+    @Query("SELECT * from Message where (uid = :id AND receiver = :receiver) OR (uid = :receiver AND receiver = :id) ORDER BY messageTime ASC")
+    List<Message> getOneUserMessage(int id, int receiver);
 
     @Delete
     void delete(Message message);
@@ -34,5 +34,9 @@ public interface MessageDao {
 
     @Query("SELECT COUNT(*) FROM MESSAGE")
     int getSum();
+
+    @Query("UPDATE Message SET isRead = 1 where uid = :id")
+    int setRead(int id);
+
 
 }

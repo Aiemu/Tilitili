@@ -24,6 +24,7 @@ import com.example.tilitili.http.SimpleCallback;
 import com.example.tilitili.utils.ToastUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,6 +79,7 @@ public class ChatListActivity extends Activity {
                                 JSONObject item = (JSONObject) items.get(i);
                                 final Message message = new Message(item.getInt("mid"),
                                         item.getInt("uid"),
+                                        UserManagerApplication.getInstance().getUser().getUserId(),
                                         item.getString("content"),
                                         item.getString("nickname"),
                                         item.getString("avatar"),
@@ -85,7 +87,7 @@ public class ChatListActivity extends Activity {
                                         0);
                                 messages2.add(message);
                             }
-                            if(messages2.size() > 0){
+                            if (messages2.size() > 0) {
                                 new AgentAsyncTask(messages2).execute();
                             }
                         } catch (JSONException e) {
@@ -152,4 +154,15 @@ public class ChatListActivity extends Activity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        timer.cancel();
+        finish();
+    }
+
+    @OnClick(R.id.chat_list_title_bar_back)
+    public void back(View view) {
+        timer.cancel();
+        finish();
+    }
 }

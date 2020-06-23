@@ -51,7 +51,7 @@ public class LoginActivity extends Activity {
 
             @Override
             public void onSuccess(Response response, String s) {
-                Intent register_intent = new Intent(LoginActivity.this, ChatListActivity.class);
+                Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(register_intent);
             }
 
@@ -94,7 +94,7 @@ public class LoginActivity extends Activity {
                     String sessionid = session.substring(0, session.indexOf(";"));
                     application.putSessionId(sessionid);
                     application.putUser(user);
-                    Intent register_intent = new Intent(LoginActivity.this, ChatListActivity.class);
+                    Intent register_intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(register_intent);
                 } catch (IndexOutOfBoundsException e) {
                     dismissDialog();
