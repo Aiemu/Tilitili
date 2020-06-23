@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:autofillHints="@string/to_message"
                 android:hint="@string/to_message"
-                android:inputType="textPersonName" />
+                android:inputType="textShortMessage" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

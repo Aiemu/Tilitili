@@ -29,7 +29,6 @@
                 android:layout_height="wrap_content"
                 android:autofillHints="@string/to_comment"
                 android:hint="@string/to_comment"
-                android:singleLine="true"
                 android:inputType="textShortMessage" />
         </com.google.android.material.textfield.TextInputLayout>
 
